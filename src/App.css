@@ -1,0 +1,13 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow: scroll;
+  overflow: hidden;
+}
+html {
+  overflow-x: hidden;
+}
+
+.noTransform {
+  transform: none !important;
+}

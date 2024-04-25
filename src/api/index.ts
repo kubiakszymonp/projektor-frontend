@@ -11,10 +11,11 @@ import {
   UploadedFilesApi,
 } from "./generated";
 import { jwtPersistance } from "../services/jwt-persistance";
+import { BACKEND_PORT } from "../environment";
 
 export const CURRENT_HOST =
   window.location.protocol + "//" + window.location.hostname;
-export const BASE_PATH = CURRENT_HOST + ":3001";
+export const BASE_PATH = CURRENT_HOST + `:${BACKEND_PORT}`;
 export const UPLOAD_ROOT = BASE_PATH + "/upload/";
 
 export const createAxios = () => {

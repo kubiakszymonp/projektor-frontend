@@ -33,7 +33,8 @@ export const TextUnitList: React.FC = () => {
   const [displayTextUnits, setDisplayTextUnits] = useState<TextUnitDto[]>([]);
   const [queues, setQueues] = useState<TextUnitQueueDto[]>([]);
   const [searchText, setSearchText] = useState<string>("");
-  const [editTextUnitDialogTitle, setEditTextUnitDialogTitle] = useState<string>("");
+  const [editTextUnitDialogTitle, setEditTextUnitDialogTitle] =
+    useState<string>("");
   const [currentlyOperatedTextUnit, setCurrentlyOperatedTextUnit] =
     useState<TextUnitDto>(emptyTextUnitObject);
 
@@ -85,8 +86,8 @@ export const TextUnitList: React.FC = () => {
     handleClose();
   };
 
-  const onAddTextUnitToPlaylist = (textUnit: TextUnitDto) => {
-    setCurrentlyOperatedTextUnit(textUnit);
+  const onAddTextUnitToPlaylist = () => {
+    setCurrentlyOperatedTextUnit(currentlyOperatedTextUnit);
     setTextUnitAddToQueueDialogOpen(true);
   };
 
@@ -100,9 +101,9 @@ export const TextUnitList: React.FC = () => {
     setQueues(res.data);
   };
 
-  const castTextUnitDirectly = async (textUnit: TextUnitDto) => {
+  const castTextUnitDirectly = async () => {
     await textUnitApi.textUnitControllerSetCurrentTextUnit({
-      id: textUnit.id,
+      id: currentlyOperatedTextUnit.id,
     });
   };
 
@@ -229,40 +230,20 @@ export const TextUnitList: React.FC = () => {
                   {isXs ? (
                     <>
                       <IconButton
-                        onClick={(e) => handleClickTextUnitMenu(e.currentTarget)}
+                        onClick={(e) => {
+                          setCurrentlyOperatedTextUnit(textUnit);
+                          handleClickTextUnitMenu(e.currentTarget);
+                        }}
                       >
                         <MoreVert />
                       </IconButton>
-                      <Menu
-                        id="simple-menu"
-                        anchorEl={anchorEl}
-                        keepMounted
-                        open={Boolean(anchorEl)}
-                        onClose={handleCloseTextUnitMenu}
-                      >
-                        <MenuItem
-                          onClick={() => {
-                            castTextUnitDirectly(textUnit);
-                            handleCloseTextUnitMenu();
-                          }}
-                        >
-                          Rzutuj
-                        </MenuItem>
-                        <MenuItem
-                          onClick={() => {
-                            onAddTextUnitToPlaylist(textUnit);
-                            handleCloseTextUnitMenu();
-                          }}
-                        >
-                          Dodaj
-                        </MenuItem>
-                      </Menu>
                     </>
                   ) : (
                     <>
                       <Button
                         onClick={() => {
-                          castTextUnitDirectly(textUnit);
+                          setCurrentlyOperatedTextUnit(textUnit);
+                          castTextUnitDirectly();
                         }}
                       >
                         Rzutuj
@@ -270,7 +251,8 @@ export const TextUnitList: React.FC = () => {
                       <Button
                         color="info"
                         onClick={() => {
-                          onAddTextUnitToPlaylist(textUnit);
+                          setCurrentlyOperatedTextUnit(textUnit);
+                          onAddTextUnitToPlaylist();
                         }}
                       >
                         Dodaj
@@ -283,6 +265,30 @@ export const TextUnitList: React.FC = () => {
           ))}
         </Stack>
       </Box>
+      <Menu
+        id="simple-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleCloseTextUnitMenu}
+      >
+        <MenuItem
+          onClick={() => {
+            castTextUnitDirectly();
+            handleCloseTextUnitMenu();
+          }}
+        >
+          Rzutuj
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            onAddTextUnitToPlaylist();
+            handleCloseTextUnitMenu();
+          }}
+        >
+          Dodaj
+        </MenuItem>
+      </Menu>
     </>
   );
 };

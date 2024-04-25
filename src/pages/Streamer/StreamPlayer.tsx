@@ -6,6 +6,47 @@ export const StreamPlayer: React.FC<{ organizationId: number }> = ({
   organizationId,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [tick, setTick] = React.useState(0);
+
+  // resize video loop
+  useEffect(() => {
+    if (!videoRef.current) return;
+    const timeout = setTimeout(() => {
+      resize(videoRef.current!);
+      setTick(tick + 1);
+    }, 2000);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [tick]);
+
+  const resize = (videoElement: HTMLVideoElement) => {
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+
+    const videoWidth = videoElement.videoWidth;
+    const videoHeight = videoElement.videoHeight;
+
+    const videoAspectRatio = videoWidth / videoHeight;
+    const windowAspectRatio = windowWidth / windowHeight;
+
+    let width = 0;
+    let height = 0;
+
+    // full horizontal
+    if (videoAspectRatio > windowAspectRatio) {
+      width = windowWidth;
+      height = width / videoAspectRatio;
+    }
+    // full vertical
+    else {
+      height = windowHeight;
+      width = height * videoAspectRatio;
+    }
+
+    videoElement.width = width;
+    videoElement.height = height;
+  };
 
   useEffect(() => {
     if (!videoRef.current) return;
@@ -18,7 +59,7 @@ export const StreamPlayer: React.FC<{ organizationId: number }> = ({
         liveMaxLatencyDuration: 0.2,
         liveDurationInfinity: true,
         highBufferWatchdogPeriod: 1,
-        lowLatencyMode: true
+        lowLatencyMode: true,
       });
 
       hls.loadSource(
@@ -38,8 +79,12 @@ export const StreamPlayer: React.FC<{ organizationId: number }> = ({
   }, [videoRef]);
 
   return (
-    <div>
-      <video style={{}} muted ref={videoRef}></video>
+    <div style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    }}>
+      <video muted ref={videoRef}></video>
     </div>
   );
 };

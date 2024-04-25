@@ -83,7 +83,6 @@ export interface DisplayState {
 export const DisplayStateDisplayTypeEnum = {
     None: 'NONE',
     Text: 'TEXT',
-    Example: 'EXAMPLE',
     Media: 'MEDIA',
     Hls: 'HLS'
 } as const;
@@ -147,10 +146,10 @@ export interface GetProjectorStateDto {
     'textState': TextUnitState;
     /**
      * 
-     * @type {ProjectorStateConfigurationDto}
+     * @type {ProjectorSettingsConfigurationDto}
      * @memberof GetProjectorStateDto
      */
-    'settings': ProjectorStateConfigurationDto;
+    'settings': ProjectorSettingsConfigurationDto;
     /**
      * 
      * @type {Array<string>}
@@ -168,7 +167,6 @@ export interface GetProjectorStateDto {
 export const GetProjectorStateDtoDisplayTypeEnum = {
     None: 'NONE',
     Text: 'TEXT',
-    Example: 'EXAMPLE',
     Media: 'MEDIA',
     Hls: 'HLS'
 } as const;
@@ -268,185 +266,108 @@ export interface OrganizationData {
 /**
  * 
  * @export
- * @interface ProjectorSettingsDto
+ * @interface ProjectorSettingsConfigurationDto
  */
-export interface ProjectorSettingsDto {
+export interface ProjectorSettingsConfigurationDto {
     /**
      * 
      * @type {string}
-     * @memberof ProjectorSettingsDto
+     * @memberof ProjectorSettingsConfigurationDto
      */
     'backgroundColor': string;
     /**
      * 
      * @type {string}
-     * @memberof ProjectorSettingsDto
+     * @memberof ProjectorSettingsConfigurationDto
      */
     'fontColor': string;
     /**
      * 
      * @type {string}
-     * @memberof ProjectorSettingsDto
+     * @memberof ProjectorSettingsConfigurationDto
      */
     'fontFamily': string;
     /**
      * 
      * @type {string}
-     * @memberof ProjectorSettingsDto
+     * @memberof ProjectorSettingsConfigurationDto
      */
     'fontSize': string;
     /**
      * 
      * @type {string}
-     * @memberof ProjectorSettingsDto
+     * @memberof ProjectorSettingsConfigurationDto
      */
     'textAlign': string;
     /**
      * 
      * @type {string}
-     * @memberof ProjectorSettingsDto
+     * @memberof ProjectorSettingsConfigurationDto
      */
     'letterSpacing': string;
     /**
      * 
      * @type {string}
-     * @memberof ProjectorSettingsDto
+     * @memberof ProjectorSettingsConfigurationDto
      */
     'marginInline': string;
     /**
      * 
      * @type {string}
-     * @memberof ProjectorSettingsDto
+     * @memberof ProjectorSettingsConfigurationDto
      */
     'marginBlock': string;
     /**
      * 
      * @type {string}
-     * @memberof ProjectorSettingsDto
+     * @memberof ProjectorSettingsConfigurationDto
      */
     'paddingTop': string;
     /**
      * 
      * @type {number}
-     * @memberof ProjectorSettingsDto
+     * @memberof ProjectorSettingsConfigurationDto
      */
     'charactersInLine': number;
     /**
      * 
      * @type {number}
-     * @memberof ProjectorSettingsDto
+     * @memberof ProjectorSettingsConfigurationDto
      */
     'linesOnPage': number;
     /**
      * 
      * @type {string}
-     * @memberof ProjectorSettingsDto
+     * @memberof ProjectorSettingsConfigurationDto
      */
     'textVertically': string;
     /**
      * 
      * @type {number}
-     * @memberof ProjectorSettingsDto
+     * @memberof ProjectorSettingsConfigurationDto
      */
     'screenWidth': number;
     /**
      * 
      * @type {number}
-     * @memberof ProjectorSettingsDto
+     * @memberof ProjectorSettingsConfigurationDto
      */
     'screenHeight': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProjectorSettingsConfigurationDto
+     */
+    'lineHeight': string;
+    /**
+     * 
+     * @type {TextStrategy}
+     * @memberof ProjectorSettingsConfigurationDto
+     */
+    'textStrategy': TextStrategy;
 }
-/**
- * 
- * @export
- * @interface ProjectorStateConfigurationDto
- */
-export interface ProjectorStateConfigurationDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof ProjectorStateConfigurationDto
-     */
-    'backgroundColor': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProjectorStateConfigurationDto
-     */
-    'fontColor': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProjectorStateConfigurationDto
-     */
-    'fontFamily': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProjectorStateConfigurationDto
-     */
-    'fontSize': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProjectorStateConfigurationDto
-     */
-    'textAlign': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProjectorStateConfigurationDto
-     */
-    'letterSpacing': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProjectorStateConfigurationDto
-     */
-    'marginInline': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProjectorStateConfigurationDto
-     */
-    'marginBlock': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProjectorStateConfigurationDto
-     */
-    'paddingTop': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof ProjectorStateConfigurationDto
-     */
-    'charactersInLine': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof ProjectorStateConfigurationDto
-     */
-    'linesOnPage': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProjectorStateConfigurationDto
-     */
-    'textVertically': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof ProjectorStateConfigurationDto
-     */
-    'screenWidth': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof ProjectorStateConfigurationDto
-     */
-    'screenHeight': number;
-}
+
+
 /**
  * 
  * @export
@@ -524,6 +445,21 @@ export interface SetCurrentUploadedFileDto {
      */
     'id': string;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const TextStrategy = {
+    FixedLines: 'FIXED_LINES',
+    Automatic: 'AUTOMATIC',
+    ExampleText: 'EXAMPLE_TEXT'
+} as const;
+
+export type TextStrategy = typeof TextStrategy[keyof typeof TextStrategy];
+
+
 /**
  * 
  * @export
@@ -739,7 +675,6 @@ export interface UpdateDisplayStateDto {
 export const UpdateDisplayStateDtoDisplayTypeEnum = {
     None: 'NONE',
     Text: 'TEXT',
-    Example: 'EXAMPLE',
     Media: 'MEDIA',
     Hls: 'HLS'
 } as const;
@@ -1755,13 +1690,13 @@ export const ProjectorSettingsApiAxiosParamCreator = function (configuration?: C
         },
         /**
          * 
-         * @param {ProjectorSettingsDto} projectorSettingsDto 
+         * @param {ProjectorSettingsConfigurationDto} projectorSettingsConfigurationDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectorSettingsControllerUpdate: async (projectorSettingsDto: ProjectorSettingsDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'projectorSettingsDto' is not null or undefined
-            assertParamExists('projectorSettingsControllerUpdate', 'projectorSettingsDto', projectorSettingsDto)
+        projectorSettingsControllerUpdate: async (projectorSettingsConfigurationDto: ProjectorSettingsConfigurationDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'projectorSettingsConfigurationDto' is not null or undefined
+            assertParamExists('projectorSettingsControllerUpdate', 'projectorSettingsConfigurationDto', projectorSettingsConfigurationDto)
             const localVarPath = `/api/projector-settings`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1785,7 +1720,7 @@ export const ProjectorSettingsApiAxiosParamCreator = function (configuration?: C
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(projectorSettingsDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(projectorSettingsConfigurationDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1807,7 +1742,7 @@ export const ProjectorSettingsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async projectorSettingsControllerGetSetting(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProjectorSettingsDto>> {
+        async projectorSettingsControllerGetSetting(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProjectorSettingsConfigurationDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.projectorSettingsControllerGetSetting(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProjectorSettingsApi.projectorSettingsControllerGetSetting']?.[localVarOperationServerIndex]?.url;
@@ -1819,7 +1754,7 @@ export const ProjectorSettingsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async projectorSettingsControllerGetSettingsByOrganizationId(organizationId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProjectorSettingsDto>> {
+        async projectorSettingsControllerGetSettingsByOrganizationId(organizationId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProjectorSettingsConfigurationDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.projectorSettingsControllerGetSettingsByOrganizationId(organizationId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProjectorSettingsApi.projectorSettingsControllerGetSettingsByOrganizationId']?.[localVarOperationServerIndex]?.url;
@@ -1827,12 +1762,12 @@ export const ProjectorSettingsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {ProjectorSettingsDto} projectorSettingsDto 
+         * @param {ProjectorSettingsConfigurationDto} projectorSettingsConfigurationDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async projectorSettingsControllerUpdate(projectorSettingsDto: ProjectorSettingsDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.projectorSettingsControllerUpdate(projectorSettingsDto, options);
+        async projectorSettingsControllerUpdate(projectorSettingsConfigurationDto: ProjectorSettingsConfigurationDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.projectorSettingsControllerUpdate(projectorSettingsConfigurationDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProjectorSettingsApi.projectorSettingsControllerUpdate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1852,7 +1787,7 @@ export const ProjectorSettingsApiFactory = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectorSettingsControllerGetSetting(options?: any): AxiosPromise<ProjectorSettingsDto> {
+        projectorSettingsControllerGetSetting(options?: any): AxiosPromise<ProjectorSettingsConfigurationDto> {
             return localVarFp.projectorSettingsControllerGetSetting(options).then((request) => request(axios, basePath));
         },
         /**
@@ -1861,17 +1796,17 @@ export const ProjectorSettingsApiFactory = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectorSettingsControllerGetSettingsByOrganizationId(organizationId: number, options?: any): AxiosPromise<ProjectorSettingsDto> {
+        projectorSettingsControllerGetSettingsByOrganizationId(organizationId: number, options?: any): AxiosPromise<ProjectorSettingsConfigurationDto> {
             return localVarFp.projectorSettingsControllerGetSettingsByOrganizationId(organizationId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {ProjectorSettingsDto} projectorSettingsDto 
+         * @param {ProjectorSettingsConfigurationDto} projectorSettingsConfigurationDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectorSettingsControllerUpdate(projectorSettingsDto: ProjectorSettingsDto, options?: any): AxiosPromise<void> {
-            return localVarFp.projectorSettingsControllerUpdate(projectorSettingsDto, options).then((request) => request(axios, basePath));
+        projectorSettingsControllerUpdate(projectorSettingsConfigurationDto: ProjectorSettingsConfigurationDto, options?: any): AxiosPromise<void> {
+            return localVarFp.projectorSettingsControllerUpdate(projectorSettingsConfigurationDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1906,13 +1841,13 @@ export class ProjectorSettingsApi extends BaseAPI {
 
     /**
      * 
-     * @param {ProjectorSettingsDto} projectorSettingsDto 
+     * @param {ProjectorSettingsConfigurationDto} projectorSettingsConfigurationDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProjectorSettingsApi
      */
-    public projectorSettingsControllerUpdate(projectorSettingsDto: ProjectorSettingsDto, options?: RawAxiosRequestConfig) {
-        return ProjectorSettingsApiFp(this.configuration).projectorSettingsControllerUpdate(projectorSettingsDto, options).then((request) => request(this.axios, this.basePath));
+    public projectorSettingsControllerUpdate(projectorSettingsConfigurationDto: ProjectorSettingsConfigurationDto, options?: RawAxiosRequestConfig) {
+        return ProjectorSettingsApiFp(this.configuration).projectorSettingsControllerUpdate(projectorSettingsConfigurationDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

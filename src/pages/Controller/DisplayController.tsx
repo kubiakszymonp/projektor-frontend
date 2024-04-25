@@ -19,7 +19,7 @@ import {
   DisplayState,
   DisplayStateDisplayTypeEnum,
   MovePageDtoDirectionEnum,
-  ProjectorSettingsDto,
+  ProjectorSettingsConfigurationDto,
   TextUnitDto,
   TextUnitQueueDto,
 } from "../../api/generated";
@@ -27,7 +27,7 @@ import { useLoading } from "../../components/loading/loading-context";
 
 export const Controller = () => {
   const [projectorSettings, setProjectorSettings] =
-    React.useState<ProjectorSettingsDto>();
+    React.useState<ProjectorSettingsConfigurationDto>();
   const [currentTextUnit, setCurrentTextUnit] = React.useState<TextUnitDto>();
   const [currentTextUnitQueue, setCurrentTextUnitQueue] =
     React.useState<TextUnitQueueDto>();

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Property } from "csstype";
+import type { Property } from "csstype";
 import "./Projector.css";
 import { setPageTitle } from "../../services/page-title";
 import { useParams } from "react-router-dom";
@@ -7,8 +7,10 @@ import { UPLOAD_ROOT, projectorApi, projectorSettingsApi } from "../../api";
 import {
   DisplayStateDisplayTypeEnum,
   GetProjectorStateDto,
+  TextStrategy,
 } from "../../api/generated";
 import { StreamPlayer } from "../Streamer/StreamPlayer";
+import { AutoFlowText } from "../../components/auto-flow-text";
 
 export const ProjectorPage = (props: { isPreview: boolean }) => {
   const { organizationId: rawOrganizationId } = useParams();
@@ -86,42 +88,50 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
       className="projector-container"
       style={{ backgroundColor: projectorState?.settings.backgroundColor }}
     >
-      {(projectorState?.displayType === DisplayStateDisplayTypeEnum.Text ||
-        projectorState?.displayType ===
-          DisplayStateDisplayTypeEnum.Example) && (
-        <div
-          style={{
-            paddingTop: projectorState?.settings.paddingTop,
-            justifyContent: projectorState?.settings.textVertically,
-            height: "100%",
-            width: "100%",
-            overflow: "hidden",
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          {projectorState?.lines.map((line, index) => {
-            return (
-              <div
-                key={index}
-                className="text-line"
-                style={{
-                  color: projectorState?.settings.fontColor,
-                  fontFamily: projectorState?.settings.fontFamily,
-                  fontSize: projectorState?.settings.fontSize,
-                  textAlign: projectorState?.settings
-                    .textAlign as Property.TextAlign,
-                  letterSpacing: projectorState?.settings.letterSpacing,
-                  lineHeight: projectorState?.settings.fontSize,
-                  marginInline: projectorState?.settings.marginInline,
-                  marginBlock: projectorState?.settings.marginBlock,
-                }}
-              >
-                {line}
-              </div>
-            );
-          })}
-        </div>
+      {projectorState?.displayType === DisplayStateDisplayTypeEnum.Text && (
+        <>
+          {projectorState.settings.textStrategy !== TextStrategy.Automatic && (
+            <div
+              style={{
+                paddingTop: projectorState?.settings.paddingTop,
+                justifyContent: projectorState?.settings.textVertically,
+                height: "100%",
+                width: "100%",
+                overflow: "hidden",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              {projectorState?.lines.map((line, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="text-line"
+                    style={{
+                      color: projectorState?.settings.fontColor,
+                      fontFamily: projectorState?.settings.fontFamily,
+                      fontSize: projectorState?.settings.fontSize,
+                      textAlign: projectorState?.settings
+                        .textAlign as Property.TextAlign,
+                      letterSpacing: projectorState?.settings.letterSpacing,
+                      lineHeight: projectorState?.settings.fontSize,
+                      marginInline: projectorState?.settings.marginInline,
+                      marginBlock: projectorState?.settings.marginBlock,
+                    }}
+                  >
+                    {line}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          {projectorState.settings.textStrategy === TextStrategy.Automatic && (
+            <AutoFlowText
+              settings={projectorState?.settings}
+              text={projectorState.lines.join("\n")}
+            />
+          )}
+        </>
       )}
       {projectorState?.displayType === DisplayStateDisplayTypeEnum.Media && (
         <img

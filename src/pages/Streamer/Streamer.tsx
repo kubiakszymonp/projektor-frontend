@@ -1,14 +1,16 @@
 import { Button } from "@mui/material";
 import { btoa } from "buffer";
 import React, { useEffect, useRef, useState } from "react";
-import { BASE_PATH, uploadedFilesApi } from "../../api";
+import { uploadedFilesApi } from "../../api";
+import { Computer, Face, Forest, PlayArrow, Stop } from "@mui/icons-material";
 
-const CHUNK_DURATION = 400;
+const CHUNK_DURATION = 600;
 const FPS = 24;
 
 enum CameraType {
   FRONT = "user",
   BACK = "environment",
+  SCREEN = "screen",
 }
 
 export const getSupportedCodecs = () => {
@@ -20,7 +22,7 @@ export const getSupportedCodecs = () => {
     "video/webm;codecs=h264,opus",
     "video/webm;codecs=h264",
     "video/mp4;codecs=h264",
-    'video/webm; codecs="avc1.42E01F"',
+    "video/webm;",
   ];
 
   codecs.forEach((codec) => {
@@ -32,69 +34,148 @@ export const getSupportedCodecs = () => {
   });
 };
 
-const MIME_TYPE = 'video/webm; codecs="avc1.42E01F"';
+const MIME_TYPE = 'video/webm;  codecs="avc1.42E01F"';
 
 export const Streamer: React.FC = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const displayCanvasRef = useRef<HTMLCanvasElement>(null);
+  const captureCanvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
+  const [capturingContext, setCapturingContext] =
+    useState<CanvasRenderingContext2D | null>(null);
+  const [displayContext, setDisplayContext] =
+    useState<CanvasRenderingContext2D | null>(null);
   const [isCapturing, setIsCapturing] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
     null
   );
 
+  const getAvailableDevices = async () => {
+    const availableDevices = await navigator.mediaDevices.enumerateDevices();
+    const inputDevices = availableDevices.filter((device) =>
+      device.kind.includes("videoinput")
+    );
+    inputDevices.forEach((device) => {
+      console.log((device as any).getCapabilities());
+    });
+    console.log({ inputDevices });
+  };
+
   useEffect(() => {
     getSupportedCodecs();
-    if (!canvasRef.current || !videoRef.current) return;
+    getAvailableDevices();
+    if (
+      !displayCanvasRef.current ||
+      !captureCanvasRef.current ||
+      !videoRef.current
+    )
+      return;
 
-    const ctx = canvasRef.current.getContext("2d");
-    setContext(ctx);
+    const ctx = captureCanvasRef.current.getContext("2d");
+    const displayCtx = displayCanvasRef.current.getContext("2d");
+
+    setCapturingContext(ctx);
+    setDisplayContext(displayCtx);
 
     videoRef.current.addEventListener("play", () => {
       function step() {
-        const videoWidth = videoRef.current!.videoWidth;
-        const videoHeight = videoRef.current!.videoHeight;
+        // const videoWidth = videoRef.current!.videoWidth;
+        // const videoHeight = videoRef.current!.videoHeight;
 
-        const aspectRatio = videoWidth / videoHeight;
-        const canvasAspectRation =
-          canvasRef.current!.width / canvasRef.current!.height;
+        // const aspectRatio = videoWidth / videoHeight;
+        // const canvasAspectRation =
+        //   canvasRef.current!.width / canvasRef.current!.height;
 
-        let width = 0;
-        let height = 0;
-        let x = 0;
-        let y = 0;
+        // let width = 0;
+        // let height = 0;
+        // let x = 0;
+        // let y = 0;
 
-        if (aspectRatio > canvasAspectRation) {
-          width = canvasRef.current!.width;
-          height = width / aspectRatio;
-          y = (canvasRef.current!.height - height) / 2;
-          x = 0;
-        }
+        // if (aspectRatio > canvasAspectRation) {
+        //   width = canvasRef.current!.width;
+        //   height = width / aspectRatio;
+        //   y = (canvasRef.current!.height - height) / 2;
+        //   x = 0;
+        // }
 
-        if (aspectRatio < canvasAspectRation) {
-          height = canvasRef.current!.height;
-          width = height * aspectRatio;
-          x = (canvasRef.current!.width - width) / 2;
-          y = 0;
-        }
+        // if (aspectRatio < canvasAspectRation) {
+        //   height = canvasRef.current!.height;
+        //   width = height * aspectRatio;
+        //   x = (canvasRef.current!.width - width) / 2;
+        //   y = 0;
+        // }
 
-        ctx?.drawImage(videoRef.current!, x, y, width, height);
+        captureCanvasRef.current!.width = videoRef.current!.videoWidth;
+        captureCanvasRef.current!.height = videoRef.current!.videoHeight;
+
+        ctx?.drawImage(
+          videoRef.current!,
+          0,
+          0,
+          videoRef.current!.videoWidth,
+          videoRef.current!.videoHeight
+        );
+        drawOnDisplayCanvas(
+          displayCtx!,
+          videoRef.current!,
+          displayCanvasRef.current!
+        );
+
         requestAnimationFrame(step);
       }
       requestAnimationFrame(step);
     });
-  }, [canvasRef, videoRef]);
+  }, [captureCanvasRef, videoRef]);
+
+  const drawOnDisplayCanvas = (
+    ctx: CanvasRenderingContext2D,
+    videoElement: HTMLVideoElement,
+    canvas: HTMLCanvasElement
+  ) => {
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+
+    const videoWidth = videoElement.videoWidth;
+    const videoHeight = videoElement.videoHeight;
+
+    const videoAspectRatio = videoWidth / videoHeight;
+    const windowAspectRatio = windowWidth / windowHeight;
+
+    let width = 0;
+    let height = 0;
+
+    // full horizontal
+    if (videoAspectRatio > windowAspectRatio) {
+      width = windowWidth;
+      height = width / videoAspectRatio;
+    }
+    // full vertical
+    else {
+      height = windowHeight;
+      width = height * videoAspectRatio;
+    }
+
+    canvas.width = width;
+    canvas.height = height;
+    ctx.drawImage(videoElement, 0, 0, width, height);
+  };
 
   const startCamera = async (cameraType: CameraType) => {
     if (!videoRef.current) return;
-    if (!context) return;
+    if (!capturingContext) return;
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: cameraType,
-        },
-      });
+      let stream: MediaStream;
+      if (cameraType === CameraType.SCREEN) {
+        stream = await navigator.mediaDevices.getDisplayMedia({
+          video: true,
+        });
+      } else {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: cameraType,
+          },
+        });
+      }
       videoRef.current.srcObject = stream;
       videoRef.current.play();
     } catch (error) {
@@ -103,12 +184,13 @@ export const Streamer: React.FC = () => {
   };
 
   const beginStream = async () => {
-    if (!context || !canvasRef.current || !videoRef.current) return;
+    if (!capturingContext || !captureCanvasRef.current || !videoRef.current)
+      return;
 
     await uploadedFilesApi.uploadedFilesControllerStartStream();
 
     setIsStreaming(true);
-    const stream = canvasRef.current.captureStream(FPS);
+    const stream = captureCanvasRef.current.captureStream(FPS);
     const mediaRecorder = new MediaRecorder(stream, {
       mimeType: MIME_TYPE,
       audioBitsPerSecond: 0,
@@ -156,6 +238,7 @@ export const Streamer: React.FC = () => {
   };
 
   const startCapturing = async (cameraType: CameraType) => {
+    stopCapturing();
     await startCamera(cameraType);
     setIsCapturing(true);
   };
@@ -163,14 +246,14 @@ export const Streamer: React.FC = () => {
   const stopCamera = () => {
     if (!videoRef.current) return;
     const stream = videoRef.current.srcObject as MediaStream;
-    const tracks = stream.getTracks();
-    tracks.forEach((track) => track.stop());
+    const tracks = stream?.getTracks();
+    tracks?.forEach((track) => track.stop());
     videoRef.current.srcObject = null;
   };
 
   const stopCapturing = () => {
     setIsCapturing(false);
-    clearCanvas(canvasRef.current!, context!);
+    clearCanvas(captureCanvasRef.current!, capturingContext!);
     stopCamera();
   };
 
@@ -182,61 +265,96 @@ export const Streamer: React.FC = () => {
   };
 
   return (
-    <div
-      style={{
-        position: "fixed",
-      }}
-    >
-      <div style={{ position: "absolute" }}>
-        {!isCapturing && (
-          <>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => startCapturing(CameraType.FRONT)}
-            >
-              Przednia kamera
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => startCapturing(CameraType.BACK)}
-            >
-              Tylna kamera
-            </Button>
-          </>
+    <div style={{ overflow: "hidden", height: "100vh", width: "100%" }}>
+      <div
+        style={{
+          position: "absolute",
+          zIndex: 5,
+          display: "flex",
+          justifyContent: "center",
+          width: "100%",
+        }}
+      >
+        <Button
+          sx={{ m: 1 }}
+          variant="contained"
+          color="primary"
+          onClick={() => startCapturing(CameraType.FRONT)}
+        >
+          <Face />
+        </Button>
+        <Button
+          sx={{ m: 1 }}
+          variant="contained"
+          color="primary"
+          onClick={() => startCapturing(CameraType.BACK)}
+        >
+          <Forest />
+        </Button>
+        <Button
+          sx={{ m: 1 }}
+          variant="contained"
+          color="primary"
+          onClick={() => startCapturing(CameraType.SCREEN)}
+        >
+          <Computer />
+        </Button>
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          zIndex: 5,
+          display: "flex",
+          justifyContent: "center",
+          width: "100%",
+          bottom: "60px",
+        }}
+      >
+        {!isStreaming && (
+          <Button
+            sx={{ m: 1 }}
+            variant="contained"
+            size="large"
+            color="success"
+            onClick={() => beginStream()}
+          >
+            <PlayArrow fontSize="large" />
+          </Button>
         )}
-        {isCapturing && (
-          <>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => stopCapturing()}
-            >
-              Zatrzymaj podgląd
-            </Button>
-            {!isStreaming && (
-              <Button
-                variant="contained"
-                color="info"
-                onClick={() => beginStream()}
-              >
-                Rzutuj
-              </Button>
-            )}
-            {isStreaming && (
-              <Button
-                variant="contained"
-                color="warning"
-                onClick={() => endStreaming()}
-              >
-                Zatrzymaj rzutowanie
-              </Button>
-            )}
-          </>
+        {isStreaming && (
+          <Button
+            sx={{ m: 1 }}
+            variant="contained"
+            color="warning"
+            onClick={() => endStreaming()}
+          >
+            <Stop fontSize="large" />
+          </Button>
         )}
       </div>
-      <canvas ref={canvasRef} id="canvas" width={400} height={400}></canvas>
+      <div
+        style={{
+          display: "flex",
+          height: "100vh",
+          width: "100%",
+          backgroundColor: "black",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <canvas
+          ref={displayCanvasRef}
+          id="displayCanvas"
+          style={{
+            zIndex: 1,
+          }}
+        ></canvas>
+      </div>
+      <canvas
+        ref={captureCanvasRef}
+        id="capturingCanvas"
+        style={{ visibility: "hidden" }}
+      ></canvas>
       <video
         ref={videoRef}
         style={{

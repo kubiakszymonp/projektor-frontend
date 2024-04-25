@@ -7,6 +7,7 @@ import {
   ProjectorSettingsApi,
   TextUnitQueuesApi,
   TextUnitsApi,
+  TextUnitTagApi,
   UploadedFilesApi,
 } from "./generated";
 import { jwtPersistance } from "../services/jwt-persistance";
@@ -51,6 +52,12 @@ export const projectorSettingsApi = new ProjectorSettingsApi(
 );
 export const projectorApi = new ProjectorApi(undefined, BASE_PATH, instance);
 export const uploadedFilesApi = new UploadedFilesApi(
+  undefined,
+  BASE_PATH,
+  instance
+);
+
+export const textUnitTagApi = new TextUnitTagApi(
   undefined,
   BASE_PATH,
   instance

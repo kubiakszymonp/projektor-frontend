@@ -16,6 +16,7 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
   const { organizationId: rawOrganizationId } = useParams();
   const organizationId = parseInt(rawOrganizationId || "0");
   const [projectorState, setProjectorState] = useState<GetProjectorStateDto>();
+  const [lastUpdateTime, setLastUpdateTime] = useState<number | null>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
   const [imageStyles, setImageStyles] = useState({
@@ -70,9 +71,16 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
   }, [projectorState]);
 
   useEffect(() => {
-    const interval = setInterval(getDisplayState, 300);
+    getDisplayState();
+    const interval = setInterval(getLastUpdateTime, 300);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (lastUpdateTime === null) return;
+    if(lastUpdateTime === projectorState?.lastUpdateTime) return;
+    getDisplayState();
+  }, [lastUpdateTime]);
 
   const getDisplayState = async () => {
     const projectorDisplay =
@@ -81,6 +89,14 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
       );
 
     setProjectorState(projectorDisplay.data);
+  };
+
+  const getLastUpdateTime = async () => {
+    const lastUpdate =
+      await projectorApi.projectorControllerGetLastUpdateTimestamp(
+        organizationId
+      );
+    setLastUpdateTime(lastUpdate.data);
   };
 
   return (

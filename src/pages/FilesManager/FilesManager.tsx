@@ -163,6 +163,7 @@ export const FilesManager: React.FC = () => {
         handleClose={() => {
           setFilePreviewModalOpen(false);
         }}
+        refresh={loadData}
       />
       <input
         type="file"

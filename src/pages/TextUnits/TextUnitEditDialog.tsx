@@ -14,7 +14,7 @@ import { TransitionAlert } from "../../components/alert.component";
 import { TextUnitDto } from "../../api/generated";
 import { CustomPopover } from "../../components/popover";
 
-const SONG_HELP_TEXT = `Tekst składa się z części oddzielonych nową linią. Każda z części rozpoczyna się tagiem tytułowym wewnątrz kwadratowych nawiasów.\n
+const SONG_HELP_TEXT = `Tekst składa się z części oddzielonych nową linią. Każda z części może rozpoczynać się znacznikiem tytułowym wewnątrz kwadratowych nawiasów.\n
 \n
 Przykład:\n
 [Pierwsza zwrotka]\n

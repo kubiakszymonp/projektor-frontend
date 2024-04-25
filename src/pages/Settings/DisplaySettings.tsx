@@ -185,14 +185,14 @@ export const DisplaySettings = () => {
             />
           ))}
           <FormControl>
-            <InputLabel id="demo-select-small-label">Age</InputLabel>
+            <InputLabel id="demo-select-small-label">Tryb wyświetlania tekstu</InputLabel>
             <Select
               labelId="demo-select-small-label"
               id="demo-select-small"
               value={
                 (currentProjectorState as any)[TEXT_STRATEGY_INPUT.fieldName]
               }
-              label="Age"
+              label="Tryb wyświetlania tekstu"
               onChange={(e) => {
                 setCurrentProjectorState({
                   ...currentProjectorState,

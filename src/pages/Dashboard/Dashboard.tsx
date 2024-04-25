@@ -16,46 +16,46 @@ export const Dashboard = () => {
 
   const items = [
     {
-      icon: <SettingsRemoteOutlined />,
+      icon: <SettingsRemoteOutlined fontSize="large"/>,
       title: "Kontroluj wyświetlane treści",
       description:
         "Możliwe przewijanie w przód i tył za pomocą przycisków na ekranie.",
       onClick: () => navigate("/display-controller"),
     },
     {
-      icon: <SettingsSuggestRounded />,
+      icon: <SettingsSuggestRounded fontSize="large"/>,
       title: "Konfiguruj ustawienia wyświetlania",
       description:
         "Zmieniaj czcionkę, rozmiar, tło. Dostosuj marginesy, odstępy, kolorystykę.",
       onClick: () => navigate("/display-settings"),
     },
     {
-      icon: <LyricsOutlined />,
+      icon: <LyricsOutlined fontSize="large"/>,
       title: "Zarządzaj tekstami",
       description: "Dodawaj, edytuj, usuwaj tekstu. Wyszukuj i zarządzaj.",
       onClick: () => navigate("/text-unit-list"),
     },
     {
-      icon: <QueueOutlined />,
+      icon: <QueueOutlined fontSize="large"/>,
       title: "Kolejki wyświetlania",
       description:
         "Twórz kolejki wyświetlania. Dodawaj, usuwaj, edytuj kolejki.",
       onClick: () => navigate("/text-unit-queue-list"),
     },
     {
-      icon: <PermMedia />,
+      icon: <PermMedia fontSize="large"/>,
       title: "Wyświetlanie mediów",
       description: "Rzutuj zdjęcia, filmy oraz muzyke na ekran.",
       onClick: () => navigate("/files-manager"),
     },
     {
-      icon: <CameraAlt />,
+      icon: <CameraAlt fontSize="large"/>,
       title: "Transmisja z kamery",
       description: "Rozpocznij transmisję kamery na ekran.",
       onClick: () => navigate("/stream"),
     },
     {
-      icon: <ScreenshotMonitor />,
+      icon: <ScreenshotMonitor fontSize="large"/>,
       title: "Tryb ekranu",
       description: "",
       onClick: () => {

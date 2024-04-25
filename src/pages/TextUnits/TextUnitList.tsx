@@ -2,9 +2,16 @@ import {
   Box,
   Button,
   Card,
+  Checkbox,
+  FormControl,
   IconButton,
+  InputLabel,
+  ListItemText,
   Menu,
   MenuItem,
+  OutlinedInput,
+  Select,
+  SelectChangeEvent,
   Stack,
   TextField,
   Typography,
@@ -13,22 +20,32 @@ import {
 } from "@mui/material";
 import Fuse from "fuse.js";
 import { useEffect, useMemo, useState } from "react";
-import { textUnitApi, textUnitQueuesApi } from "../../api";
+import { textUnitApi, textUnitQueuesApi, textUnitTagApi } from "../../api";
 import { TextUnitEditDialog } from "./TextUnitEditDialog";
 import { AddTextUnitToQueueDialog } from "./AddTextUnitToQueueDialog";
 import { MoreVert } from "@mui/icons-material";
-import { TextUnitDto, TextUnitQueueDto } from "../../api/generated";
+import {
+  TextUnitDto,
+  TextUnitQueueDto,
+  TextUnitTagDto,
+} from "../../api/generated";
+import { ManageTagsDialog } from "./ManageTagsDialog";
 
 export const emptyTextUnitObject: TextUnitDto = {
   id: -1,
   title: "",
   content: "",
+  tags: [],
 };
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
 
 export const TextUnitList: React.FC = () => {
   const [textUnitEditDialogOpen, setTextUnitEditDialogOpen] = useState(false);
   const [textUnitAddToQueueDialogOpen, setTextUnitAddToQueueDialogOpen] =
     useState(false);
+  const [manageTagsDialogOpen, setManageTagsDialogOpen] = useState(false);
   const [textUnitList, setTextUnitList] = useState<TextUnitDto[]>([]);
   const [displayTextUnits, setDisplayTextUnits] = useState<TextUnitDto[]>([]);
   const [queues, setQueues] = useState<TextUnitQueueDto[]>([]);
@@ -37,32 +54,31 @@ export const TextUnitList: React.FC = () => {
     useState<string>("");
   const [currentlyOperatedTextUnit, setCurrentlyOperatedTextUnit] =
     useState<TextUnitDto>(emptyTextUnitObject);
-
-  const fuse = useMemo(
-    () =>
-      new Fuse(textUnitList, {
-        keys: ["title"],
-        includeScore: true,
-        shouldSort: true,
-        minMatchCharLength: 1,
-      }),
-    [textUnitList]
-  );
+  const [tags, setTags] = useState<TextUnitTagDto[]>([]);
+  const [selectedTags, setSelectedTags] = useState<number[]>([]);
 
   useEffect(() => {
     fetchTextUnitList();
     fetchQueues();
+    fetchTags();
   }, []);
 
   useEffect(() => {
-    onChangeSearchText();
-  }, [searchText, fuse]);
+    onChangeFilter();
+  }, [searchText, selectedTags, textUnitList]);
 
   const handleClose = () => {
     setTextUnitEditDialogOpen(false);
     setTextUnitAddToQueueDialogOpen(false);
+    setManageTagsDialogOpen(false);
     fetchTextUnitList();
     fetchQueues();
+    fetchTags();
+  };
+
+  const fetchTags = async () => {
+    const res = await textUnitTagApi.textUnitTagControllerFindAll();
+    setTags(res.data);
   };
 
   const theme = useTheme();
@@ -107,12 +123,27 @@ export const TextUnitList: React.FC = () => {
     });
   };
 
-  const onChangeSearchText = () => {
+  const onChangeFilter = () => {
+    let filtered: TextUnitDto[] = textUnitList;
+
+    if (selectedTags.length > 0) {
+      filtered = textUnitList.filter((textUnit) =>
+        textUnit.tags.some((tag) => selectedTags.includes(tag.id))
+      );
+    }
+
     if (searchText === "") {
-      setDisplayTextUnits(textUnitList);
+      setDisplayTextUnits(filtered);
       return;
     }
-    const result = fuse.search(searchText);
+
+    const result = new Fuse(filtered, {
+      keys: ["title"],
+      includeScore: true,
+      shouldSort: true,
+      minMatchCharLength: 1,
+    }).search(searchText);
+
     setDisplayTextUnits(result.map((r) => r.item));
   };
 
@@ -127,6 +158,15 @@ export const TextUnitList: React.FC = () => {
     const foundTextUnit = textUnitList.find((s) => s.id === textUnitId);
     if (foundTextUnit) setCurrentlyOperatedTextUnit(foundTextUnit);
     setTextUnitEditDialogOpen(true);
+  };
+
+  const handleChangeTagsSelection = (event: SelectChangeEvent<number>) => {
+    const values = event.target.value as unknown as number[];
+    setSelectedTags(values);
+  };
+
+  const onClickManageTags = () => {
+    setManageTagsDialogOpen(true);
   };
 
   return (
@@ -148,6 +188,7 @@ export const TextUnitList: React.FC = () => {
         allQueues={queues}
         setAllQueues={setQueues}
       />
+      <ManageTagsDialog handleClose={handleClose} open={manageTagsDialogOpen} />
       <Box
         sx={{
           py: {
@@ -176,12 +217,64 @@ export const TextUnitList: React.FC = () => {
             <Button
               variant="outlined"
               sx={{
+                width: "8rem",
                 px: 5,
-                mx: 2,
+                ml: 1,
               }}
               onClick={onAddTextUnit}
             >
               Dodaj
+            </Button>
+          </Stack>
+        </Box>
+        <Box>
+          <Stack direction={"row"}>
+            <FormControl sx={{ my: 1 }} fullWidth>
+              <InputLabel id="demo-multiple-checkbox-label">
+                Wybrane tagi
+              </InputLabel>
+              <Select
+                labelId="demo-multiple-checkbox-label"
+                id="demo-multiple-checkbox"
+                multiple
+                value={selectedTags as any}
+                onChange={handleChangeTagsSelection}
+                MenuProps={{
+                  PaperProps: {
+                    style: {
+                      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                      width: 250,
+                    },
+                  },
+                }}
+                renderValue={(selected) =>
+                  `Wybrano (${(selected as any).length})`
+                }
+                input={<OutlinedInput label="Wybrane tagi" />}
+              >
+                {tags.map((tag) => (
+                  <MenuItem key={tag.id} value={tag.id}>
+                    <Checkbox
+                      checked={selectedTags.some(
+                        (selectedTag) => selectedTag === tag.id
+                      )}
+                    />
+                    <ListItemText primary={tag.name} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Button
+              variant="outlined"
+              sx={{
+                width: "8rem",
+                px: 5,
+                my: 1,
+                ml: 1,
+              }}
+              onClick={onClickManageTags}
+            >
+              Tagi
             </Button>
           </Stack>
         </Box>
@@ -255,7 +348,7 @@ export const TextUnitList: React.FC = () => {
                           onAddTextUnitToPlaylist();
                         }}
                       >
-                        Dodaj
+                        Playlisty
                       </Button>
                     </>
                   )}
@@ -286,7 +379,7 @@ export const TextUnitList: React.FC = () => {
             handleCloseTextUnitMenu();
           }}
         >
-          Dodaj
+          Playlisty
         </MenuItem>
       </Menu>
     </>

@@ -1,1 +1,2 @@
-export const BACKEND_PORT = 3001;
+export const BACKEND_HOST =
+  window.location.protocol + "//" + window.location.host;

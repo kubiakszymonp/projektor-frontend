@@ -11,9 +11,9 @@ import {
   UploadedFilesApi,
 } from "./generated";
 import { jwtPersistance } from "../services/jwt-persistance";
-import { BACKEND_HOST } from "../environment";
+import { environment } from "../environment";
 
-export const BASE_PATH = BACKEND_HOST;
+export const BASE_PATH = environment.BACKEND_HOST;
 
 export const UPLOAD_ROOT = BASE_PATH + "/upload/";
 

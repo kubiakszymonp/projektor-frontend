@@ -62,6 +62,12 @@ export interface DisplayState {
     'textState': TextUnitState;
     /**
      * 
+     * @type {boolean}
+     * @memberof DisplayState
+     */
+    'emptyDisplay': boolean;
+    /**
+     * 
      * @type {Organization}
      * @memberof DisplayState
      */
@@ -81,7 +87,6 @@ export interface DisplayState {
 }
 
 export const DisplayStateDisplayTypeEnum = {
-    None: 'NONE',
     Text: 'TEXT',
     Media: 'MEDIA',
     Hls: 'HLS'
@@ -140,6 +145,12 @@ export interface GetProjectorStateDto {
     'displayType': GetProjectorStateDtoDisplayTypeEnum;
     /**
      * 
+     * @type {boolean}
+     * @memberof GetProjectorStateDto
+     */
+    'emptyDisplay': boolean;
+    /**
+     * 
      * @type {TextUnitState}
      * @memberof GetProjectorStateDto
      */
@@ -171,7 +182,6 @@ export interface GetProjectorStateDto {
 }
 
 export const GetProjectorStateDtoDisplayTypeEnum = {
-    None: 'NONE',
     Text: 'TEXT',
     Media: 'MEDIA',
     Hls: 'HLS'
@@ -768,10 +778,15 @@ export interface UpdateDisplayStateDto {
      * @memberof UpdateDisplayStateDto
      */
     'textState'?: TextUnitState;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateDisplayStateDto
+     */
+    'emptyDisplay'?: boolean;
 }
 
 export const UpdateDisplayStateDtoDisplayTypeEnum = {
-    None: 'NONE',
     Text: 'TEXT',
     Media: 'MEDIA',
     Hls: 'HLS'

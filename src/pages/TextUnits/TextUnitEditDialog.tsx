@@ -6,13 +6,25 @@ import {
   Box,
   DialogActions,
   Button,
+  Stack,
+  Chip,
+  FormControl,
+  InputLabel,
+  Select,
+  OutlinedInput,
+  MenuItem,
+  Checkbox,
+  ListItemText,
 } from "@mui/material";
-import { textUnitApi } from "../../api";
+import { textUnitApi, textUnitTagApi } from "../../api";
 import { Song } from "song-parser";
 import { useEffect, useState } from "react";
 import { TransitionAlert } from "../../components/alert.component";
-import { TextUnitDto } from "../../api/generated";
+import { TextUnitDto, TextUnitTagDto } from "../../api/generated";
 import { CustomPopover } from "../../components/popover";
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
 
 const SONG_HELP_TEXT = `Tekst składa się z części oddzielonych nową linią. Każda z części może rozpoczynać się znacznikiem tytułowym wewnątrz kwadratowych nawiasów.\n
 \n
@@ -46,6 +58,13 @@ export const TextUnitEditDialog: React.FC<{
   const [contentValidation, setContentValidation] = useState<string | null>(
     null
   );
+  const [availableTags, setAvailableTags] = useState<TextUnitTagDto[]>([]);
+  const [allTags, setAllTags] = useState<TextUnitTagDto[]>([]);
+
+  useEffect(() => {
+    fetchTags();
+  }, [open]);
+
   const onSave = () => {
     handleSave(operatedTextUnit);
   };
@@ -64,10 +83,41 @@ export const TextUnitEditDialog: React.FC<{
     return null;
   };
 
+  const fetchTags = async () => {
+    const res = await textUnitTagApi.textUnitTagControllerFindAll();
+    setAllTags(res.data);
+  };
+
+  useEffect(() => {
+    filterAvailableTags();
+  }, [operatedTextUnit.tags, allTags]);
+
+  const filterAvailableTags = () => {
+    setAvailableTags(
+      allTags.filter(
+        (tag) => !operatedTextUnit.tags.some((t) => t.id === tag.id)
+      )
+    );
+  };
+
   useEffect(() => {
     const valid = validateSong(operatedTextUnit.content);
     setContentValidation(valid);
   }, [operatedTextUnit.content]);
+
+  const onClickTag = (tag: TextUnitTagDto) => {
+    if (operatedTextUnit.tags.some((t) => t.id === tag.id)) {
+      setOperatedTextUnit({
+        ...operatedTextUnit,
+        tags: operatedTextUnit.tags.filter((t) => t.id !== tag.id),
+      });
+    } else {
+      setOperatedTextUnit({
+        ...operatedTextUnit,
+        tags: [...operatedTextUnit.tags, tag],
+      });
+    }
+  };
 
   return (
     <Dialog fullWidth open={open} onClose={handleClose}>
@@ -87,7 +137,7 @@ export const TextUnitEditDialog: React.FC<{
             setOperatedTextUnit({ ...operatedTextUnit, title: e.target.value });
           }}
         />
-        <Box sx={{ pt: 5 }}>
+        <Box sx={{ pt: 2 }}>
           <TextField
             fullWidth
             required
@@ -103,6 +153,48 @@ export const TextUnitEditDialog: React.FC<{
             }}
           />
         </Box>
+        <FormControl sx={{ mt: 4, mb: 2 }} fullWidth>
+          <InputLabel id="demo-multiple-checkbox-label">Dodaj tagi</InputLabel>
+          <Select
+            labelId="demo-multiple-checkbox-label"
+            id="demo-multiple-checkbox"
+            value={""}
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                  width: 250,
+                },
+              },
+            }}
+            renderValue={() => ""}
+            input={<OutlinedInput label="Wybrane tagi" />}
+          >
+            {availableTags.map((tag) => (
+              <MenuItem
+                key={tag.id}
+                value={tag.id}
+                onClick={() => {
+                  onClickTag(tag);
+                }}
+              >
+                <ListItemText primary={tag.name} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Stack direction="row" flexWrap={"wrap"}>
+          {operatedTextUnit.tags.map((tag) => (
+            <Chip
+              key={tag.id}
+              label={tag.name}
+              variant="outlined"
+              onDelete={() => {
+                onClickTag(tag);
+              }}
+            />
+          ))}
+        </Stack>
         <TransitionAlert
           opened={contentValidation !== null}
           text={contentValidation || ""}

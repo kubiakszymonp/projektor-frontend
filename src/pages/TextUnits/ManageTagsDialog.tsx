@@ -7,6 +7,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
   Stack,
   TextField,
   Typography,
@@ -14,6 +15,7 @@ import {
 import { useState, useEffect } from "react";
 import { textUnitTagApi } from "../../api";
 import { TextUnitTagDto } from "../../api/generated";
+import { Check, Close, Delete, Edit } from "@mui/icons-material";
 
 export const ManageTagsDialog: React.FC<{
   open: boolean;
@@ -47,16 +49,21 @@ export const ManageTagsDialog: React.FC<{
     fetchTags();
   };
 
+  const deleteTag = async (tag: TextUnitTagDto) => {
+    await textUnitTagApi.textUnitTagControllerRemove(String(tag.id));
+    fetchTags();
+  };
+
   return (
     <Dialog fullWidth open={open} onClose={handleClose}>
       <DialogTitle>Zarządzanie tagami</DialogTitle>
       <DialogContent>
         <Box sx={{ pt: 3 }}>
-          {/* button to add */}
           <Button
             color="primary"
             variant="contained"
             onClick={() => {
+              if (editedTag?.id === -1) return;
               const appended = [{ id: -1, name: "", description: "" }, ...tags];
               setTags(appended);
               setEditedTag(appended[0]);
@@ -87,15 +94,24 @@ export const ManageTagsDialog: React.FC<{
                     >
                       {tag.name}
                     </Typography>
-                    <Button
-                      color="warning"
-                      onClick={() => {
-                        setEditedTag({ ...tag });
-                      }}
-                      sx={{ ml: 1 }}
-                    >
-                      Edytuj
-                    </Button>
+                    <Box>
+                      <IconButton
+                        color="warning"
+                        onClick={() => {
+                          setEditedTag({ ...tag });
+                        }}
+                      >
+                        <Edit />
+                      </IconButton>
+                      <IconButton
+                        color="error"
+                        onClick={() => {
+                          deleteTag(tag);
+                        }}
+                      >
+                        <Delete />
+                      </IconButton>
+                    </Box>
                   </>
                 )}
                 {editedTag?.id === tag.id && (
@@ -111,20 +127,19 @@ export const ManageTagsDialog: React.FC<{
                         setEditedTag({ ...tag, name: e.target.value });
                       }}
                     />
-                    {/* // save button */}
-                    <Button sx={{ ml: 1 }} color="success" onClick={saveTag}>
-                      Zapisz
-                    </Button>
-                    <Button
-                      sx={{ ml: 1 }}
+                    {/* // save Iconbutton */}
+                    <IconButton color="success" onClick={saveTag}>
+                      <Check />
+                    </IconButton>
+                    <IconButton
                       color="error"
                       onClick={() => {
                         setEditedTag(null);
                         fetchTags();
                       }}
                     >
-                      Anuluj
-                    </Button>
+                      <Close />
+                    </IconButton>
                   </>
                 )}
               </Stack>

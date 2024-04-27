@@ -97,9 +97,7 @@ export const Controller = () => {
 
   const setScreenOnOff = async (off: boolean) => {
     await displayStateApi.displayStateControllerUpdateDisplayState({
-      displayType: off
-        ? DisplayStateDisplayTypeEnum.None
-        : DisplayStateDisplayTypeEnum.Text,
+      emptyDisplay: off,
     });
     await loadState();
   };
@@ -201,7 +199,7 @@ export const Controller = () => {
         <FormControlLabel
           control={
             <Checkbox
-              checked={currentDisplayState?.displayType === "NONE"}
+              checked={currentDisplayState?.emptyDisplay}
               sx={{ "& .MuiSvgIcon-root": { fontSize: 32 } }}
             />
           }

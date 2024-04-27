@@ -41,6 +41,7 @@ export const CustomPopover: React.FC<{ text: string }> = ({ text }) => {
         <Box sx={{ p: 2 }}>
           {text.split("\n").map((line, index) => (
             <Typography
+              key={index}
               sx={{
                 pt: 0.5,
                 maxWidth: 400,

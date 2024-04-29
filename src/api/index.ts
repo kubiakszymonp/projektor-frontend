@@ -15,7 +15,7 @@ import { environment } from "../environment";
 
 export const BASE_PATH = environment.BACKEND_HOST;
 
-export const UPLOAD_ROOT = BASE_PATH + "/upload/";
+const UPLOAD_ROOT = BASE_PATH + "/upload/";
 
 export const createAxios = () => {
   const interceptedAxios = axios.create();
@@ -62,3 +62,9 @@ export const textUnitTagApi = new TextUnitTagApi(
   BASE_PATH,
   instance
 );
+
+
+export const getStaticResourceUrl = (resourceOid: string | null | undefined) => {
+  if (!resourceOid) throw Error("File oid is empty");
+  return UPLOAD_ROOT + resourceOid;
+};

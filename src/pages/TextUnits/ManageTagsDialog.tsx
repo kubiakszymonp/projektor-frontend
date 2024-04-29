@@ -151,8 +151,6 @@ export const ManageTagsDialog: React.FC<{
         <Button onClick={handleClose}>Anuluj</Button>
         <Button
           onClick={() => {
-            debugger;
-            console.log({ tags });
             handleClose();
           }}
         >

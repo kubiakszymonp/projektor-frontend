@@ -16,17 +16,9 @@ import { TextUnitQueueDragAndDrop } from "./TextUnitQueueDragAndDropComponent";
 export const TextUnitQueueEditDialog: React.FC<{
   open: boolean;
   handleClose: () => void;
-  handleSave: () => void;
-  title: string;
-  operatedTextUnitQueue: TextUnitQueueDto;
-  setOperatedTextUnitQueue: (textUnitQueue: TextUnitQueueDto) => void;
 }> = ({
   open,
   handleClose,
-  handleSave,
-  title,
-  operatedTextUnitQueue,
-  setOperatedTextUnitQueue,
 }) => {
   const [queueTextUnits, setQueueTextUnits] = useState<DragAndDropItem[]>([]);
 

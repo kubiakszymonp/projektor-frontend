@@ -31,13 +31,6 @@ import {
 } from "../../api/generated";
 import { ManageTagsDialog } from "./ManageTagsDialog";
 
-export const emptyTextUnitObject: TextUnitDto = {
-  id: -1,
-  title: "",
-  content: "",
-  tags: [],
-};
-
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 
@@ -50,10 +43,6 @@ export const TextUnitList: React.FC = () => {
   const [displayTextUnits, setDisplayTextUnits] = useState<TextUnitDto[]>([]);
   const [queues, setQueues] = useState<TextUnitQueueDto[]>([]);
   const [searchText, setSearchText] = useState<string>("");
-  const [editTextUnitDialogTitle, setEditTextUnitDialogTitle] =
-    useState<string>("");
-  const [currentlyOperatedTextUnit, setCurrentlyOperatedTextUnit] =
-    useState<TextUnitDto>(emptyTextUnitObject);
   const [tags, setTags] = useState<TextUnitTagDto[]>([]);
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
 
@@ -172,12 +161,9 @@ export const TextUnitList: React.FC = () => {
   return (
     <>
       <TextUnitEditDialog
-        operatedTextUnit={currentlyOperatedTextUnit}
-        setOperatedTextUnit={setCurrentlyOperatedTextUnit}
         open={textUnitEditDialogOpen}
         handleClose={handleClose}
-        handleSave={handleSave}
-        title={editTextUnitDialogTitle}
+        textUnitId={currentlyOperatedTextUnit.id}
       />
       <AddTextUnitToQueueDialog
         textUnit={currentlyOperatedTextUnit}

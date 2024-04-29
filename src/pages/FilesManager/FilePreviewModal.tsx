@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import { UploadedFileDto } from "../../api/generated";
-import { UPLOAD_ROOT, uploadedFilesApi } from "../../api";
+import {  uploadedFilesApi } from "../../api";
 import { useRef, useState } from "react";
 import { MoreVert } from "@mui/icons-material";
 
@@ -71,7 +71,7 @@ export const FilePreviewModal: React.FC<{
           <DialogContent sx={{ p: 1 }}>
             <Box>
               <img
-                src={UPLOAD_ROOT + currentFile.url}
+                src={getStaticResourceUrl(currentFile.url)}
                 style={{ maxWidth: "100%", maxHeight: "100%" }}
                 alt={currentFile.name}
               />

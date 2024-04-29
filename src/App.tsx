@@ -25,8 +25,8 @@ function App() {
       <LoadingProvider>
         <LoadingSpinner />
         <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<Dashboard />} />
           <Route path="/text-unit-list" element={<TextUnitList />} />
           <Route path="/display-settings" element={<DisplaySettings />} />
           <Route path="/display-controller" element={<Controller />} />

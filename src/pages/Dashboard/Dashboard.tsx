@@ -1,5 +1,6 @@
 import {
   CameraAlt,
+  Logout,
   LyricsOutlined,
   PermMedia,
   QueueOutlined,
@@ -10,52 +11,58 @@ import {
 import { Box, Card, Container, Grid, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { jwtPersistance } from "../../services/jwt-persistance";
+import { useEffect } from "react";
 
 export const Dashboard = () => {
   const navigate = useNavigate();
+  useEffect(() => {
+    if (jwtPersistance.getDecodedJwt() === null) {
+      navigate("login");
+    }
+  }, []);
 
   const items = [
     {
-      icon: <SettingsRemoteOutlined fontSize="large"/>,
+      icon: <SettingsRemoteOutlined fontSize="large" />,
       title: "Kontroluj wyświetlane treści",
       description:
         "Możliwe przewijanie w przód i tył za pomocą przycisków na ekranie.",
       onClick: () => navigate("/display-controller"),
     },
     {
-      icon: <SettingsSuggestRounded fontSize="large"/>,
+      icon: <SettingsSuggestRounded fontSize="large" />,
       title: "Konfiguruj ustawienia wyświetlania",
       description:
         "Zmieniaj czcionkę, rozmiar, tło. Dostosuj marginesy, odstępy, kolorystykę.",
       onClick: () => navigate("/display-settings"),
     },
     {
-      icon: <LyricsOutlined fontSize="large"/>,
+      icon: <LyricsOutlined fontSize="large" />,
       title: "Zarządzaj tekstami",
       description: "Dodawaj, edytuj, usuwaj tekstu. Wyszukuj i zarządzaj.",
       onClick: () => navigate("/text-unit-list"),
     },
     {
-      icon: <QueueOutlined fontSize="large"/>,
+      icon: <QueueOutlined fontSize="large" />,
       title: "Kolejki wyświetlania",
       description:
         "Twórz kolejki wyświetlania. Dodawaj, usuwaj, edytuj kolejki.",
       onClick: () => navigate("/text-unit-queue-list"),
     },
     {
-      icon: <PermMedia fontSize="large"/>,
+      icon: <PermMedia fontSize="large" />,
       title: "Wyświetlanie mediów",
       description: "Rzutuj zdjęcia, filmy oraz muzyke na ekran.",
       onClick: () => navigate("/files-manager"),
     },
     {
-      icon: <CameraAlt fontSize="large"/>,
+      icon: <CameraAlt fontSize="large" />,
       title: "Transmisja z kamery",
       description: "Rozpocznij transmisję kamery na ekran.",
       onClick: () => navigate("/stream"),
     },
     {
-      icon: <ScreenshotMonitor fontSize="large"/>,
+      icon: <ScreenshotMonitor fontSize="large" />,
       title: "Tryb ekranu",
       description: "",
       onClick: () => {
@@ -63,6 +70,15 @@ export const Dashboard = () => {
         navigate("/projector/" + organizationId);
       },
     },
+    {
+      icon: <Logout fontSize="large" />,
+      title: "Wyloguj",
+      onClick: () => {
+        jwtPersistance.removeJwt();
+        navigate("login");
+      }
+
+    }
   ];
   return (
     <Box

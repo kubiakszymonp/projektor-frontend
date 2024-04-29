@@ -18,25 +18,14 @@ import Fuse from "fuse.js";
 import { TextUnitQueueEditDialog } from "./TextUnitQueueEditDialog";
 import { MoreVert } from "@mui/icons-material";
 
-const emptyTextUnitQueueObject: TextUnitQueueDto = {
-  id: -1,
-  name: "",
-  content: {
-    textUnits: [],
-  },
-  description: "",
-};
-
 export const TextUnitQueueList = () => {
   const [textUnitQueues, setTextUnitQueues] = useState<TextUnitQueueDto[]>([]);
   const [displayQueues, setDisplayQueues] = useState<TextUnitQueueDto[]>([]);
   const [selectedTextUnitQueue, setSelectedTextUnitQueue] =
-    useState<TextUnitQueueDto>(emptyTextUnitQueueObject);
+    useState<TextUnitQueueDto | null>(null);
   const [searchText, setSearchText] = useState<string>("");
   const [textUnitQueueEditDialogOpen, setTextUnitQueueEditDialogOpen] =
     useState(false);
-  const [textUnitQueueEditDialogTitle, setTextUnitQueueEditDialogTitle] =
-    useState("");
 
   useEffect(() => {
     fetchTextUnitQueues();
@@ -84,8 +73,7 @@ export const TextUnitQueueList = () => {
   };
 
   const onAddTextUnitQueue = async () => {
-    setSelectedTextUnitQueue(emptyTextUnitQueueObject);
-    setTextUnitQueueEditDialogTitle("Utwórz kolejkę");
+    setSelectedTextUnitQueue(null);
     setTextUnitQueueEditDialogOpen(true);
   };
 
@@ -93,7 +81,6 @@ export const TextUnitQueueList = () => {
     const textUnitQueue = textUnitQueues.find((queue) => queue.id === id);
     if (textUnitQueue) {
       setSelectedTextUnitQueue(textUnitQueue);
-      setTextUnitQueueEditDialogTitle("Edytuj kolejkę");
       setTextUnitQueueEditDialogOpen(true);
     }
   };
@@ -107,19 +94,13 @@ export const TextUnitQueueList = () => {
   return (
     <>
       <TextUnitQueueEditDialog
-        setOperatedTextUnitQueue={setSelectedTextUnitQueue}
+        textUnitQueueId={selectedTextUnitQueue?.id ?? null}
         handleClose={() => {
-          setTextUnitQueueEditDialogOpen(false);
-        }}
-        handleSave={() => {
           setTextUnitQueueEditDialogOpen(false);
           fetchTextUnitQueues();
         }}
         open={textUnitQueueEditDialogOpen}
-        operatedTextUnitQueue={selectedTextUnitQueue}
-        title={textUnitQueueEditDialogTitle}
       />
-
       <Box
         sx={{
           py: {

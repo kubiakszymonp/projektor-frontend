@@ -1315,6 +1315,300 @@ export class DisplayStateApi extends BaseAPI {
 
 
 /**
+ * LiveStreamingApi - axios parameter creator
+ * @export
+ */
+export const LiveStreamingApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} organizationId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        liveStreamingControllerGetStreamManifest: async (organizationId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'organizationId' is not null or undefined
+            assertParamExists('liveStreamingControllerGetStreamManifest', 'organizationId', organizationId)
+            const localVarPath = `/api/live-streaming/hls-stream-manifest/{organizationId}`
+                .replace(`{${"organizationId"}}`, encodeURIComponent(String(organizationId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        liveStreamingControllerStartStream: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/live-streaming/hls-stream/start`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        liveStreamingControllerStopStream: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/live-streaming/hls-stream/stop`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        liveStreamingControllerUploadStreamChunk: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/live-streaming/hls-stream`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * LiveStreamingApi - functional programming interface
+ * @export
+ */
+export const LiveStreamingApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = LiveStreamingApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} organizationId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async liveStreamingControllerGetStreamManifest(organizationId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.liveStreamingControllerGetStreamManifest(organizationId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['LiveStreamingApi.liveStreamingControllerGetStreamManifest']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async liveStreamingControllerStartStream(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.liveStreamingControllerStartStream(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['LiveStreamingApi.liveStreamingControllerStartStream']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async liveStreamingControllerStopStream(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.liveStreamingControllerStopStream(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['LiveStreamingApi.liveStreamingControllerStopStream']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async liveStreamingControllerUploadStreamChunk(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.liveStreamingControllerUploadStreamChunk(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['LiveStreamingApi.liveStreamingControllerUploadStreamChunk']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * LiveStreamingApi - factory interface
+ * @export
+ */
+export const LiveStreamingApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = LiveStreamingApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} organizationId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        liveStreamingControllerGetStreamManifest(organizationId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.liveStreamingControllerGetStreamManifest(organizationId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        liveStreamingControllerStartStream(options?: any): AxiosPromise<void> {
+            return localVarFp.liveStreamingControllerStartStream(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        liveStreamingControllerStopStream(options?: any): AxiosPromise<void> {
+            return localVarFp.liveStreamingControllerStopStream(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        liveStreamingControllerUploadStreamChunk(options?: any): AxiosPromise<void> {
+            return localVarFp.liveStreamingControllerUploadStreamChunk(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * LiveStreamingApi - object-oriented interface
+ * @export
+ * @class LiveStreamingApi
+ * @extends {BaseAPI}
+ */
+export class LiveStreamingApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} organizationId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LiveStreamingApi
+     */
+    public liveStreamingControllerGetStreamManifest(organizationId: string, options?: RawAxiosRequestConfig) {
+        return LiveStreamingApiFp(this.configuration).liveStreamingControllerGetStreamManifest(organizationId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LiveStreamingApi
+     */
+    public liveStreamingControllerStartStream(options?: RawAxiosRequestConfig) {
+        return LiveStreamingApiFp(this.configuration).liveStreamingControllerStartStream(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LiveStreamingApi
+     */
+    public liveStreamingControllerStopStream(options?: RawAxiosRequestConfig) {
+        return LiveStreamingApiFp(this.configuration).liveStreamingControllerStopStream(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LiveStreamingApi
+     */
+    public liveStreamingControllerUploadStreamChunk(options?: RawAxiosRequestConfig) {
+        return LiveStreamingApiFp(this.configuration).liveStreamingControllerUploadStreamChunk(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
  * OrganizationsApi - axios parameter creator
  * @export
  */
@@ -3525,43 +3819,6 @@ export const UploadedFilesApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
-         * @param {string} organizationId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        uploadedFilesControllerGetStreamManifest: async (organizationId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'organizationId' is not null or undefined
-            assertParamExists('uploadedFilesControllerGetStreamManifest', 'organizationId', organizationId)
-            const localVarPath = `/api/uploaded-files/stream-manifest/{organizationId}`
-                .replace(`{${"organizationId"}}`, encodeURIComponent(String(organizationId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3680,107 +3937,8 @@ export const UploadedFilesApiAxiosParamCreator = function (configuration?: Confi
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadedFilesControllerStartStream: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/uploaded-files/stream/start`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        uploadedFilesControllerStopStream: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/uploaded-files/stream/stop`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
         uploadedFilesControllerUploadMultipleFiles: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/uploaded-files`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        uploadedFilesControllerUploadStreamChunk: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/uploaded-files/stream`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3841,18 +3999,6 @@ export const UploadedFilesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} organizationId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async uploadedFilesControllerGetStreamManifest(organizationId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadedFilesControllerGetStreamManifest(organizationId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UploadedFilesApi.uploadedFilesControllerGetStreamManifest']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3892,43 +4038,10 @@ export const UploadedFilesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async uploadedFilesControllerStartStream(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadedFilesControllerStartStream(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UploadedFilesApi.uploadedFilesControllerStartStream']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async uploadedFilesControllerStopStream(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadedFilesControllerStopStream(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UploadedFilesApi.uploadedFilesControllerStopStream']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
         async uploadedFilesControllerUploadMultipleFiles(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.uploadedFilesControllerUploadMultipleFiles(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UploadedFilesApi.uploadedFilesControllerUploadMultipleFiles']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async uploadedFilesControllerUploadStreamChunk(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadedFilesControllerUploadStreamChunk(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UploadedFilesApi.uploadedFilesControllerUploadStreamChunk']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -3956,15 +4069,6 @@ export const UploadedFilesApiFactory = function (configuration?: Configuration, 
          */
         uploadedFilesControllerGetFilesForOrganization(options?: any): AxiosPromise<Array<UploadedFileDto>> {
             return localVarFp.uploadedFilesControllerGetFilesForOrganization(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} organizationId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        uploadedFilesControllerGetStreamManifest(organizationId: string, options?: any): AxiosPromise<void> {
-            return localVarFp.uploadedFilesControllerGetStreamManifest(organizationId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3998,32 +4102,8 @@ export const UploadedFilesApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadedFilesControllerStartStream(options?: any): AxiosPromise<void> {
-            return localVarFp.uploadedFilesControllerStartStream(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        uploadedFilesControllerStopStream(options?: any): AxiosPromise<void> {
-            return localVarFp.uploadedFilesControllerStopStream(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
         uploadedFilesControllerUploadMultipleFiles(options?: any): AxiosPromise<void> {
             return localVarFp.uploadedFilesControllerUploadMultipleFiles(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        uploadedFilesControllerUploadStreamChunk(options?: any): AxiosPromise<void> {
-            return localVarFp.uploadedFilesControllerUploadStreamChunk(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -4053,17 +4133,6 @@ export class UploadedFilesApi extends BaseAPI {
      */
     public uploadedFilesControllerGetFilesForOrganization(options?: RawAxiosRequestConfig) {
         return UploadedFilesApiFp(this.configuration).uploadedFilesControllerGetFilesForOrganization(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} organizationId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UploadedFilesApi
-     */
-    public uploadedFilesControllerGetStreamManifest(organizationId: string, options?: RawAxiosRequestConfig) {
-        return UploadedFilesApiFp(this.configuration).uploadedFilesControllerGetStreamManifest(organizationId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4105,38 +4174,8 @@ export class UploadedFilesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UploadedFilesApi
      */
-    public uploadedFilesControllerStartStream(options?: RawAxiosRequestConfig) {
-        return UploadedFilesApiFp(this.configuration).uploadedFilesControllerStartStream(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UploadedFilesApi
-     */
-    public uploadedFilesControllerStopStream(options?: RawAxiosRequestConfig) {
-        return UploadedFilesApiFp(this.configuration).uploadedFilesControllerStopStream(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UploadedFilesApi
-     */
     public uploadedFilesControllerUploadMultipleFiles(options?: RawAxiosRequestConfig) {
         return UploadedFilesApiFp(this.configuration).uploadedFilesControllerUploadMultipleFiles(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UploadedFilesApi
-     */
-    public uploadedFilesControllerUploadStreamChunk(options?: RawAxiosRequestConfig) {
-        return UploadedFilesApiFp(this.configuration).uploadedFilesControllerUploadStreamChunk(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

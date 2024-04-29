@@ -1,10 +1,10 @@
 import { Button } from "@mui/material";
 import { btoa } from "buffer";
 import React, { useEffect, useRef, useState } from "react";
-import { uploadedFilesApi } from "../../api";
+import { liveStreamingApi, uploadedFilesApi } from "../../api";
 import { Computer, Face, Forest, PlayArrow, Stop } from "@mui/icons-material";
 
-const CHUNK_DURATION = 600;
+const CHUNK_DURATION = 1000;
 const FPS = 24;
 
 enum CameraType {
@@ -79,31 +79,6 @@ export const Streamer: React.FC = () => {
 
     videoRef.current.addEventListener("play", () => {
       function step() {
-        // const videoWidth = videoRef.current!.videoWidth;
-        // const videoHeight = videoRef.current!.videoHeight;
-
-        // const aspectRatio = videoWidth / videoHeight;
-        // const canvasAspectRation =
-        //   canvasRef.current!.width / canvasRef.current!.height;
-
-        // let width = 0;
-        // let height = 0;
-        // let x = 0;
-        // let y = 0;
-
-        // if (aspectRatio > canvasAspectRation) {
-        //   width = canvasRef.current!.width;
-        //   height = width / aspectRatio;
-        //   y = (canvasRef.current!.height - height) / 2;
-        //   x = 0;
-        // }
-
-        // if (aspectRatio < canvasAspectRation) {
-        //   height = canvasRef.current!.height;
-        //   width = height * aspectRatio;
-        //   x = (canvasRef.current!.width - width) / 2;
-        //   y = 0;
-        // }
 
         captureCanvasRef.current!.width = videoRef.current!.videoWidth;
         captureCanvasRef.current!.height = videoRef.current!.videoHeight;
@@ -187,7 +162,7 @@ export const Streamer: React.FC = () => {
     if (!capturingContext || !captureCanvasRef.current || !videoRef.current)
       return;
 
-    await uploadedFilesApi.uploadedFilesControllerStartStream();
+    await liveStreamingApi.liveStreamingControllerStartStream();
 
     setIsStreaming(true);
     const stream = captureCanvasRef.current.captureStream(FPS);
@@ -215,7 +190,7 @@ export const Streamer: React.FC = () => {
 
       formData.append("file", blob, new Date().getTime() + ".mp4");
 
-      uploadedFilesApi.uploadedFilesControllerUploadStreamChunk({
+      liveStreamingApi.liveStreamingControllerUploadStreamChunk({
         data: formData,
       });
 
@@ -258,7 +233,7 @@ export const Streamer: React.FC = () => {
   };
 
   const endStreaming = () => {
-    uploadedFilesApi.uploadedFilesControllerStopStream();
+    liveStreamingApi.liveStreamingControllerStopStream();
     setIsStreaming(false);
     (mediaRecorder as any).doNotResume = true;
     mediaRecorder?.stop();

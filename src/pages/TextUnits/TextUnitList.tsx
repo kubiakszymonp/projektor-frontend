@@ -24,11 +24,7 @@ import { textUnitApi, textUnitQueuesApi, textUnitTagApi } from "../../api";
 import { TextUnitEditDialog } from "./TextUnitEditDialog";
 import { AddTextUnitToQueueDialog } from "./AddTextUnitToQueueDialog";
 import { MoreVert } from "@mui/icons-material";
-import {
-  TextUnitDto,
-  TextUnitQueueDto,
-  TextUnitTagDto,
-} from "../../api/generated";
+import { TextUnitDto, TextUnitTagDto } from "../../api/generated";
 import { ManageTagsDialog } from "./ManageTagsDialog";
 
 const ITEM_HEIGHT = 48;
@@ -41,15 +37,20 @@ export const TextUnitList: React.FC = () => {
   const [manageTagsDialogOpen, setManageTagsDialogOpen] = useState(false);
   const [textUnitList, setTextUnitList] = useState<TextUnitDto[]>([]);
   const [displayTextUnits, setDisplayTextUnits] = useState<TextUnitDto[]>([]);
-  const [queues, setQueues] = useState<TextUnitQueueDto[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [tags, setTags] = useState<TextUnitTagDto[]>([]);
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
+  const [selectedTextUnit, setSelectedTextUnit] = useState<TextUnitDto | null>(
+    null
+  );
+
+  const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.down("sm"));
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
-    fetchTextUnitList();
-    fetchQueues();
-    fetchTags();
+    handleClose();
+    refreshData();
   }, []);
 
   useEffect(() => {
@@ -57,22 +58,25 @@ export const TextUnitList: React.FC = () => {
   }, [searchText, selectedTags, textUnitList]);
 
   const handleClose = () => {
+    closeAllModals();
+    refreshData();
+  };
+
+  const refreshData = () => {
+    fetchTextUnitList();
+    fetchTags();
+  };
+
+  const closeAllModals = () => {
     setTextUnitEditDialogOpen(false);
     setTextUnitAddToQueueDialogOpen(false);
     setManageTagsDialogOpen(false);
-    fetchTextUnitList();
-    fetchQueues();
-    fetchTags();
   };
 
   const fetchTags = async () => {
     const res = await textUnitTagApi.textUnitTagControllerFindAll();
     setTags(res.data);
   };
-
-  const theme = useTheme();
-  const isXs = useMediaQuery(theme.breakpoints.down("sm"));
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const handleClickTextUnitMenu = (el: HTMLElement) => {
     setAnchorEl(el);
@@ -82,17 +86,7 @@ export const TextUnitList: React.FC = () => {
     setAnchorEl(null);
   };
 
-  const handleSave = async (textUnit: TextUnitDto) => {
-    if (textUnit.id === -1) {
-      await textUnitApi.textUnitControllerCreate(textUnit);
-    } else {
-      await textUnitApi.textUnitControllerUpdate(textUnit);
-    }
-    handleClose();
-  };
-
   const onAddTextUnitToPlaylist = () => {
-    setCurrentlyOperatedTextUnit(currentlyOperatedTextUnit);
     setTextUnitAddToQueueDialogOpen(true);
   };
 
@@ -101,14 +95,10 @@ export const TextUnitList: React.FC = () => {
     setTextUnitList(res.data);
   };
 
-  const fetchQueues = async () => {
-    const res = await textUnitQueuesApi.textUnitQueuesControllerFindAll();
-    setQueues(res.data);
-  };
-
-  const castTextUnitDirectly = async () => {
+  const setTextUnitForDisplay = async () => {
+    if (!selectedTextUnit) return;
     await textUnitApi.textUnitControllerSetCurrentTextUnit({
-      id: currentlyOperatedTextUnit.id,
+      id: selectedTextUnit.id,
     });
   };
 
@@ -137,15 +127,12 @@ export const TextUnitList: React.FC = () => {
   };
 
   const onAddTextUnit = () => {
-    setEditTextUnitDialogTitle("Dodaj tekst");
-    setCurrentlyOperatedTextUnit(emptyTextUnitObject);
+    setSelectedTextUnit(null);
     setTextUnitEditDialogOpen(true);
   };
 
-  const onEditTextUnit = (textUnitId: number) => {
-    setEditTextUnitDialogTitle("Edytuj tekst");
-    const foundTextUnit = textUnitList.find((s) => s.id === textUnitId);
-    if (foundTextUnit) setCurrentlyOperatedTextUnit(foundTextUnit);
+  const onEditTextUnit = (textUnit: TextUnitDto) => {
+    setSelectedTextUnit(textUnit);
     setTextUnitEditDialogOpen(true);
   };
 
@@ -163,17 +150,15 @@ export const TextUnitList: React.FC = () => {
       <TextUnitEditDialog
         open={textUnitEditDialogOpen}
         handleClose={handleClose}
-        textUnitId={currentlyOperatedTextUnit.id}
+        textUnitId={selectedTextUnit?.id || null}
       />
-      <AddTextUnitToQueueDialog
-        textUnit={currentlyOperatedTextUnit}
-        open={textUnitAddToQueueDialogOpen}
-        handleClose={handleClose}
-        handleSave={handleClose}
-        title={"Dodaj tekst do kolejki"}
-        allQueues={queues}
-        setAllQueues={setQueues}
-      />
+      {selectedTextUnit && (
+        <AddTextUnitToQueueDialog
+          handleClose={handleClose}
+          textUnitId={selectedTextUnit.id}
+          open={textUnitAddToQueueDialogOpen}
+        />
+      )}
       <ManageTagsDialog handleClose={handleClose} open={manageTagsDialogOpen} />
       <Box
         sx={{
@@ -291,7 +276,7 @@ export const TextUnitList: React.FC = () => {
                 alignItems={"center"}
               >
                 <Typography
-                  onClick={() => onEditTextUnit(textUnit.id)}
+                  onClick={() => onEditTextUnit(textUnit)}
                   variant={"h6"}
                   textOverflow={"ellipsis"}
                   sx={{
@@ -310,7 +295,7 @@ export const TextUnitList: React.FC = () => {
                     <>
                       <IconButton
                         onClick={(e) => {
-                          setCurrentlyOperatedTextUnit(textUnit);
+                          setSelectedTextUnit(textUnit);
                           handleClickTextUnitMenu(e.currentTarget);
                         }}
                       >
@@ -321,8 +306,8 @@ export const TextUnitList: React.FC = () => {
                     <>
                       <Button
                         onClick={() => {
-                          setCurrentlyOperatedTextUnit(textUnit);
-                          castTextUnitDirectly();
+                          setSelectedTextUnit(textUnit);
+                          setTextUnitForDisplay();
                         }}
                       >
                         Rzutuj
@@ -330,8 +315,8 @@ export const TextUnitList: React.FC = () => {
                       <Button
                         color="info"
                         onClick={() => {
-                          setCurrentlyOperatedTextUnit(textUnit);
-                          onAddTextUnitToPlaylist();
+                          setSelectedTextUnit(textUnit);
+                          setTextUnitAddToQueueDialogOpen(true);
                         }}
                       >
                         Playlisty
@@ -353,7 +338,7 @@ export const TextUnitList: React.FC = () => {
       >
         <MenuItem
           onClick={() => {
-            castTextUnitDirectly();
+            setTextUnitForDisplay();
             handleCloseTextUnitMenu();
           }}
         >
@@ -361,7 +346,7 @@ export const TextUnitList: React.FC = () => {
         </MenuItem>
         <MenuItem
           onClick={() => {
-            onAddTextUnitToPlaylist();
+            setTextUnitAddToQueueDialogOpen(true);
             handleCloseTextUnitMenu();
           }}
         >

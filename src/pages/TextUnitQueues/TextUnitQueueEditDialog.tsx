@@ -13,14 +13,38 @@ import { TextUnitQueueDto } from "../../api/generated";
 import { DragAndDropItem } from "./TextUnitQueueList";
 import { TextUnitQueueDragAndDrop } from "./TextUnitQueueDragAndDropComponent";
 
+const emptyTextUnitQueueObject: TextUnitQueueDto = {
+  id: -1,
+  name: "",
+  content: {
+    textUnits: [],
+  },
+  description: "",
+};
+
 export const TextUnitQueueEditDialog: React.FC<{
   open: boolean;
   handleClose: () => void;
-}> = ({
-  open,
-  handleClose,
-}) => {
+  textUnitQueueId: number | null;
+}> = ({ open, handleClose, textUnitQueueId }) => {
   const [queueTextUnits, setQueueTextUnits] = useState<DragAndDropItem[]>([]);
+  const [operatedTextUnitQueue, setOperatedTextUnitQueue] =
+    useState<TextUnitQueueDto>(emptyTextUnitQueueObject);
+
+  useEffect(() => {
+    fetchTextUnitQueue();
+  }, [open]);
+
+  const fetchTextUnitQueue = async () => {
+    if (textUnitQueueId === null) {
+      setOperatedTextUnitQueue(emptyTextUnitQueueObject);
+    } else {
+      const res = await textUnitQueuesApi.textUnitQueuesControllerFindOne(
+        String(textUnitQueueId)
+      );
+      setOperatedTextUnitQueue(res.data);
+    }
+  };
 
   useEffect(() => {
     setQueueTextUnits(
@@ -48,23 +72,27 @@ export const TextUnitQueueEditDialog: React.FC<{
       });
     }
 
-    handleSave();
+    handleClose();
   };
 
   const onDeleteItem = (key: string) => {
-    setQueueTextUnits(queueTextUnits.filter((textUnit) => textUnit.key !== key));
+    setQueueTextUnits(
+      queueTextUnits.filter((textUnit) => textUnit.key !== key)
+    );
   };
 
   const onDelete = async () => {
     await textUnitQueuesApi.textUnitQueuesControllerRemove(
       String(operatedTextUnitQueue.id)
     );
-    handleSave();
+    handleClose();
   };
 
   return (
     <Dialog fullWidth open={open} onClose={handleClose}>
-      <DialogTitle>{title}</DialogTitle>
+      <DialogTitle>
+        {textUnitQueueId === null ? "Utwórz kolejkę" : "Edytuj kolejkę"}
+      </DialogTitle>
       <DialogContent>
         <TextField
           autoFocus

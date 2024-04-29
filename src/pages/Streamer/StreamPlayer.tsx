@@ -1,12 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import Hls from "hls.js";
-import { BASE_PATH } from "../../api";
+import { BASE_PATH, liveStreamingApi } from "../../api";
 
 export const StreamPlayer: React.FC<{ organizationId: number }> = ({
   organizationId,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [tick, setTick] = React.useState(0);
+  const [hls, setHls] = React.useState<Hls | null>(null);
 
   // resize video loop
   useEffect(() => {
@@ -49,9 +50,18 @@ export const StreamPlayer: React.FC<{ organizationId: number }> = ({
   };
 
   useEffect(() => {
+    initHls();
+    return () => {
+      hls?.detachMedia();
+      hls?.stopLoad();
+      hls?.destroy();
+    };
+  }, [videoRef]);
+
+  const initHls = async () => {
     if (!videoRef.current) return;
     if (Hls.isSupported()) {
-      var hls = new Hls({
+      const hls = new Hls({
         enableWorker: true,
         maxBufferLength: 1,
         liveBackBufferLength: 0,
@@ -62,28 +72,31 @@ export const StreamPlayer: React.FC<{ organizationId: number }> = ({
         lowLatencyMode: true,
       });
 
-      hls.loadSource(
-        BASE_PATH + "/api/uploaded-files/stream-manifest/" + organizationId
-      );
-      hls.attachMedia(videoRef.current);
+      const res =
+        await liveStreamingApi.liveStreamingControllerGetStreamManifest(
+          String(organizationId)
+        );
+
+      if (res.config.url === undefined) throw Error("No stream url");
+
+      hls.loadSource(res.config.url);
+      hls.attachMedia(videoRef?.current);
       hls.on(Hls.Events.MANIFEST_PARSED, function () {
         videoRef.current!.play();
       });
 
-      return () => {
-        hls.detachMedia();
-        hls.stopLoad();
-        hls.destroy();
-      };
+      setHls(hls);
     }
-  }, [videoRef]);
+  };
 
   return (
-    <div style={{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-    }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <video muted ref={videoRef}></video>
     </div>
   );

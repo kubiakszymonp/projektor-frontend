@@ -7,4 +7,4 @@ const dev = {
     window.location.protocol + "//" + window.location.hostname + ":3001",
 };
 
-export const environment = prod;
+export const environment = dev;

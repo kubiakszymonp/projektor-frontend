@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import { UploadedFileDto } from "../../api/generated";
-import {  uploadedFilesApi } from "../../api";
+import {  getStaticResourceUrl, uploadedFilesApi } from "../../api";
 import { useRef, useState } from "react";
 import { MoreVert } from "@mui/icons-material";
 

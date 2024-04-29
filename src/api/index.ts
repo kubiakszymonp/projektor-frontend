@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   AuthApi,
   DisplayStateApi,
+  LiveStreamingApi,
   OrganizationsApi,
   ProjectorApi,
   ProjectorSettingsApi,
@@ -63,8 +64,15 @@ export const textUnitTagApi = new TextUnitTagApi(
   instance
 );
 
+export const liveStreamingApi = new LiveStreamingApi(
+  undefined,
+  BASE_PATH,
+  instance
+);
 
-export const getStaticResourceUrl = (resourceOid: string | null | undefined) => {
+export const getStaticResourceUrl = (
+  resourceOid: string | null | undefined
+) => {
   if (!resourceOid) throw Error("File oid is empty");
   return UPLOAD_ROOT + resourceOid;
 };

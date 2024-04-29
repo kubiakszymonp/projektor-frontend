@@ -10,6 +10,7 @@ import {
 import { StreamPlayer } from "../Streamer/StreamPlayer";
 import { ProjectorMediaDisplay } from "./MediaDisplay";
 import { ProjectorTextDisplay } from "./TextDisplay";
+import { io } from "socket.io-client";
 
 export const ProjectorPage = (props: { isPreview: boolean }) => {
   const { organizationId: rawOrganizationId } = useParams();
@@ -41,8 +42,17 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
 
   useEffect(() => {
     getDisplayState();
-    const interval = setInterval(getLastUpdateTime, 300);
-    return () => clearInterval(interval);
+    const socket = io("ws://localhost:81", {
+      query: { organizationId },
+    });
+
+    socket.on("changed", () => {
+      getDisplayState();
+    });
+
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   useEffect(() => {
@@ -77,7 +87,7 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
         <ProjectorTextDisplay projectorState={projectorState} />
       )}
       {projectorState?.displayType === DisplayStateDisplayTypeEnum.Media && (
-        < ProjectorMediaDisplay projectorState={projectorState} />
+        <ProjectorMediaDisplay projectorState={projectorState} />
       )}
       {projectorState?.displayType === DisplayStateDisplayTypeEnum.Hls && (
         <StreamPlayer organizationId={organizationId} />

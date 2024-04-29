@@ -10,7 +10,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { uploadedFilesApi } from "../../api";
+import { getStaticResourceUrl, uploadedFilesApi } from "../../api";
 import { UploadedFileDto } from "../../api/generated";
 import { useEffect, useRef, useState } from "react";
 import { MoreVert } from "@mui/icons-material";
@@ -241,7 +241,7 @@ export const FilesManager: React.FC = () => {
                         }}
                       >
                         <img
-                          src={currentFile.url(fileInfo.previewUrl)}
+                          src={getStaticResourceUrl(fileInfo.previewUrl)}
                           alt={fileInfo.name}
                           style={{
                             objectFit: "cover",

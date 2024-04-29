@@ -196,18 +196,20 @@ export const Controller = () => {
             </Card>
           );
         })}
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={currentDisplayState?.emptyDisplay}
-              sx={{ "& .MuiSvgIcon-root": { fontSize: 32 } }}
-            />
-          }
-          label="Wygaś ekran"
-          onChange={(_, checked) => {
-            setScreenOnOff(checked);
-          }}
-        />
+        {currentDisplayState && (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={currentDisplayState.emptyDisplay}
+                sx={{ "& .MuiSvgIcon-root": { fontSize: 32 } }}
+              />
+            }
+            label="Wygaś ekran"
+            onChange={(_, checked) => {
+              setScreenOnOff(checked);
+            }}
+          />
+        )}
         <Box>
           <Typography variant="h5">{currentTextUnitQueue?.name}</Typography>
           {!currentTextUnitQueueIsNotEmpty() && (

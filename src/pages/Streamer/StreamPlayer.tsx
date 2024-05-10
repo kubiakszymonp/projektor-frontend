@@ -15,7 +15,7 @@ export const StreamPlayer: React.FC<{ organizationId: number }> = ({
     const timeout = setTimeout(() => {
       resize(videoRef.current!);
       setTick(tick + 1);
-    }, 2000);
+    }, 300);
     return () => {
       clearTimeout(timeout);
     };

@@ -55,7 +55,7 @@ export const LoginPage = () => {
       .then((res) => {
         const jwt = res.data;
         jwtPersistance.saveJwt(jwt);
-        navigate("/dashboard");
+        navigate("/");
       })
       .catch((er) => {
         setErrorMessage("Błędne dane logowania!");

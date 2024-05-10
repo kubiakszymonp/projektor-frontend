@@ -16,7 +16,6 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
   const { organizationId: rawOrganizationId } = useParams();
   const organizationId = parseInt(rawOrganizationId || "0");
   const [projectorState, setProjectorState] = useState<GetProjectorStateDto>();
-  const [lastUpdateTime, setLastUpdateTime] = useState<number | null>(null);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -28,7 +27,6 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
     const height = window.innerHeight;
 
     await projectorSettingsApi.projectorSettingsControllerUpdate({
-      ...projectorState!.settings,
       screenHeight: height,
       screenWidth: width,
     });
@@ -55,12 +53,6 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
     };
   }, []);
 
-  useEffect(() => {
-    if (lastUpdateTime === null) return;
-    if (lastUpdateTime === projectorState?.lastUpdateTime) return;
-    getDisplayState();
-  }, [lastUpdateTime]);
-
   const getDisplayState = async () => {
     const projectorDisplay =
       await projectorApi.projectorControllerGetProjectorStateByOrganizationId(
@@ -68,14 +60,6 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
       );
 
     setProjectorState(projectorDisplay.data);
-  };
-
-  const getLastUpdateTime = async () => {
-    const lastUpdate =
-      await projectorApi.projectorControllerGetLastUpdateTimestamp(
-        organizationId
-      );
-    setLastUpdateTime(lastUpdate.data);
   };
 
   return (

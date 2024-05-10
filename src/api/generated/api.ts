@@ -2166,13 +2166,13 @@ export const ProjectorSettingsApiAxiosParamCreator = function (configuration?: C
         },
         /**
          * 
-         * @param {ProjectorSettingsConfigurationDto} projectorSettingsConfigurationDto 
+         * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectorSettingsControllerUpdate: async (projectorSettingsConfigurationDto: ProjectorSettingsConfigurationDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'projectorSettingsConfigurationDto' is not null or undefined
-            assertParamExists('projectorSettingsControllerUpdate', 'projectorSettingsConfigurationDto', projectorSettingsConfigurationDto)
+        projectorSettingsControllerUpdate: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('projectorSettingsControllerUpdate', 'body', body)
             const localVarPath = `/api/projector-settings`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2196,7 +2196,7 @@ export const ProjectorSettingsApiAxiosParamCreator = function (configuration?: C
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(projectorSettingsConfigurationDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2238,12 +2238,12 @@ export const ProjectorSettingsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {ProjectorSettingsConfigurationDto} projectorSettingsConfigurationDto 
+         * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async projectorSettingsControllerUpdate(projectorSettingsConfigurationDto: ProjectorSettingsConfigurationDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.projectorSettingsControllerUpdate(projectorSettingsConfigurationDto, options);
+        async projectorSettingsControllerUpdate(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.projectorSettingsControllerUpdate(body, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProjectorSettingsApi.projectorSettingsControllerUpdate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -2277,12 +2277,12 @@ export const ProjectorSettingsApiFactory = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {ProjectorSettingsConfigurationDto} projectorSettingsConfigurationDto 
+         * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectorSettingsControllerUpdate(projectorSettingsConfigurationDto: ProjectorSettingsConfigurationDto, options?: any): AxiosPromise<void> {
-            return localVarFp.projectorSettingsControllerUpdate(projectorSettingsConfigurationDto, options).then((request) => request(axios, basePath));
+        projectorSettingsControllerUpdate(body: object, options?: any): AxiosPromise<void> {
+            return localVarFp.projectorSettingsControllerUpdate(body, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2317,13 +2317,13 @@ export class ProjectorSettingsApi extends BaseAPI {
 
     /**
      * 
-     * @param {ProjectorSettingsConfigurationDto} projectorSettingsConfigurationDto 
+     * @param {object} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProjectorSettingsApi
      */
-    public projectorSettingsControllerUpdate(projectorSettingsConfigurationDto: ProjectorSettingsConfigurationDto, options?: RawAxiosRequestConfig) {
-        return ProjectorSettingsApiFp(this.configuration).projectorSettingsControllerUpdate(projectorSettingsConfigurationDto, options).then((request) => request(this.axios, this.basePath));
+    public projectorSettingsControllerUpdate(body: object, options?: RawAxiosRequestConfig) {
+        return ProjectorSettingsApiFp(this.configuration).projectorSettingsControllerUpdate(body, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { AutoscalingIframe } from "../../components/autoscaling-iframe";
 
 import { jwtPersistance } from "../../services/jwt-persistance";
@@ -14,6 +14,7 @@ import {
 } from "../../api/generated";
 import { useLoading } from "../../components/loading/loading-context";
 import { TextController } from "./TextController";
+import { useNotifyOrganizationEdit } from "../../services/useNofifyOrganizationEdit";
 
 export const Controller = () => {
   const [projectorSettings, setProjectorSettings] =
@@ -21,8 +22,8 @@ export const Controller = () => {
   const [currentDisplayState, setCurrentDisplayState] =
     React.useState<DisplayState>();
   const { setLoading } = useLoading();
-
   const previewRef = useRef<HTMLDivElement>(null);
+  const organizationId = useMemo(() => jwtPersistance.getDecodedJwt()?.id, []);
 
   useEffect(() => {
     setLoading(true);
@@ -47,8 +48,10 @@ export const Controller = () => {
     setProjectorSettings(settings.data);
   };
 
+  useNotifyOrganizationEdit(loadState, String(organizationId));
+
   return (
-    <>
+    <div style={{ position: "relative" }}>
       <AutoscalingIframe
         onLoad={() => {
           setTimeout(() => {
@@ -65,7 +68,7 @@ export const Controller = () => {
       {currentDisplayState?.displayType === DisplayStateDisplayTypeEnum.Text && (
         <TextController currentDisplayState={currentDisplayState} previewRef={previewRef} />
       )}
-    </>
+    </div>
   );
 };
 

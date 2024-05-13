@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import {  getStaticResourceUrl } from "../../api"
+import { getStaticResourceUrl } from "../../api"
 import { GetProjectorStateDto } from "../../api/generated"
+import { useInterval } from "../../services/useInterval";
 
 export const ProjectorMediaDisplay: React.FC<{ projectorState: GetProjectorStateDto }> = ({ projectorState }) => {
 
@@ -9,9 +10,11 @@ export const ProjectorMediaDisplay: React.FC<{ projectorState: GetProjectorState
         height: "100%",
     });
     const imageRef = useRef<HTMLImageElement>(null);
+    useInterval(() => {
+        resize();
+    }, 200);
 
-
-    useEffect(() => {
+    const resize = () => {
         if (!projectorState?.uploadedFile) return;
         const image = imageRef.current;
         if (!image) return;
@@ -21,19 +24,28 @@ export const ProjectorMediaDisplay: React.FC<{ projectorState: GetProjectorState
         const screenRatio = screenWidth / screenHeight;
         const imageRatio = naturalWidth / naturalHeight;
 
-        if (imageRatio <= screenRatio) {
-            setImageStyles({
-                width: `auto`,
-                height: `100%`,
-            });
-        }
+        let width = 0;
+        let height = 0;
+
         if (imageRatio > screenRatio) {
-            setImageStyles({
-                width: `100%`,
-                height: `auto`,
-            });
+            width = screenWidth;
+            height = width / imageRatio;
         }
-    }, [projectorState?.uploadedFile?.id, projectorState]);
+        // full vertical
+        else {
+            height = screenHeight;
+            width = height * imageRatio;
+        }
+
+        setImageStyles({
+            width: width + "px",
+            height: height + "px",
+        });
+    };
+
+    useEffect(() => {
+        resize();
+    }, [projectorState]);
 
     return (
         <img

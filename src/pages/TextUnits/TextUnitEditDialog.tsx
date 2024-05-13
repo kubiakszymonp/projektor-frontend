@@ -127,7 +127,16 @@ export const TextUnitEditDialog: React.FC<{
     );
   };
 
-  const onSave = async () => {};
+  const onSave = async () => {
+    if (textUnitId === null) {
+      await textUnitApi.textUnitControllerCreate({ id: -1, ...currentTextUnit });
+    } else {
+      await textUnitApi.textUnitControllerUpdate(
+        { id: textUnitId, ...currentTextUnit }
+      );
+    }
+    handleClose();
+  };
 
   return (
     <Dialog fullWidth open={open} onClose={handleClose}>
@@ -136,7 +145,6 @@ export const TextUnitEditDialog: React.FC<{
       </DialogTitle>
       <DialogContent>
         <TextField
-          autoFocus
           required
           id="title"
           name="title"

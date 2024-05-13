@@ -62,6 +62,10 @@ export const Streamer: React.FC = () => {
   };
 
   useEffect(() => {
+    return stopCamera;
+  }, []);
+
+  useEffect(() => {
     getSupportedCodecs();
     getAvailableDevices();
     if (
@@ -79,6 +83,8 @@ export const Streamer: React.FC = () => {
 
     videoRef.current.addEventListener("play", () => {
       function step() {
+
+        if (!captureCanvasRef.current || !videoRef.current) return;
 
         captureCanvasRef.current!.width = videoRef.current!.videoWidth;
         captureCanvasRef.current!.height = videoRef.current!.videoHeight;

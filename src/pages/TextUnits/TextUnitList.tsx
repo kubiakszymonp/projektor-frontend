@@ -86,19 +86,15 @@ export const TextUnitList: React.FC = () => {
     setAnchorEl(null);
   };
 
-  const onAddTextUnitToPlaylist = () => {
-    setTextUnitAddToQueueDialogOpen(true);
-  };
-
   const fetchTextUnitList = async () => {
     const res = await textUnitApi.textUnitControllerFindAll();
     setTextUnitList(res.data);
   };
 
-  const setTextUnitForDisplay = async () => {
-    if (!selectedTextUnit) return;
+  const setTextUnitForDisplay = async (textUnit: TextUnitDto | null) => {
+    if (!textUnit) return;
     await textUnitApi.textUnitControllerSetCurrentTextUnit({
-      id: selectedTextUnit.id,
+      id: textUnit.id,
     });
   };
 
@@ -306,8 +302,7 @@ export const TextUnitList: React.FC = () => {
                     <>
                       <Button
                         onClick={() => {
-                          setSelectedTextUnit(textUnit);
-                          setTextUnitForDisplay();
+                          setTextUnitForDisplay(textUnit);
                         }}
                       >
                         Rzutuj
@@ -338,7 +333,7 @@ export const TextUnitList: React.FC = () => {
       >
         <MenuItem
           onClick={() => {
-            setTextUnitForDisplay();
+            setTextUnitForDisplay(selectedTextUnit);
             handleCloseTextUnitMenu();
           }}
         >

@@ -8,10 +8,12 @@ export const OnPreviewClickHandler: React.FC<{
 
     const width = previewRef.current?.offsetWidth;
     const height = previewRef.current?.offsetHeight;
+    const top = previewRef.current?.offsetTop;
 
     return (
         <div
             style={{
+                top: top,
                 display: "flex",
                 width: width,
                 position: "absolute",

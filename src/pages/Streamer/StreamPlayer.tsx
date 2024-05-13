@@ -1,25 +1,18 @@
 import React, { useEffect, useRef } from "react";
 import Hls from "hls.js";
 import { BASE_PATH, liveStreamingApi } from "../../api";
+import { useInterval } from "../../services/useInterval";
 
 export const StreamPlayer: React.FC<{ organizationId: number }> = ({
   organizationId,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [tick, setTick] = React.useState(0);
   const [hls, setHls] = React.useState<Hls | null>(null);
 
-  // resize video loop
-  useEffect(() => {
+  useInterval(() => {
     if (!videoRef.current) return;
-    const timeout = setTimeout(() => {
-      resize(videoRef.current!);
-      setTick(tick + 1);
-    }, 300);
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [tick]);
+    resize(videoRef.current!);
+  }, 200);
 
   const resize = (videoElement: HTMLVideoElement) => {
     const windowWidth = window.innerWidth;
@@ -48,6 +41,14 @@ export const StreamPlayer: React.FC<{ organizationId: number }> = ({
     videoElement.width = width;
     videoElement.height = height;
   };
+
+  useEffect(() => {
+    return () => {
+      hls?.detachMedia();
+      hls?.stopLoad();
+      hls?.destroy();
+    };
+  }, []);
 
   useEffect(() => {
     initHls();
@@ -95,6 +96,7 @@ export const StreamPlayer: React.FC<{ organizationId: number }> = ({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        height: "100%",
       }}
     >
       <video muted ref={videoRef}></video>

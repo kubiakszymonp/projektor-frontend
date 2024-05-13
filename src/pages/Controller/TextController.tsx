@@ -22,7 +22,7 @@ export const TextController: React.FC<{
 
         useEffect(() => {
             loadState();
-        });
+        }, []);
 
         const loadState = async () => {
             fetchCurrentTextUnit();
@@ -76,6 +76,8 @@ export const TextController: React.FC<{
             await displayStateApi.displayStateControllerMovePage({
                 direction,
             });
+
+            loadState();
         };
 
         return (

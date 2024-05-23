@@ -12,7 +12,6 @@ import { TextUnitQueueList } from "./pages/TextUnitQueues/TextUnitQueueList";
 import { FilesManager } from "./pages/FilesManager/FilesManager";
 import { LoadingSpinner } from "./components/loading-spinner";
 import { LoadingProvider } from "./components/loading/loading-context";
-import { Streamer } from "./pages/Streamer/Streamer";
 
 function App() {
   const defaultTheme = createTheme({
@@ -40,7 +39,7 @@ function App() {
             element={<ProjectorPage isPreview={true} />}
           />
           <Route path="/files-manager" element={<FilesManager />} />
-          <Route path="/stream" element={<Streamer />} />
+          {/* <Route path="/stream" element={<Streamer />} /> */}
         </Routes>
       </LoadingProvider>
     </ThemeProvider>

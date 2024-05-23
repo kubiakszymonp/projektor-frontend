@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { textUnitQueuesApi } from "../../api";
-import { TextUnitQueueDto } from "../../api/generated";
+import { displayStateApi, textUnitQueuesApi } from "../../api";
 import {
   Box,
   Button,
@@ -15,17 +14,20 @@ import {
   useTheme,
 } from "@mui/material";
 import Fuse from "fuse.js";
-import { TextUnitQueueEditDialog } from "./TextUnitQueueEditDialog";
+import { TextUnitQueueEditDialog } from "./TextUnitQueueUpdateDialog";
 import { MoreVert } from "@mui/icons-material";
+import { GetDisplayQueueDto, GetTextUnitDto } from "../../api/generated";
+import { TextUnitQueueCreateDialog } from "./TextUnitQueueCreateDialog";
 
 export const TextUnitQueueList = () => {
-  const [textUnitQueues, setTextUnitQueues] = useState<TextUnitQueueDto[]>([]);
-  const [displayQueues, setDisplayQueues] = useState<TextUnitQueueDto[]>([]);
-  const [selectedTextUnitQueue, setSelectedTextUnitQueue] =
-    useState<TextUnitQueueDto | null>(null);
+  const [allDisplayQueues, setAllDisplayQueues] = useState<GetDisplayQueueDto[]>([]);
+  const [filteredDisplayQueues, setFilteredDisplayQueues] = useState<GetDisplayQueueDto[]>([]);
+  const [selectedDisplayQueue, setSelectedDisplayQueue] =
+    useState<GetDisplayQueueDto | null>(null);
   const [searchText, setSearchText] = useState<string>("");
   const [textUnitQueueEditDialogOpen, setTextUnitQueueEditDialogOpen] =
     useState(false);
+  const [displayQueueCreateDialogOpen, setDisplayQueueCreateDialogOpen] = useState(false);
 
   useEffect(() => {
     fetchTextUnitQueues();
@@ -33,13 +35,13 @@ export const TextUnitQueueList = () => {
 
   const fuse = useMemo(
     () =>
-      new Fuse(textUnitQueues, {
+      new Fuse(allDisplayQueues, {
         keys: ["name"],
         includeScore: true,
         shouldSort: true,
         minMatchCharLength: 1,
       }),
-    [textUnitQueues]
+    [allDisplayQueues]
   );
 
   useEffect(() => {
@@ -60,47 +62,53 @@ export const TextUnitQueueList = () => {
 
   const onChangeSearchText = () => {
     if (searchText === "") {
-      setDisplayQueues(textUnitQueues);
+      setFilteredDisplayQueues(allDisplayQueues);
       return;
     }
     const result = fuse.search(searchText);
-    setDisplayQueues(result.map((r) => r.item));
+    setFilteredDisplayQueues(result.map((r) => r.item));
   };
 
   const fetchTextUnitQueues = async () => {
-    const queues = await textUnitQueuesApi.textUnitQueuesControllerFindAll();
-    setTextUnitQueues(queues.data);
+    const queues = await textUnitQueuesApi.displayQueuesControllerFindAll();
+    setAllDisplayQueues(queues.data);
   };
 
   const onAddTextUnitQueue = async () => {
-    setSelectedTextUnitQueue(null);
+    setDisplayQueueCreateDialogOpen(true);
+  };
+
+  const onEditTextUnitQueue = (queue: GetDisplayQueueDto) => {
+    setSelectedDisplayQueue(queue);
     setTextUnitQueueEditDialogOpen(true);
+
   };
 
-  const onEditTextUnitQueue = (id: number) => {
-    const textUnitQueue = textUnitQueues.find((queue) => queue.id === id);
-    if (textUnitQueue) {
-      setSelectedTextUnitQueue(textUnitQueue);
-      setTextUnitQueueEditDialogOpen(true);
-    }
-  };
-
-  const setCurrentQueue = async (queue: TextUnitQueueDto) => {
-    await textUnitQueuesApi.textUnitQueuesControllerSetCurrentTextUnitQueue({
-      id: queue.id,
-    });
+  const setCurrentQueue = async (queue: GetDisplayQueueDto) => {
+    await displayStateApi.displayStateControllerUpdateDisplayState({
+      textUnitQueueId: queue.id,
+    })
   };
 
   return (
     <>
-      <TextUnitQueueEditDialog
-        textUnitQueueId={selectedTextUnitQueue?.id ?? null}
-        handleClose={() => {
-          setTextUnitQueueEditDialogOpen(false);
-          fetchTextUnitQueues();
-        }}
-        open={textUnitQueueEditDialogOpen}
+      {selectedDisplayQueue && (
+        <TextUnitQueueEditDialog
+          textUnitQueueId={selectedDisplayQueue.id}
+          handleClose={() => {
+            setTextUnitQueueEditDialogOpen(false);
+            fetchTextUnitQueues();
+          }}
+          open={textUnitQueueEditDialogOpen}
+        />
+      )}
+      <TextUnitQueueCreateDialog handleClose={() => {
+        setDisplayQueueCreateDialogOpen(false);
+        fetchTextUnitQueues();
+      }}
+        open={displayQueueCreateDialogOpen}
       />
+
       <Box
         sx={{
           py: {
@@ -139,7 +147,7 @@ export const TextUnitQueueList = () => {
           </Stack>
         </Box>
         <Box>
-          {displayQueues.map((queue) => (
+          {filteredDisplayQueues.map((queue) => (
             <Card
               sx={{
                 borderRadius: 2,
@@ -174,45 +182,13 @@ export const TextUnitQueueList = () => {
                   {isXs ? (
                     <>
                       <IconButton
-                        onClick={(e) =>
+                        onClick={(e) => {
+                          setTextUnitQueueEditDialogOpen(true)
                           handleClickTextUnitMenu(e.currentTarget)
-                        }
+                        }}
                       >
                         <MoreVert />
                       </IconButton>
-                      <Menu
-                        elevation={0}
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "right",
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "right",
-                        }}
-                        id="simple-menu"
-                        anchorEl={anchorEl}
-                        keepMounted
-                        open={Boolean(anchorEl)}
-                        onClose={handleCloseTextUnitMenu}
-                      >
-                        <MenuItem
-                          onClick={() => {
-                            setCurrentQueue(queue);
-                            handleCloseTextUnitMenu();
-                          }}
-                        >
-                          Rzutuj
-                        </MenuItem>
-                        <MenuItem
-                          onClick={() => {
-                            onEditTextUnitQueue(queue.id!);
-                            handleCloseTextUnitMenu();
-                          }}
-                        >
-                          Edytuj
-                        </MenuItem>
-                      </Menu>
                     </>
                   ) : (
                     <>
@@ -224,7 +200,7 @@ export const TextUnitQueueList = () => {
                       </Button>
                       <Button
                         color="warning"
-                        onClick={() => onEditTextUnitQueue(queue.id!)}
+                        onClick={() => onEditTextUnitQueue(queue)}
                       >
                         Edytuj
                       </Button>
@@ -234,8 +210,40 @@ export const TextUnitQueueList = () => {
               </Stack>
             </Card>
           ))}
+
+          <Menu
+            elevation={0}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleCloseTextUnitMenu}
+          >
+            <MenuItem
+              onClick={() => {
+                handleCloseTextUnitMenu();
+              }}
+            >
+              Rzutuj
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleCloseTextUnitMenu();
+              }}
+            >
+              Edytuj
+            </MenuItem>
+          </Menu>
         </Box>
-      </Box>
+      </Box >
     </>
   );
 };

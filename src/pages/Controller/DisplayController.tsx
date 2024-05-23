@@ -7,20 +7,16 @@ import {
   displayStateApi,
   projectorSettingsApi,
 } from "../../api";
-import {
-  DisplayState,
-  DisplayStateDisplayTypeEnum,
-  ProjectorSettingsConfigurationDto,
-} from "../../api/generated";
 import { useLoading } from "../../components/loading/loading-context";
 import { TextController } from "./TextController";
 import { useNotifyOrganizationEdit } from "../../services/useNofifyOrganizationEdit";
+import { GetDisplayDto, GetDisplayDtoDisplayTypeEnum, GetDisplayStateDto, GetProjectorSettingsDto } from "../../api/generated";
 
 export const Controller = () => {
   const [projectorSettings, setProjectorSettings] =
-    React.useState<ProjectorSettingsConfigurationDto>();
-  const [currentDisplayState, setCurrentDisplayState] =
-    React.useState<DisplayState>();
+    React.useState<GetProjectorSettingsDto>();
+  const [displayState, setDisplayState] =
+    React.useState<GetDisplayStateDto>();
   const { setLoading } = useLoading();
   const previewRef = useRef<HTMLDivElement>(null);
   const organizationId = useMemo(() => jwtPersistance.getDecodedJwt()?.id, []);
@@ -39,7 +35,7 @@ export const Controller = () => {
 
   const fetchDisplayState = async () => {
     const state = await displayStateApi.displayStateControllerGetDisplayState();
-    setCurrentDisplayState(state.data);
+    setDisplayState(state.data);
   };
 
   const fetchProjectorSettings = async () => {
@@ -65,8 +61,8 @@ export const Controller = () => {
         originalWidth={projectorSettings?.screenWidth || 0}
         url={"/projector-preview/" + jwtPersistance.getDecodedJwt()?.id}
       />
-      {currentDisplayState?.displayType === DisplayStateDisplayTypeEnum.Text && (
-        <TextController currentDisplayState={currentDisplayState} previewRef={previewRef} />
+      {displayState?.displayType === GetDisplayDtoDisplayTypeEnum.Text && (
+        <TextController displayState={displayState} previewRef={previewRef} />
       )}
     </div>
   );

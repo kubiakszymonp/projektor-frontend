@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Property } from "csstype";
-import { ProjectorSettingsConfigurationDto } from "../api/generated";
+import { GetProjectorSettingsDto } from "../api/generated";
 export const AutoFlowText: React.FC<{
   text: string;
-  settings: ProjectorSettingsConfigurationDto;
+  settings: GetProjectorSettingsDto;
 }> = ({ text, settings }) => {
   const [calculationsFontSize, setCalculationsFontSize] = useState(250);
   const [fontSize, setFontSize] = useState(250);

@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { getStaticResourceUrl } from "../../api"
-import { GetProjectorStateDto } from "../../api/generated"
 import { useInterval } from "../../services/useInterval";
+import { GetDisplayDto, GetProjectorSettingsDto } from "../../api/generated";
 
-export const ProjectorMediaDisplay: React.FC<{ projectorState: GetProjectorStateDto }> = ({ projectorState }) => {
+export const ProjectorMediaDisplay: React.FC<{ displayState: GetDisplayDto, projectorSettings: GetProjectorSettingsDto }> =
+ ({ displayState, projectorSettings }) => {
 
     const [imageStyles, setImageStyles] = useState({
         width: "100%",
@@ -15,11 +16,11 @@ export const ProjectorMediaDisplay: React.FC<{ projectorState: GetProjectorState
     }, 200);
 
     const resize = () => {
-        if (!projectorState?.uploadedFile) return;
+        if (!displayState?.mediaFile) return;
         const image = imageRef.current;
         if (!image) return;
         const { naturalWidth, naturalHeight } = image;
-        const { screenWidth, screenHeight } = projectorState.settings;
+        const { screenWidth, screenHeight } = projectorSettings;
 
         const screenRatio = screenWidth / screenHeight;
         const imageRatio = naturalWidth / naturalHeight;
@@ -45,12 +46,12 @@ export const ProjectorMediaDisplay: React.FC<{ projectorState: GetProjectorState
 
     useEffect(() => {
         resize();
-    }, [projectorState]);
+    }, [displayState]);
 
     return (
         <img
             ref={imageRef}
-            src={getStaticResourceUrl(projectorState?.uploadedFile?.previewUrl)}
+            src={getStaticResourceUrl(displayState?.mediaFile?.url)}
             alt="media"
             style={{
                 ...imageStyles,

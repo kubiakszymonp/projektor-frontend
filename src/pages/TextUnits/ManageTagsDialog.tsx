@@ -14,15 +14,15 @@ import {
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import { textUnitTagApi } from "../../api";
-import { TextUnitTagDto } from "../../api/generated";
 import { Check, Close, Delete, Edit } from "@mui/icons-material";
+import { GetTextUnitDto, GetTextUnitTagDto } from "../../api/generated";
 
 export const ManageTagsDialog: React.FC<{
   open: boolean;
   handleClose: () => void;
 }> = ({ open, handleClose }) => {
-  const [tags, setTags] = useState<TextUnitTagDto[]>([]);
-  const [editedTag, setEditedTag] = useState<TextUnitTagDto | null>(null);
+  const [tags, setTags] = useState<GetTextUnitTagDto[]>([]);
+  const [editedTag, setEditedTag] = useState<GetTextUnitTagDto | null>(null);
 
   useEffect(() => {
     fetchTags();
@@ -49,7 +49,7 @@ export const ManageTagsDialog: React.FC<{
     fetchTags();
   };
 
-  const deleteTag = async (tag: TextUnitTagDto) => {
+  const deleteTag = async (tag: GetTextUnitTagDto) => {
     await textUnitTagApi.textUnitTagControllerRemove(String(tag.id));
     fetchTags();
   };

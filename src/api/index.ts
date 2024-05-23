@@ -2,14 +2,13 @@ import axios from "axios";
 import {
   AuthApi,
   DisplayStateApi,
-  LiveStreamingApi,
+  MediaFilesApi,
   OrganizationsApi,
   ProjectorApi,
   ProjectorSettingsApi,
   TextUnitQueuesApi,
   TextUnitsApi,
   TextUnitTagApi,
-  UploadedFilesApi,
 } from "./generated";
 import { jwtPersistance } from "../services/jwt-persistance";
 import { environment } from "../environment";
@@ -52,7 +51,7 @@ export const projectorSettingsApi = new ProjectorSettingsApi(
   instance
 );
 export const projectorApi = new ProjectorApi(undefined, BASE_PATH, instance);
-export const uploadedFilesApi = new UploadedFilesApi(
+export const uploadedFilesApi = new MediaFilesApi(
   undefined,
   BASE_PATH,
   instance
@@ -64,11 +63,11 @@ export const textUnitTagApi = new TextUnitTagApi(
   instance
 );
 
-export const liveStreamingApi = new LiveStreamingApi(
-  undefined,
-  BASE_PATH,
-  instance
-);
+// export const liveStreamingApi = new LiveStreamingApi(
+//   undefined,
+//   BASE_PATH,
+//   instance
+// );
 
 export const getStaticResourceUrl = (
   resourceOid: string | null | undefined

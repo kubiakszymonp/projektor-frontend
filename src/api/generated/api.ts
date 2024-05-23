@@ -26,169 +26,662 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
+ * @interface CreateDisplayQueueDto
+ */
+export interface CreateDisplayQueueDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateDisplayQueueDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateDisplayQueueDto
+     */
+    'description'?: string;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof CreateDisplayQueueDto
+     */
+    'textUnitIds': Array<number>;
+}
+/**
+ * 
+ * @export
  * @interface CreateOrganizationDto
  */
 export interface CreateOrganizationDto {
     /**
      * 
-     * @type {OrganizationData}
+     * @type {string}
      * @memberof CreateOrganizationDto
      */
-    'data': OrganizationData;
+    'name': string;
     /**
      * 
      * @type {string}
      * @memberof CreateOrganizationDto
      */
-    'accessCode': string;
+    'phoneNumber': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateOrganizationDto
+     */
+    'paymentData': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateOrganizationDto
+     */
+    'contactData': string;
 }
 /**
  * 
  * @export
- * @interface DisplayState
+ * @interface CreateTextUnitDto
  */
-export interface DisplayState {
+export interface CreateTextUnitDto {
     /**
      * 
      * @type {string}
-     * @memberof DisplayState
+     * @memberof CreateTextUnitDto
      */
-    'displayType': DisplayStateDisplayTypeEnum;
+    'content': string;
     /**
      * 
-     * @type {TextUnitState}
-     * @memberof DisplayState
+     * @type {string}
+     * @memberof CreateTextUnitDto
      */
-    'textState': TextUnitState;
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTextUnitDto
+     */
+    'description'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateTextUnitDto
+     */
+    'transposition'?: number;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof CreateTextUnitDto
+     */
+    'textUnitTagIds': Array<number>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof CreateTextUnitDto
+     */
+    'displayQueueIds': Array<number>;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTextUnitDto
+     */
+    'partsOrder'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateTextUnitTagDto
+ */
+export interface CreateTextUnitTagDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTextUnitTagDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTextUnitTagDto
+     */
+    'description'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateUserDto
+ */
+export interface CreateUserDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateUserDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateUserDto
+     */
+    'email': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateUserDto
+     */
+    'password': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateUserDto
+     */
+    'organizationId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateUserDto
+     */
+    'role': CreateUserDtoRoleEnum;
+}
+
+export const CreateUserDtoRoleEnum = {
+    Admin: 'ADMIN',
+    User: 'USER'
+} as const;
+
+export type CreateUserDtoRoleEnum = typeof CreateUserDtoRoleEnum[keyof typeof CreateUserDtoRoleEnum];
+
+/**
+ * 
+ * @export
+ * @interface GetDisplayDto
+ */
+export interface GetDisplayDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetDisplayDto
+     */
+    'displayType': GetDisplayDtoDisplayTypeEnum;
     /**
      * 
      * @type {boolean}
-     * @memberof DisplayState
+     * @memberof GetDisplayDto
      */
     'emptyDisplay': boolean;
     /**
      * 
-     * @type {Organization}
-     * @memberof DisplayState
+     * @type {Array<string>}
+     * @memberof GetDisplayDto
      */
-    'organization': Organization;
+    'lines'?: Array<string>;
     /**
      * 
-     * @type {TextUnitQueue}
-     * @memberof DisplayState
+     * @type {GetMediaFileDto}
+     * @memberof GetDisplayDto
      */
-    'textUnitQueue': TextUnitQueue;
+    'mediaFile'?: GetMediaFileDto;
     /**
      * 
-     * @type {UploadedFile}
-     * @memberof DisplayState
+     * @type {WebRtcConnectionStructure}
+     * @memberof GetDisplayDto
      */
-    'uploadedFile'?: UploadedFile | null;
+    'webRtcState'?: WebRtcConnectionStructure;
 }
 
-export const DisplayStateDisplayTypeEnum = {
+export const GetDisplayDtoDisplayTypeEnum = {
     Text: 'TEXT',
     Media: 'MEDIA',
-    Hls: 'HLS'
+    WebRtc: 'WEB_RTC'
 } as const;
 
-export type DisplayStateDisplayTypeEnum = typeof DisplayStateDisplayTypeEnum[keyof typeof DisplayStateDisplayTypeEnum];
+export type GetDisplayDtoDisplayTypeEnum = typeof GetDisplayDtoDisplayTypeEnum[keyof typeof GetDisplayDtoDisplayTypeEnum];
 
 /**
  * 
  * @export
- * @interface GetOrganizationDto
+ * @interface GetDisplayQueueDto
  */
-export interface GetOrganizationDto {
+export interface GetDisplayQueueDto {
     /**
      * 
      * @type {number}
-     * @memberof GetOrganizationDto
+     * @memberof GetDisplayQueueDto
      */
     'id': number;
     /**
      * 
      * @type {string}
-     * @memberof GetOrganizationDto
+     * @memberof GetDisplayQueueDto
      */
     'createdAt'?: string;
     /**
      * 
      * @type {string}
-     * @memberof GetOrganizationDto
+     * @memberof GetDisplayQueueDto
      */
     'updatedAt'?: string;
     /**
      * 
-     * @type {OrganizationData}
-     * @memberof GetOrganizationDto
+     * @type {string}
+     * @memberof GetDisplayQueueDto
      */
-    'data': OrganizationData;
+    'name': string;
     /**
      * 
      * @type {string}
-     * @memberof GetOrganizationDto
+     * @memberof GetDisplayQueueDto
      */
-    'accessCode': string;
+    'description': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetDisplayQueueDto
+     */
+    'organizationId'?: number;
+    /**
+     * 
+     * @type {Array<GetQueueTextUnit>}
+     * @memberof GetDisplayQueueDto
+     */
+    'queueTextUnits': Array<GetQueueTextUnit>;
 }
 /**
  * 
  * @export
- * @interface GetProjectorStateDto
+ * @interface GetDisplayStateDto
  */
-export interface GetProjectorStateDto {
+export interface GetDisplayStateDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof GetDisplayStateDto
+     */
+    'id': number;
     /**
      * 
      * @type {string}
-     * @memberof GetProjectorStateDto
+     * @memberof GetDisplayStateDto
      */
-    'displayType': GetProjectorStateDtoDisplayTypeEnum;
+    'createdAt'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetDisplayStateDto
+     */
+    'updatedAt'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetDisplayStateDto
+     */
+    'displayType': GetDisplayStateDtoDisplayTypeEnum;
     /**
      * 
      * @type {boolean}
-     * @memberof GetProjectorStateDto
+     * @memberof GetDisplayStateDto
      */
     'emptyDisplay': boolean;
     /**
      * 
-     * @type {TextUnitState}
-     * @memberof GetProjectorStateDto
+     * @type {number}
+     * @memberof GetDisplayStateDto
      */
-    'textState': TextUnitState;
-    /**
-     * 
-     * @type {ProjectorSettingsConfigurationDto}
-     * @memberof GetProjectorStateDto
-     */
-    'settings': ProjectorSettingsConfigurationDto;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof GetProjectorStateDto
-     */
-    'lines': Array<string>;
-    /**
-     * 
-     * @type {UploadedFileDto}
-     * @memberof GetProjectorStateDto
-     */
-    'uploadedFile': UploadedFileDto | null;
+    'textUnitId': number;
     /**
      * 
      * @type {number}
-     * @memberof GetProjectorStateDto
+     * @memberof GetDisplayStateDto
      */
-    'lastUpdateTime': number;
+    'textUnitPart': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetDisplayStateDto
+     */
+    'textUnitPartPage': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetDisplayStateDto
+     */
+    'mediaFileId': number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetDisplayStateDto
+     */
+    'textUnitQueueId': number;
 }
 
-export const GetProjectorStateDtoDisplayTypeEnum = {
+export const GetDisplayStateDtoDisplayTypeEnum = {
     Text: 'TEXT',
     Media: 'MEDIA',
-    Hls: 'HLS'
+    WebRtc: 'WEB_RTC'
 } as const;
 
-export type GetProjectorStateDtoDisplayTypeEnum = typeof GetProjectorStateDtoDisplayTypeEnum[keyof typeof GetProjectorStateDtoDisplayTypeEnum];
+export type GetDisplayStateDtoDisplayTypeEnum = typeof GetDisplayStateDtoDisplayTypeEnum[keyof typeof GetDisplayStateDtoDisplayTypeEnum];
 
+/**
+ * 
+ * @export
+ * @interface GetMediaFileDto
+ */
+export interface GetMediaFileDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof GetMediaFileDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetMediaFileDto
+     */
+    'createdAt'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetMediaFileDto
+     */
+    'updatedAt'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetMediaFileDto
+     */
+    'mimeType': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetMediaFileDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetMediaFileDto
+     */
+    'url': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetMediaFileDto
+     */
+    'size': number;
+}
+/**
+ * 
+ * @export
+ * @interface GetProjectorSettingsDto
+ */
+export interface GetProjectorSettingsDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof GetProjectorSettingsDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetProjectorSettingsDto
+     */
+    'createdAt'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetProjectorSettingsDto
+     */
+    'updatedAt'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetProjectorSettingsDto
+     */
+    'backgroundColor': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetProjectorSettingsDto
+     */
+    'fontColor': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetProjectorSettingsDto
+     */
+    'fontFamily': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetProjectorSettingsDto
+     */
+    'fontSize': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetProjectorSettingsDto
+     */
+    'textAlign': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetProjectorSettingsDto
+     */
+    'letterSpacing': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetProjectorSettingsDto
+     */
+    'marginInline': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetProjectorSettingsDto
+     */
+    'marginBlock': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetProjectorSettingsDto
+     */
+    'paddingTop': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetProjectorSettingsDto
+     */
+    'charactersInLine': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetProjectorSettingsDto
+     */
+    'linesOnPage': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetProjectorSettingsDto
+     */
+    'textVertically': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetProjectorSettingsDto
+     */
+    'screenWidth': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetProjectorSettingsDto
+     */
+    'screenHeight': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetProjectorSettingsDto
+     */
+    'lineHeight': string;
+    /**
+     * 
+     * @type {TextStrategy}
+     * @memberof GetProjectorSettingsDto
+     */
+    'textStrategy': TextStrategy;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface GetQueueTextUnit
+ */
+export interface GetQueueTextUnit {
+    /**
+     * 
+     * @type {number}
+     * @memberof GetQueueTextUnit
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetQueueTextUnit
+     */
+    'textTitle': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetQueueTextUnit
+     */
+    'queueName': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetQueueTextUnit
+     */
+    'position': number;
+}
+/**
+ * 
+ * @export
+ * @interface GetTextUnitDto
+ */
+export interface GetTextUnitDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof GetTextUnitDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTextUnitDto
+     */
+    'createdAt'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTextUnitDto
+     */
+    'updatedAt'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTextUnitDto
+     */
+    'content': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTextUnitDto
+     */
+    'description'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetTextUnitDto
+     */
+    'transposition'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetTextUnitDto
+     */
+    'organizationId'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTextUnitDto
+     */
+    'title': string;
+    /**
+     * 
+     * @type {Array<GetTextUnitTagDto>}
+     * @memberof GetTextUnitDto
+     */
+    'tags': Array<GetTextUnitTagDto>;
+    /**
+     * 
+     * @type {Array<GetQueueTextUnit>}
+     * @memberof GetTextUnitDto
+     */
+    'queues': Array<GetQueueTextUnit>;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTextUnitDto
+     */
+    'partsOrder'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface GetTextUnitTagDto
+ */
+export interface GetTextUnitTagDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof GetTextUnitTagDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTextUnitTagDto
+     */
+    'createdAt'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTextUnitTagDto
+     */
+    'updatedAt'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTextUnitTagDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTextUnitTagDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetTextUnitTagDto
+     */
+    'organizationId'?: number;
+}
 /**
  * 
  * @export
@@ -200,7 +693,13 @@ export interface LoginDto {
      * @type {string}
      * @memberof LoginDto
      */
-    'accessCode': string;
+    'email': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LoginDto
+     */
+    'password': string;
 }
 /**
  * 
@@ -231,241 +730,34 @@ export type MovePageDtoDirectionEnum = typeof MovePageDtoDirectionEnum[keyof typ
 export interface Organization {
     /**
      * 
-     * @type {DisplayState}
-     * @memberof Organization
-     */
-    'projectorState': DisplayState;
-    /**
-     * 
-     * @type {Array<TextUnitQueue>}
-     * @memberof Organization
-     */
-    'textUnitQueues': Array<TextUnitQueue>;
-    /**
-     * 
-     * @type {Array<TextUnit>}
-     * @memberof Organization
-     */
-    'textUnits': Array<TextUnit>;
-    /**
-     * 
-     * @type {Array<TextUnitTag>}
-     * @memberof Organization
-     */
-    'textUnitTags': Array<TextUnitTag>;
-    /**
-     * 
-     * @type {Array<UploadedFile>}
-     * @memberof Organization
-     */
-    'uploadedFiles': Array<UploadedFile>;
-    /**
-     * 
      * @type {string}
      * @memberof Organization
-     */
-    'accessCode': string;
-    /**
-     * 
-     * @type {OrganizationData}
-     * @memberof Organization
-     */
-    'data': OrganizationData;
-}
-/**
- * 
- * @export
- * @interface OrganizationData
- */
-export interface OrganizationData {
-    /**
-     * 
-     * @type {string}
-     * @memberof OrganizationData
      */
     'name': string;
-}
-/**
- * 
- * @export
- * @interface ProjectorSettingsConfigurationDto
- */
-export interface ProjectorSettingsConfigurationDto {
     /**
      * 
      * @type {string}
-     * @memberof ProjectorSettingsConfigurationDto
+     * @memberof Organization
      */
-    'backgroundColor': string;
+    'phoneNumber': string;
     /**
      * 
      * @type {string}
-     * @memberof ProjectorSettingsConfigurationDto
+     * @memberof Organization
      */
-    'fontColor': string;
+    'paymentData': string;
     /**
      * 
      * @type {string}
-     * @memberof ProjectorSettingsConfigurationDto
+     * @memberof Organization
      */
-    'fontFamily': string;
+    'contactData': string;
     /**
      * 
-     * @type {string}
-     * @memberof ProjectorSettingsConfigurationDto
+     * @type {Array<User>}
+     * @memberof Organization
      */
-    'fontSize': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProjectorSettingsConfigurationDto
-     */
-    'textAlign': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProjectorSettingsConfigurationDto
-     */
-    'letterSpacing': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProjectorSettingsConfigurationDto
-     */
-    'marginInline': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProjectorSettingsConfigurationDto
-     */
-    'marginBlock': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProjectorSettingsConfigurationDto
-     */
-    'paddingTop': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof ProjectorSettingsConfigurationDto
-     */
-    'charactersInLine': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof ProjectorSettingsConfigurationDto
-     */
-    'linesOnPage': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProjectorSettingsConfigurationDto
-     */
-    'textVertically': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof ProjectorSettingsConfigurationDto
-     */
-    'screenWidth': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof ProjectorSettingsConfigurationDto
-     */
-    'screenHeight': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProjectorSettingsConfigurationDto
-     */
-    'lineHeight': string;
-    /**
-     * 
-     * @type {TextStrategy}
-     * @memberof ProjectorSettingsConfigurationDto
-     */
-    'textStrategy': TextStrategy;
-}
-
-
-/**
- * 
- * @export
- * @interface QueueTextUnit
- */
-export interface QueueTextUnit {
-    /**
-     * 
-     * @type {number}
-     * @memberof QueueTextUnit
-     */
-    'id': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof QueueTextUnit
-     */
-    'title': string;
-}
-/**
- * 
- * @export
- * @interface RenameUploadedFileDto
- */
-export interface RenameUploadedFileDto {
-    /**
-     * 
-     * @type {number}
-     * @memberof RenameUploadedFileDto
-     */
-    'id': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof RenameUploadedFileDto
-     */
-    'name': string;
-}
-/**
- * 
- * @export
- * @interface SetCurrentTextUnitDto
- */
-export interface SetCurrentTextUnitDto {
-    /**
-     * 
-     * @type {number}
-     * @memberof SetCurrentTextUnitDto
-     */
-    'id': number;
-}
-/**
- * 
- * @export
- * @interface SetCurrentTextUnitQueueDto
- */
-export interface SetCurrentTextUnitQueueDto {
-    /**
-     * 
-     * @type {number}
-     * @memberof SetCurrentTextUnitQueueDto
-     */
-    'id': number;
-}
-/**
- * 
- * @export
- * @interface SetCurrentUploadedFileDto
- */
-export interface SetCurrentUploadedFileDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof SetCurrentUploadedFileDto
-     */
-    'id': string;
+    'users': Array<User>;
 }
 /**
  * 
@@ -485,280 +777,33 @@ export type TextStrategy = typeof TextStrategy[keyof typeof TextStrategy];
 /**
  * 
  * @export
- * @interface TextUnit
+ * @interface UpdateDisplayQueueDto
  */
-export interface TextUnit {
+export interface UpdateDisplayQueueDto {
     /**
      * 
      * @type {string}
-     * @memberof TextUnit
+     * @memberof UpdateDisplayQueueDto
      */
-    'content': string;
-    /**
-     * 
-     * @type {Organization}
-     * @memberof TextUnit
-     */
-    'organization': Organization | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof TextUnit
-     */
-    'organizationId': number | null;
+    'name'?: string;
     /**
      * 
      * @type {string}
-     * @memberof TextUnit
-     */
-    'title': string;
-    /**
-     * 
-     * @type {Array<TextUnitTag>}
-     * @memberof TextUnit
-     */
-    'tags': Array<TextUnitTag>;
-}
-/**
- * 
- * @export
- * @interface TextUnitDto
- */
-export interface TextUnitDto {
-    /**
-     * 
-     * @type {number}
-     * @memberof TextUnitDto
-     */
-    'id': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof TextUnitDto
-     */
-    'createdAt'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TextUnitDto
-     */
-    'updatedAt'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TextUnitDto
-     */
-    'content': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TextUnitDto
-     */
-    'title': string;
-    /**
-     * 
-     * @type {Array<TextUnitTagDto>}
-     * @memberof TextUnitDto
-     */
-    'tags': Array<TextUnitTagDto>;
-}
-/**
- * 
- * @export
- * @interface TextUnitQueue
- */
-export interface TextUnitQueue {
-    /**
-     * 
-     * @type {string}
-     * @memberof TextUnitQueue
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TextUnitQueue
-     */
-    'description': string;
-    /**
-     * 
-     * @type {Organization}
-     * @memberof TextUnitQueue
-     */
-    'organization': Organization;
-    /**
-     * 
-     * @type {number}
-     * @memberof TextUnitQueue
-     */
-    'organizationId': number | null;
-    /**
-     * 
-     * @type {TextUnitQueueContent}
-     * @memberof TextUnitQueue
-     */
-    'content': TextUnitQueueContent;
-    /**
-     * 
-     * @type {DisplayState}
-     * @memberof TextUnitQueue
-     */
-    'projectorState': DisplayState;
-}
-/**
- * 
- * @export
- * @interface TextUnitQueueContent
- */
-export interface TextUnitQueueContent {
-    /**
-     * 
-     * @type {Array<QueueTextUnit>}
-     * @memberof TextUnitQueueContent
-     */
-    'textUnits': Array<QueueTextUnit>;
-}
-/**
- * 
- * @export
- * @interface TextUnitQueueDto
- */
-export interface TextUnitQueueDto {
-    /**
-     * 
-     * @type {number}
-     * @memberof TextUnitQueueDto
-     */
-    'id': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof TextUnitQueueDto
-     */
-    'createdAt'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TextUnitQueueDto
-     */
-    'updatedAt'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TextUnitQueueDto
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TextUnitQueueDto
+     * @memberof UpdateDisplayQueueDto
      */
     'description'?: string;
     /**
      * 
-     * @type {TextUnitQueueContent}
-     * @memberof TextUnitQueueDto
+     * @type {Array<number>}
+     * @memberof UpdateDisplayQueueDto
      */
-    'content': TextUnitQueueContent;
-}
-/**
- * 
- * @export
- * @interface TextUnitState
- */
-export interface TextUnitState {
+    'textUnitIds'?: Array<number>;
     /**
      * 
      * @type {number}
-     * @memberof TextUnitState
-     */
-    'textUnitId': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof TextUnitState
-     */
-    'textUnitPart': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof TextUnitState
-     */
-    'textUnitPartPage': number;
-}
-/**
- * 
- * @export
- * @interface TextUnitTag
- */
-export interface TextUnitTag {
-    /**
-     * 
-     * @type {string}
-     * @memberof TextUnitTag
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TextUnitTag
-     */
-    'description': string;
-    /**
-     * 
-     * @type {Organization}
-     * @memberof TextUnitTag
-     */
-    'organization': Organization | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof TextUnitTag
-     */
-    'organizationId': number | null;
-    /**
-     * 
-     * @type {Array<TextUnit>}
-     * @memberof TextUnitTag
-     */
-    'textUnits': Array<TextUnit>;
-}
-/**
- * 
- * @export
- * @interface TextUnitTagDto
- */
-export interface TextUnitTagDto {
-    /**
-     * 
-     * @type {number}
-     * @memberof TextUnitTagDto
+     * @memberof UpdateDisplayQueueDto
      */
     'id': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof TextUnitTagDto
-     */
-    'createdAt'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TextUnitTagDto
-     */
-    'updatedAt'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TextUnitTagDto
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TextUnitTagDto
-     */
-    'description'?: string;
 }
 /**
  * 
@@ -768,28 +813,70 @@ export interface TextUnitTagDto {
 export interface UpdateDisplayStateDto {
     /**
      * 
+     * @type {number}
+     * @memberof UpdateDisplayStateDto
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateDisplayStateDto
+     */
+    'createdAt'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateDisplayStateDto
+     */
+    'updatedAt'?: string;
+    /**
+     * 
      * @type {string}
      * @memberof UpdateDisplayStateDto
      */
     'displayType'?: UpdateDisplayStateDtoDisplayTypeEnum;
     /**
      * 
-     * @type {TextUnitState}
-     * @memberof UpdateDisplayStateDto
-     */
-    'textState'?: TextUnitState;
-    /**
-     * 
      * @type {boolean}
      * @memberof UpdateDisplayStateDto
      */
     'emptyDisplay'?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateDisplayStateDto
+     */
+    'textUnitId'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateDisplayStateDto
+     */
+    'textUnitPart'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateDisplayStateDto
+     */
+    'textUnitPartPage'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateDisplayStateDto
+     */
+    'mediaFileId'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateDisplayStateDto
+     */
+    'textUnitQueueId'?: number;
 }
 
 export const UpdateDisplayStateDtoDisplayTypeEnum = {
     Text: 'TEXT',
     Media: 'MEDIA',
-    Hls: 'HLS'
+    WebRtc: 'WEB_RTC'
 } as const;
 
 export type UpdateDisplayStateDtoDisplayTypeEnum = typeof UpdateDisplayStateDtoDisplayTypeEnum[keyof typeof UpdateDisplayStateDtoDisplayTypeEnum];
@@ -797,106 +884,345 @@ export type UpdateDisplayStateDtoDisplayTypeEnum = typeof UpdateDisplayStateDtoD
 /**
  * 
  * @export
- * @interface UploadedFile
+ * @interface UpdateMediaFileDto
  */
-export interface UploadedFile {
-    /**
-     * 
-     * @type {string}
-     * @memberof UploadedFile
-     */
-    'mimeType': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UploadedFile
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UploadedFile
-     */
-    'url': string;
-    /**
-     * 
-     * @type {Organization}
-     * @memberof UploadedFile
-     */
-    'organization': Organization | null;
+export interface UpdateMediaFileDto {
     /**
      * 
      * @type {number}
-     * @memberof UploadedFile
-     */
-    'organizationId': number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof UploadedFile
-     */
-    'size': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof UploadedFile
-     */
-    'previewUrl': string;
-}
-/**
- * 
- * @export
- * @interface UploadedFileDto
- */
-export interface UploadedFileDto {
-    /**
-     * 
-     * @type {number}
-     * @memberof UploadedFileDto
+     * @memberof UpdateMediaFileDto
      */
     'id': number;
     /**
      * 
      * @type {string}
-     * @memberof UploadedFileDto
+     * @memberof UpdateMediaFileDto
+     */
+    'name': string;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateProjectorSettingDto
+ */
+export interface UpdateProjectorSettingDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateProjectorSettingDto
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateProjectorSettingDto
      */
     'createdAt'?: string;
     /**
      * 
      * @type {string}
-     * @memberof UploadedFileDto
+     * @memberof UpdateProjectorSettingDto
      */
     'updatedAt'?: string;
     /**
      * 
      * @type {string}
-     * @memberof UploadedFileDto
+     * @memberof UpdateProjectorSettingDto
      */
-    'mimeType': string;
+    'backgroundColor'?: string;
     /**
      * 
      * @type {string}
-     * @memberof UploadedFileDto
+     * @memberof UpdateProjectorSettingDto
+     */
+    'fontColor'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateProjectorSettingDto
+     */
+    'fontFamily'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateProjectorSettingDto
+     */
+    'fontSize'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateProjectorSettingDto
+     */
+    'textAlign'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateProjectorSettingDto
+     */
+    'letterSpacing'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateProjectorSettingDto
+     */
+    'marginInline'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateProjectorSettingDto
+     */
+    'marginBlock'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateProjectorSettingDto
+     */
+    'paddingTop'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateProjectorSettingDto
+     */
+    'charactersInLine'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateProjectorSettingDto
+     */
+    'linesOnPage'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateProjectorSettingDto
+     */
+    'textVertically'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateProjectorSettingDto
+     */
+    'screenWidth'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateProjectorSettingDto
+     */
+    'screenHeight'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateProjectorSettingDto
+     */
+    'lineHeight'?: string;
+    /**
+     * 
+     * @type {TextStrategy}
+     * @memberof UpdateProjectorSettingDto
+     */
+    'textStrategy'?: TextStrategy;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface UpdateTextUnitDto
+ */
+export interface UpdateTextUnitDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateTextUnitDto
+     */
+    'content'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateTextUnitDto
+     */
+    'title'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateTextUnitDto
+     */
+    'description'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateTextUnitDto
+     */
+    'transposition'?: number;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof UpdateTextUnitDto
+     */
+    'textUnitTagIds'?: Array<number>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof UpdateTextUnitDto
+     */
+    'displayQueueIds'?: Array<number>;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateTextUnitDto
+     */
+    'partsOrder'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateTextUnitDto
+     */
+    'id': number;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateTextUnitTagDto
+ */
+export interface UpdateTextUnitTagDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateTextUnitTagDto
+     */
+    'name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateTextUnitTagDto
+     */
+    'description'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateTextUnitTagDto
+     */
+    'id': number;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateUserDto
+ */
+export interface UpdateUserDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'email'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'password'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateUserDto
+     */
+    'organizationId'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserDto
+     */
+    'role'?: UpdateUserDtoRoleEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateUserDto
+     */
+    'id': number;
+}
+
+export const UpdateUserDtoRoleEnum = {
+    Admin: 'ADMIN',
+    User: 'USER'
+} as const;
+
+export type UpdateUserDtoRoleEnum = typeof UpdateUserDtoRoleEnum[keyof typeof UpdateUserDtoRoleEnum];
+
+/**
+ * 
+ * @export
+ * @interface User
+ */
+export interface User {
+    /**
+     * 
+     * @type {string}
+     * @memberof User
      */
     'name': string;
     /**
      * 
      * @type {string}
-     * @memberof UploadedFileDto
+     * @memberof User
      */
-    'url': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof UploadedFileDto
-     */
-    'size': number;
+    'email': string;
     /**
      * 
      * @type {string}
-     * @memberof UploadedFileDto
+     * @memberof User
      */
-    'previewUrl': string;
+    'password': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    'role': UserRoleEnum;
+    /**
+     * 
+     * @type {Organization}
+     * @memberof User
+     */
+    'organization': Organization | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof User
+     */
+    'organizationId': number | null;
+}
+
+export const UserRoleEnum = {
+    Admin: 'ADMIN',
+    User: 'USER'
+} as const;
+
+export type UserRoleEnum = typeof UserRoleEnum[keyof typeof UserRoleEnum];
+
+/**
+ * 
+ * @export
+ * @interface WebRtcConnectionStructure
+ */
+export interface WebRtcConnectionStructure {
+    /**
+     * 
+     * @type {object}
+     * @memberof WebRtcConnectionStructure
+     */
+    'offer': object;
+    /**
+     * 
+     * @type {object}
+     * @memberof WebRtcConnectionStructure
+     */
+    'answer': object;
 }
 
 /**
@@ -905,39 +1231,6 @@ export interface UploadedFileDto {
  */
 export const AuthApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        authControllerGetProfile: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/auth`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
         /**
          * 
          * @param {LoginDto} loginDto 
@@ -989,17 +1282,6 @@ export const AuthApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async authControllerGetProfile(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetOrganizationDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerGetProfile(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AuthApi.authControllerGetProfile']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
          * @param {LoginDto} loginDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1022,14 +1304,6 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        authControllerGetProfile(options?: any): AxiosPromise<GetOrganizationDto> {
-            return localVarFp.authControllerGetProfile(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @param {LoginDto} loginDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1047,16 +1321,6 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
  * @extends {BaseAPI}
  */
 export class AuthApi extends BaseAPI {
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AuthApi
-     */
-    public authControllerGetProfile(options?: RawAxiosRequestConfig) {
-        return AuthApiFp(this.configuration).authControllerGetProfile(options).then((request) => request(this.axios, this.basePath));
-    }
-
     /**
      * 
      * @param {LoginDto} loginDto 
@@ -1077,6 +1341,39 @@ export class AuthApi extends BaseAPI {
  */
 export const DisplayStateApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        displayStateControllerCreateDisplayState: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/display-state`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @param {*} [options] Override http request option.
@@ -1203,7 +1500,18 @@ export const DisplayStateApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async displayStateControllerGetDisplayState(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DisplayState>> {
+        async displayStateControllerCreateDisplayState(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetDisplayStateDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.displayStateControllerCreateDisplayState(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DisplayStateApi.displayStateControllerCreateDisplayState']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async displayStateControllerGetDisplayState(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetDisplayStateDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.displayStateControllerGetDisplayState(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DisplayStateApi.displayStateControllerGetDisplayState']?.[localVarOperationServerIndex]?.url;
@@ -1215,7 +1523,7 @@ export const DisplayStateApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async displayStateControllerMovePage(movePageDto: MovePageDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async displayStateControllerMovePage(movePageDto: MovePageDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetDisplayStateDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.displayStateControllerMovePage(movePageDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DisplayStateApi.displayStateControllerMovePage']?.[localVarOperationServerIndex]?.url;
@@ -1227,7 +1535,7 @@ export const DisplayStateApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async displayStateControllerUpdateDisplayState(updateDisplayStateDto: UpdateDisplayStateDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async displayStateControllerUpdateDisplayState(updateDisplayStateDto: UpdateDisplayStateDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetDisplayStateDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.displayStateControllerUpdateDisplayState(updateDisplayStateDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DisplayStateApi.displayStateControllerUpdateDisplayState']?.[localVarOperationServerIndex]?.url;
@@ -1248,7 +1556,15 @@ export const DisplayStateApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        displayStateControllerGetDisplayState(options?: any): AxiosPromise<DisplayState> {
+        displayStateControllerCreateDisplayState(options?: any): AxiosPromise<GetDisplayStateDto> {
+            return localVarFp.displayStateControllerCreateDisplayState(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        displayStateControllerGetDisplayState(options?: any): AxiosPromise<GetDisplayStateDto> {
             return localVarFp.displayStateControllerGetDisplayState(options).then((request) => request(axios, basePath));
         },
         /**
@@ -1257,7 +1573,7 @@ export const DisplayStateApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        displayStateControllerMovePage(movePageDto: MovePageDto, options?: any): AxiosPromise<void> {
+        displayStateControllerMovePage(movePageDto: MovePageDto, options?: any): AxiosPromise<GetDisplayStateDto> {
             return localVarFp.displayStateControllerMovePage(movePageDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1266,7 +1582,7 @@ export const DisplayStateApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        displayStateControllerUpdateDisplayState(updateDisplayStateDto: UpdateDisplayStateDto, options?: any): AxiosPromise<void> {
+        displayStateControllerUpdateDisplayState(updateDisplayStateDto: UpdateDisplayStateDto, options?: any): AxiosPromise<GetDisplayStateDto> {
             return localVarFp.displayStateControllerUpdateDisplayState(updateDisplayStateDto, options).then((request) => request(axios, basePath));
         },
     };
@@ -1279,6 +1595,16 @@ export const DisplayStateApiFactory = function (configuration?: Configuration, b
  * @extends {BaseAPI}
  */
 export class DisplayStateApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DisplayStateApi
+     */
+    public displayStateControllerCreateDisplayState(options?: RawAxiosRequestConfig) {
+        return DisplayStateApiFp(this.configuration).displayStateControllerCreateDisplayState(options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {*} [options] Override http request option.
@@ -1315,22 +1641,18 @@ export class DisplayStateApi extends BaseAPI {
 
 
 /**
- * LiveStreamingApi - axios parameter creator
+ * MediaFilesApi - axios parameter creator
  * @export
  */
-export const LiveStreamingApiAxiosParamCreator = function (configuration?: Configuration) {
+export const MediaFilesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} organizationId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        liveStreamingControllerGetStreamManifest: async (organizationId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'organizationId' is not null or undefined
-            assertParamExists('liveStreamingControllerGetStreamManifest', 'organizationId', organizationId)
-            const localVarPath = `/api/live-streaming/hls-stream-manifest/{organizationId}`
-                .replace(`{${"organizationId"}}`, encodeURIComponent(String(organizationId)));
+        mediaFilesControllerGetFilesForOrganization: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/media-files`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1359,11 +1681,15 @@ export const LiveStreamingApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        liveStreamingControllerStartStream: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/live-streaming/hls-stream/start`;
+        mediaFilesControllerRemove: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('mediaFilesControllerRemove', 'id', id)
+            const localVarPath = `/api/media-files/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1371,7 +1697,7 @@ export const LiveStreamingApiAxiosParamCreator = function (configuration?: Confi
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -1392,11 +1718,14 @@ export const LiveStreamingApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
+         * @param {UpdateMediaFileDto} updateMediaFileDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        liveStreamingControllerStopStream: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/live-streaming/hls-stream/stop`;
+        mediaFilesControllerRenameFile: async (updateMediaFileDto: UpdateMediaFileDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateMediaFileDto' is not null or undefined
+            assertParamExists('mediaFilesControllerRenameFile', 'updateMediaFileDto', updateMediaFileDto)
+            const localVarPath = `/api/media-files`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1404,7 +1733,7 @@ export const LiveStreamingApiAxiosParamCreator = function (configuration?: Confi
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -1414,9 +1743,12 @@ export const LiveStreamingApiAxiosParamCreator = function (configuration?: Confi
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateMediaFileDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1428,8 +1760,8 @@ export const LiveStreamingApiAxiosParamCreator = function (configuration?: Confi
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        liveStreamingControllerUploadStreamChunk: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/live-streaming/hls-stream`;
+        mediaFilesControllerUploadMultipleFiles: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/media-files`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1460,22 +1792,45 @@ export const LiveStreamingApiAxiosParamCreator = function (configuration?: Confi
 };
 
 /**
- * LiveStreamingApi - functional programming interface
+ * MediaFilesApi - functional programming interface
  * @export
  */
-export const LiveStreamingApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = LiveStreamingApiAxiosParamCreator(configuration)
+export const MediaFilesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MediaFilesApiAxiosParamCreator(configuration)
     return {
         /**
          * 
-         * @param {string} organizationId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async liveStreamingControllerGetStreamManifest(organizationId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.liveStreamingControllerGetStreamManifest(organizationId, options);
+        async mediaFilesControllerGetFilesForOrganization(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetMediaFileDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaFilesControllerGetFilesForOrganization(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['LiveStreamingApi.liveStreamingControllerGetStreamManifest']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MediaFilesApi.mediaFilesControllerGetFilesForOrganization']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mediaFilesControllerRemove(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaFilesControllerRemove(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MediaFilesApi.mediaFilesControllerRemove']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {UpdateMediaFileDto} updateMediaFileDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mediaFilesControllerRenameFile(updateMediaFileDto: UpdateMediaFileDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetMediaFileDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaFilesControllerRenameFile(updateMediaFileDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MediaFilesApi.mediaFilesControllerRenameFile']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1483,126 +1838,106 @@ export const LiveStreamingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async liveStreamingControllerStartStream(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.liveStreamingControllerStartStream(options);
+        async mediaFilesControllerUploadMultipleFiles(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaFilesControllerUploadMultipleFiles(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['LiveStreamingApi.liveStreamingControllerStartStream']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async liveStreamingControllerStopStream(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.liveStreamingControllerStopStream(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['LiveStreamingApi.liveStreamingControllerStopStream']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async liveStreamingControllerUploadStreamChunk(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.liveStreamingControllerUploadStreamChunk(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['LiveStreamingApi.liveStreamingControllerUploadStreamChunk']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MediaFilesApi.mediaFilesControllerUploadMultipleFiles']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
- * LiveStreamingApi - factory interface
+ * MediaFilesApi - factory interface
  * @export
  */
-export const LiveStreamingApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = LiveStreamingApiFp(configuration)
+export const MediaFilesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MediaFilesApiFp(configuration)
     return {
         /**
          * 
-         * @param {string} organizationId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        liveStreamingControllerGetStreamManifest(organizationId: string, options?: any): AxiosPromise<void> {
-            return localVarFp.liveStreamingControllerGetStreamManifest(organizationId, options).then((request) => request(axios, basePath));
+        mediaFilesControllerGetFilesForOrganization(options?: any): AxiosPromise<Array<GetMediaFileDto>> {
+            return localVarFp.mediaFilesControllerGetFilesForOrganization(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaFilesControllerRemove(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.mediaFilesControllerRemove(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {UpdateMediaFileDto} updateMediaFileDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaFilesControllerRenameFile(updateMediaFileDto: UpdateMediaFileDto, options?: any): AxiosPromise<GetMediaFileDto> {
+            return localVarFp.mediaFilesControllerRenameFile(updateMediaFileDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        liveStreamingControllerStartStream(options?: any): AxiosPromise<void> {
-            return localVarFp.liveStreamingControllerStartStream(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        liveStreamingControllerStopStream(options?: any): AxiosPromise<void> {
-            return localVarFp.liveStreamingControllerStopStream(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        liveStreamingControllerUploadStreamChunk(options?: any): AxiosPromise<void> {
-            return localVarFp.liveStreamingControllerUploadStreamChunk(options).then((request) => request(axios, basePath));
+        mediaFilesControllerUploadMultipleFiles(options?: any): AxiosPromise<void> {
+            return localVarFp.mediaFilesControllerUploadMultipleFiles(options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * LiveStreamingApi - object-oriented interface
+ * MediaFilesApi - object-oriented interface
  * @export
- * @class LiveStreamingApi
+ * @class MediaFilesApi
  * @extends {BaseAPI}
  */
-export class LiveStreamingApi extends BaseAPI {
+export class MediaFilesApi extends BaseAPI {
     /**
      * 
-     * @param {string} organizationId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof LiveStreamingApi
+     * @memberof MediaFilesApi
      */
-    public liveStreamingControllerGetStreamManifest(organizationId: string, options?: RawAxiosRequestConfig) {
-        return LiveStreamingApiFp(this.configuration).liveStreamingControllerGetStreamManifest(organizationId, options).then((request) => request(this.axios, this.basePath));
+    public mediaFilesControllerGetFilesForOrganization(options?: RawAxiosRequestConfig) {
+        return MediaFilesApiFp(this.configuration).mediaFilesControllerGetFilesForOrganization(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaFilesApi
+     */
+    public mediaFilesControllerRemove(id: string, options?: RawAxiosRequestConfig) {
+        return MediaFilesApiFp(this.configuration).mediaFilesControllerRemove(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {UpdateMediaFileDto} updateMediaFileDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaFilesApi
+     */
+    public mediaFilesControllerRenameFile(updateMediaFileDto: UpdateMediaFileDto, options?: RawAxiosRequestConfig) {
+        return MediaFilesApiFp(this.configuration).mediaFilesControllerRenameFile(updateMediaFileDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof LiveStreamingApi
+     * @memberof MediaFilesApi
      */
-    public liveStreamingControllerStartStream(options?: RawAxiosRequestConfig) {
-        return LiveStreamingApiFp(this.configuration).liveStreamingControllerStartStream(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof LiveStreamingApi
-     */
-    public liveStreamingControllerStopStream(options?: RawAxiosRequestConfig) {
-        return LiveStreamingApiFp(this.configuration).liveStreamingControllerStopStream(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof LiveStreamingApi
-     */
-    public liveStreamingControllerUploadStreamChunk(options?: RawAxiosRequestConfig) {
-        return LiveStreamingApiFp(this.configuration).liveStreamingControllerUploadStreamChunk(options).then((request) => request(this.axios, this.basePath));
+    public mediaFilesControllerUploadMultipleFiles(options?: RawAxiosRequestConfig) {
+        return MediaFilesApiFp(this.configuration).mediaFilesControllerUploadMultipleFiles(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -1620,9 +1955,9 @@ export const OrganizationsApiAxiosParamCreator = function (configuration?: Confi
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        organizationsControllerCreate: async (createOrganizationDto: CreateOrganizationDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        organizationControllerCreateOrganization: async (createOrganizationDto: CreateOrganizationDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'createOrganizationDto' is not null or undefined
-            assertParamExists('organizationsControllerCreate', 'createOrganizationDto', createOrganizationDto)
+            assertParamExists('organizationControllerCreateOrganization', 'createOrganizationDto', createOrganizationDto)
             const localVarPath = `/api/organizations`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1655,10 +1990,84 @@ export const OrganizationsApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        organizationsControllerFindAll: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        organizationControllerDeleteOrganization: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('organizationControllerDeleteOrganization', 'id', id)
+            const localVarPath = `/api/organizations/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        organizationControllerGetOrganization: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('organizationControllerGetOrganization', 'id', id)
+            const localVarPath = `/api/organizations/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        organizationControllerGetOrganizations: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/organizations`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1688,15 +2097,14 @@ export const OrganizationsApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
-         * @param {string} id 
+         * @param {UpdateUserDto} updateUserDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        organizationsControllerFindOne: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('organizationsControllerFindOne', 'id', id)
-            const localVarPath = `/api/organizations/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        organizationControllerUpdateOrganization: async (updateUserDto: UpdateUserDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateUserDto' is not null or undefined
+            assertParamExists('organizationControllerUpdateOrganization', 'updateUserDto', updateUserDto)
+            const localVarPath = `/api/organizations`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1704,7 +2112,7 @@ export const OrganizationsApiAxiosParamCreator = function (configuration?: Confi
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -1714,9 +2122,12 @@ export const OrganizationsApiAxiosParamCreator = function (configuration?: Confi
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateUserDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1739,10 +2150,34 @@ export const OrganizationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async organizationsControllerCreate(createOrganizationDto: CreateOrganizationDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.organizationsControllerCreate(createOrganizationDto, options);
+        async organizationControllerCreateOrganization(createOrganizationDto: CreateOrganizationDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Organization>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.organizationControllerCreateOrganization(createOrganizationDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['OrganizationsApi.organizationsControllerCreate']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['OrganizationsApi.organizationControllerCreateOrganization']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async organizationControllerDeleteOrganization(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.organizationControllerDeleteOrganization(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['OrganizationsApi.organizationControllerDeleteOrganization']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async organizationControllerGetOrganization(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Organization>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.organizationControllerGetOrganization(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['OrganizationsApi.organizationControllerGetOrganization']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1750,22 +2185,22 @@ export const OrganizationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async organizationsControllerFindAll(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetOrganizationDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.organizationsControllerFindAll(options);
+        async organizationControllerGetOrganizations(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Organization>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.organizationControllerGetOrganizations(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['OrganizationsApi.organizationsControllerFindAll']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['OrganizationsApi.organizationControllerGetOrganizations']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @param {string} id 
+         * @param {UpdateUserDto} updateUserDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async organizationsControllerFindOne(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetOrganizationDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.organizationsControllerFindOne(id, options);
+        async organizationControllerUpdateOrganization(updateUserDto: UpdateUserDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.organizationControllerUpdateOrganization(updateUserDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['OrganizationsApi.organizationsControllerFindOne']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['OrganizationsApi.organizationControllerUpdateOrganization']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -1784,25 +2219,43 @@ export const OrganizationsApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        organizationsControllerCreate(createOrganizationDto: CreateOrganizationDto, options?: any): AxiosPromise<void> {
-            return localVarFp.organizationsControllerCreate(createOrganizationDto, options).then((request) => request(axios, basePath));
+        organizationControllerCreateOrganization(createOrganizationDto: CreateOrganizationDto, options?: any): AxiosPromise<Organization> {
+            return localVarFp.organizationControllerCreateOrganization(createOrganizationDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        organizationControllerDeleteOrganization(id: number, options?: any): AxiosPromise<void> {
+            return localVarFp.organizationControllerDeleteOrganization(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        organizationControllerGetOrganization(id: number, options?: any): AxiosPromise<Organization> {
+            return localVarFp.organizationControllerGetOrganization(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        organizationsControllerFindAll(options?: any): AxiosPromise<Array<GetOrganizationDto>> {
-            return localVarFp.organizationsControllerFindAll(options).then((request) => request(axios, basePath));
+        organizationControllerGetOrganizations(options?: any): AxiosPromise<Array<Organization>> {
+            return localVarFp.organizationControllerGetOrganizations(options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} id 
+         * @param {UpdateUserDto} updateUserDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        organizationsControllerFindOne(id: string, options?: any): AxiosPromise<GetOrganizationDto> {
-            return localVarFp.organizationsControllerFindOne(id, options).then((request) => request(axios, basePath));
+        organizationControllerUpdateOrganization(updateUserDto: UpdateUserDto, options?: any): AxiosPromise<object> {
+            return localVarFp.organizationControllerUpdateOrganization(updateUserDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1821,8 +2274,30 @@ export class OrganizationsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof OrganizationsApi
      */
-    public organizationsControllerCreate(createOrganizationDto: CreateOrganizationDto, options?: RawAxiosRequestConfig) {
-        return OrganizationsApiFp(this.configuration).organizationsControllerCreate(createOrganizationDto, options).then((request) => request(this.axios, this.basePath));
+    public organizationControllerCreateOrganization(createOrganizationDto: CreateOrganizationDto, options?: RawAxiosRequestConfig) {
+        return OrganizationsApiFp(this.configuration).organizationControllerCreateOrganization(createOrganizationDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrganizationsApi
+     */
+    public organizationControllerDeleteOrganization(id: number, options?: RawAxiosRequestConfig) {
+        return OrganizationsApiFp(this.configuration).organizationControllerDeleteOrganization(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrganizationsApi
+     */
+    public organizationControllerGetOrganization(id: number, options?: RawAxiosRequestConfig) {
+        return OrganizationsApiFp(this.configuration).organizationControllerGetOrganization(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1831,19 +2306,19 @@ export class OrganizationsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof OrganizationsApi
      */
-    public organizationsControllerFindAll(options?: RawAxiosRequestConfig) {
-        return OrganizationsApiFp(this.configuration).organizationsControllerFindAll(options).then((request) => request(this.axios, this.basePath));
+    public organizationControllerGetOrganizations(options?: RawAxiosRequestConfig) {
+        return OrganizationsApiFp(this.configuration).organizationControllerGetOrganizations(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {string} id 
+     * @param {UpdateUserDto} updateUserDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OrganizationsApi
      */
-    public organizationsControllerFindOne(id: string, options?: RawAxiosRequestConfig) {
-        return OrganizationsApiFp(this.configuration).organizationsControllerFindOne(id, options).then((request) => request(this.axios, this.basePath));
+    public organizationControllerUpdateOrganization(updateUserDto: UpdateUserDto, options?: RawAxiosRequestConfig) {
+        return OrganizationsApiFp(this.configuration).organizationControllerUpdateOrganization(updateUserDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -1855,43 +2330,6 @@ export class OrganizationsApi extends BaseAPI {
  */
 export const ProjectorApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
-        /**
-         * 
-         * @param {number} organizationId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        projectorControllerGetLastUpdateTimestamp: async (organizationId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'organizationId' is not null or undefined
-            assertParamExists('projectorControllerGetLastUpdateTimestamp', 'organizationId', organizationId)
-            const localVarPath = `/api/projector/last-update/{organizationId}`
-                .replace(`{${"organizationId"}}`, encodeURIComponent(String(organizationId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
         /**
          * 
          * @param {*} [options] Override http request option.
@@ -1974,22 +2412,10 @@ export const ProjectorApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {number} organizationId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async projectorControllerGetLastUpdateTimestamp(organizationId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<number>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.projectorControllerGetLastUpdateTimestamp(organizationId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ProjectorApi.projectorControllerGetLastUpdateTimestamp']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async projectorControllerGetProjectorState(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetProjectorStateDto>> {
+        async projectorControllerGetProjectorState(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetDisplayDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.projectorControllerGetProjectorState(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProjectorApi.projectorControllerGetProjectorState']?.[localVarOperationServerIndex]?.url;
@@ -2001,7 +2427,7 @@ export const ProjectorApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async projectorControllerGetProjectorStateByOrganizationId(organizationId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetProjectorStateDto>> {
+        async projectorControllerGetProjectorStateByOrganizationId(organizationId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetDisplayDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.projectorControllerGetProjectorStateByOrganizationId(organizationId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProjectorApi.projectorControllerGetProjectorStateByOrganizationId']?.[localVarOperationServerIndex]?.url;
@@ -2019,19 +2445,10 @@ export const ProjectorApiFactory = function (configuration?: Configuration, base
     return {
         /**
          * 
-         * @param {number} organizationId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectorControllerGetLastUpdateTimestamp(organizationId: number, options?: any): AxiosPromise<number> {
-            return localVarFp.projectorControllerGetLastUpdateTimestamp(organizationId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        projectorControllerGetProjectorState(options?: any): AxiosPromise<GetProjectorStateDto> {
+        projectorControllerGetProjectorState(options?: any): AxiosPromise<GetDisplayDto> {
             return localVarFp.projectorControllerGetProjectorState(options).then((request) => request(axios, basePath));
         },
         /**
@@ -2040,7 +2457,7 @@ export const ProjectorApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectorControllerGetProjectorStateByOrganizationId(organizationId: number, options?: any): AxiosPromise<GetProjectorStateDto> {
+        projectorControllerGetProjectorStateByOrganizationId(organizationId: number, options?: any): AxiosPromise<GetDisplayDto> {
             return localVarFp.projectorControllerGetProjectorStateByOrganizationId(organizationId, options).then((request) => request(axios, basePath));
         },
     };
@@ -2053,17 +2470,6 @@ export const ProjectorApiFactory = function (configuration?: Configuration, base
  * @extends {BaseAPI}
  */
 export class ProjectorApi extends BaseAPI {
-    /**
-     * 
-     * @param {number} organizationId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ProjectorApi
-     */
-    public projectorControllerGetLastUpdateTimestamp(organizationId: number, options?: RawAxiosRequestConfig) {
-        return ProjectorApiFp(this.configuration).projectorControllerGetLastUpdateTimestamp(organizationId, options).then((request) => request(this.axios, this.basePath));
-    }
-
     /**
      * 
      * @param {*} [options] Override http request option.
@@ -2094,6 +2500,39 @@ export class ProjectorApi extends BaseAPI {
  */
 export const ProjectorSettingsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        projectorSettingsControllerCreateF: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/projector-settings`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @param {*} [options] Override http request option.
@@ -2166,13 +2605,13 @@ export const ProjectorSettingsApiAxiosParamCreator = function (configuration?: C
         },
         /**
          * 
-         * @param {object} body 
+         * @param {UpdateProjectorSettingDto} updateProjectorSettingDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectorSettingsControllerUpdate: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('projectorSettingsControllerUpdate', 'body', body)
+        projectorSettingsControllerUpdate: async (updateProjectorSettingDto: UpdateProjectorSettingDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateProjectorSettingDto' is not null or undefined
+            assertParamExists('projectorSettingsControllerUpdate', 'updateProjectorSettingDto', updateProjectorSettingDto)
             const localVarPath = `/api/projector-settings`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2196,7 +2635,7 @@ export const ProjectorSettingsApiAxiosParamCreator = function (configuration?: C
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(updateProjectorSettingDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2218,7 +2657,18 @@ export const ProjectorSettingsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async projectorSettingsControllerGetSetting(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProjectorSettingsConfigurationDto>> {
+        async projectorSettingsControllerCreateF(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetProjectorSettingsDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.projectorSettingsControllerCreateF(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ProjectorSettingsApi.projectorSettingsControllerCreateF']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async projectorSettingsControllerGetSetting(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetProjectorSettingsDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.projectorSettingsControllerGetSetting(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProjectorSettingsApi.projectorSettingsControllerGetSetting']?.[localVarOperationServerIndex]?.url;
@@ -2230,7 +2680,7 @@ export const ProjectorSettingsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async projectorSettingsControllerGetSettingsByOrganizationId(organizationId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProjectorSettingsConfigurationDto>> {
+        async projectorSettingsControllerGetSettingsByOrganizationId(organizationId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetProjectorSettingsDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.projectorSettingsControllerGetSettingsByOrganizationId(organizationId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProjectorSettingsApi.projectorSettingsControllerGetSettingsByOrganizationId']?.[localVarOperationServerIndex]?.url;
@@ -2238,12 +2688,12 @@ export const ProjectorSettingsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {object} body 
+         * @param {UpdateProjectorSettingDto} updateProjectorSettingDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async projectorSettingsControllerUpdate(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.projectorSettingsControllerUpdate(body, options);
+        async projectorSettingsControllerUpdate(updateProjectorSettingDto: UpdateProjectorSettingDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetProjectorSettingsDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.projectorSettingsControllerUpdate(updateProjectorSettingDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProjectorSettingsApi.projectorSettingsControllerUpdate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -2263,7 +2713,15 @@ export const ProjectorSettingsApiFactory = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectorSettingsControllerGetSetting(options?: any): AxiosPromise<ProjectorSettingsConfigurationDto> {
+        projectorSettingsControllerCreateF(options?: any): AxiosPromise<GetProjectorSettingsDto> {
+            return localVarFp.projectorSettingsControllerCreateF(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        projectorSettingsControllerGetSetting(options?: any): AxiosPromise<GetProjectorSettingsDto> {
             return localVarFp.projectorSettingsControllerGetSetting(options).then((request) => request(axios, basePath));
         },
         /**
@@ -2272,17 +2730,17 @@ export const ProjectorSettingsApiFactory = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectorSettingsControllerGetSettingsByOrganizationId(organizationId: number, options?: any): AxiosPromise<ProjectorSettingsConfigurationDto> {
+        projectorSettingsControllerGetSettingsByOrganizationId(organizationId: number, options?: any): AxiosPromise<GetProjectorSettingsDto> {
             return localVarFp.projectorSettingsControllerGetSettingsByOrganizationId(organizationId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {object} body 
+         * @param {UpdateProjectorSettingDto} updateProjectorSettingDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectorSettingsControllerUpdate(body: object, options?: any): AxiosPromise<void> {
-            return localVarFp.projectorSettingsControllerUpdate(body, options).then((request) => request(axios, basePath));
+        projectorSettingsControllerUpdate(updateProjectorSettingDto: UpdateProjectorSettingDto, options?: any): AxiosPromise<GetProjectorSettingsDto> {
+            return localVarFp.projectorSettingsControllerUpdate(updateProjectorSettingDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2294,6 +2752,16 @@ export const ProjectorSettingsApiFactory = function (configuration?: Configurati
  * @extends {BaseAPI}
  */
 export class ProjectorSettingsApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProjectorSettingsApi
+     */
+    public projectorSettingsControllerCreateF(options?: RawAxiosRequestConfig) {
+        return ProjectorSettingsApiFp(this.configuration).projectorSettingsControllerCreateF(options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {*} [options] Override http request option.
@@ -2317,13 +2785,13 @@ export class ProjectorSettingsApi extends BaseAPI {
 
     /**
      * 
-     * @param {object} body 
+     * @param {UpdateProjectorSettingDto} updateProjectorSettingDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProjectorSettingsApi
      */
-    public projectorSettingsControllerUpdate(body: object, options?: RawAxiosRequestConfig) {
-        return ProjectorSettingsApiFp(this.configuration).projectorSettingsControllerUpdate(body, options).then((request) => request(this.axios, this.basePath));
+    public projectorSettingsControllerUpdate(updateProjectorSettingDto: UpdateProjectorSettingDto, options?: RawAxiosRequestConfig) {
+        return ProjectorSettingsApiFp(this.configuration).projectorSettingsControllerUpdate(updateProjectorSettingDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2337,13 +2805,13 @@ export const TextUnitQueuesApiAxiosParamCreator = function (configuration?: Conf
     return {
         /**
          * 
-         * @param {TextUnitQueueDto} textUnitQueueDto 
+         * @param {CreateDisplayQueueDto} createDisplayQueueDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitQueuesControllerCreate: async (textUnitQueueDto: TextUnitQueueDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'textUnitQueueDto' is not null or undefined
-            assertParamExists('textUnitQueuesControllerCreate', 'textUnitQueueDto', textUnitQueueDto)
+        displayQueuesControllerCreate: async (createDisplayQueueDto: CreateDisplayQueueDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createDisplayQueueDto' is not null or undefined
+            assertParamExists('displayQueuesControllerCreate', 'createDisplayQueueDto', createDisplayQueueDto)
             const localVarPath = `/api/text-unit-queues`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2367,7 +2835,7 @@ export const TextUnitQueuesApiAxiosParamCreator = function (configuration?: Conf
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(textUnitQueueDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(createDisplayQueueDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2379,7 +2847,7 @@ export const TextUnitQueuesApiAxiosParamCreator = function (configuration?: Conf
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitQueuesControllerFindAll: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        displayQueuesControllerFindAll: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/text-unit-queues`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2413,10 +2881,10 @@ export const TextUnitQueuesApiAxiosParamCreator = function (configuration?: Conf
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitQueuesControllerFindOne: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        displayQueuesControllerFindOne: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('textUnitQueuesControllerFindOne', 'id', id)
-            const localVarPath = `/api/text-unit-queues/by-id/{id}`
+            assertParamExists('displayQueuesControllerFindOne', 'id', id)
+            const localVarPath = `/api/text-unit-queues/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2446,46 +2914,13 @@ export const TextUnitQueuesApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        textUnitQueuesControllerGetCurrentTextUnitQueue: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/text-unit-queues/current`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitQueuesControllerRemove: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        displayQueuesControllerRemove: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('textUnitQueuesControllerRemove', 'id', id)
+            assertParamExists('displayQueuesControllerRemove', 'id', id)
             const localVarPath = `/api/text-unit-queues/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2516,52 +2951,13 @@ export const TextUnitQueuesApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
-         * @param {SetCurrentTextUnitQueueDto} setCurrentTextUnitQueueDto 
+         * @param {UpdateDisplayQueueDto} updateDisplayQueueDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitQueuesControllerSetCurrentTextUnitQueue: async (setCurrentTextUnitQueueDto: SetCurrentTextUnitQueueDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'setCurrentTextUnitQueueDto' is not null or undefined
-            assertParamExists('textUnitQueuesControllerSetCurrentTextUnitQueue', 'setCurrentTextUnitQueueDto', setCurrentTextUnitQueueDto)
-            const localVarPath = `/api/text-unit-queues/current`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(setCurrentTextUnitQueueDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {TextUnitQueueDto} textUnitQueueDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        textUnitQueuesControllerUpdate: async (textUnitQueueDto: TextUnitQueueDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'textUnitQueueDto' is not null or undefined
-            assertParamExists('textUnitQueuesControllerUpdate', 'textUnitQueueDto', textUnitQueueDto)
+        displayQueuesControllerUpdate: async (updateDisplayQueueDto: UpdateDisplayQueueDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateDisplayQueueDto' is not null or undefined
+            assertParamExists('displayQueuesControllerUpdate', 'updateDisplayQueueDto', updateDisplayQueueDto)
             const localVarPath = `/api/text-unit-queues`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2585,7 +2981,7 @@ export const TextUnitQueuesApiAxiosParamCreator = function (configuration?: Conf
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(textUnitQueueDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(updateDisplayQueueDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2604,14 +3000,14 @@ export const TextUnitQueuesApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {TextUnitQueueDto} textUnitQueueDto 
+         * @param {CreateDisplayQueueDto} createDisplayQueueDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async textUnitQueuesControllerCreate(textUnitQueueDto: TextUnitQueueDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TextUnitQueue>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitQueuesControllerCreate(textUnitQueueDto, options);
+        async displayQueuesControllerCreate(createDisplayQueueDto: CreateDisplayQueueDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetDisplayQueueDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.displayQueuesControllerCreate(createDisplayQueueDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TextUnitQueuesApi.textUnitQueuesControllerCreate']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['TextUnitQueuesApi.displayQueuesControllerCreate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2619,33 +3015,10 @@ export const TextUnitQueuesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async textUnitQueuesControllerFindAll(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TextUnitQueueDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitQueuesControllerFindAll(options);
+        async displayQueuesControllerFindAll(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetDisplayQueueDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.displayQueuesControllerFindAll(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TextUnitQueuesApi.textUnitQueuesControllerFindAll']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async textUnitQueuesControllerFindOne(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TextUnitQueueDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitQueuesControllerFindOne(id, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TextUnitQueuesApi.textUnitQueuesControllerFindOne']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async textUnitQueuesControllerGetCurrentTextUnitQueue(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TextUnitQueueDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitQueuesControllerGetCurrentTextUnitQueue(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TextUnitQueuesApi.textUnitQueuesControllerGetCurrentTextUnitQueue']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['TextUnitQueuesApi.displayQueuesControllerFindAll']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2654,34 +3027,34 @@ export const TextUnitQueuesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async textUnitQueuesControllerRemove(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitQueuesControllerRemove(id, options);
+        async displayQueuesControllerFindOne(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetDisplayQueueDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.displayQueuesControllerFindOne(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TextUnitQueuesApi.textUnitQueuesControllerRemove']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['TextUnitQueuesApi.displayQueuesControllerFindOne']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @param {SetCurrentTextUnitQueueDto} setCurrentTextUnitQueueDto 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async textUnitQueuesControllerSetCurrentTextUnitQueue(setCurrentTextUnitQueueDto: SetCurrentTextUnitQueueDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitQueuesControllerSetCurrentTextUnitQueue(setCurrentTextUnitQueueDto, options);
+        async displayQueuesControllerRemove(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.displayQueuesControllerRemove(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TextUnitQueuesApi.textUnitQueuesControllerSetCurrentTextUnitQueue']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['TextUnitQueuesApi.displayQueuesControllerRemove']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @param {TextUnitQueueDto} textUnitQueueDto 
+         * @param {UpdateDisplayQueueDto} updateDisplayQueueDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async textUnitQueuesControllerUpdate(textUnitQueueDto: TextUnitQueueDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitQueuesControllerUpdate(textUnitQueueDto, options);
+        async displayQueuesControllerUpdate(updateDisplayQueueDto: UpdateDisplayQueueDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetDisplayQueueDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.displayQueuesControllerUpdate(updateDisplayQueueDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TextUnitQueuesApi.textUnitQueuesControllerUpdate']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['TextUnitQueuesApi.displayQueuesControllerUpdate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -2696,37 +3069,20 @@ export const TextUnitQueuesApiFactory = function (configuration?: Configuration,
     return {
         /**
          * 
-         * @param {TextUnitQueueDto} textUnitQueueDto 
+         * @param {CreateDisplayQueueDto} createDisplayQueueDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitQueuesControllerCreate(textUnitQueueDto: TextUnitQueueDto, options?: any): AxiosPromise<TextUnitQueue> {
-            return localVarFp.textUnitQueuesControllerCreate(textUnitQueueDto, options).then((request) => request(axios, basePath));
+        displayQueuesControllerCreate(createDisplayQueueDto: CreateDisplayQueueDto, options?: any): AxiosPromise<GetDisplayQueueDto> {
+            return localVarFp.displayQueuesControllerCreate(createDisplayQueueDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitQueuesControllerFindAll(options?: any): AxiosPromise<Array<TextUnitQueueDto>> {
-            return localVarFp.textUnitQueuesControllerFindAll(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        textUnitQueuesControllerFindOne(id: string, options?: any): AxiosPromise<TextUnitQueueDto> {
-            return localVarFp.textUnitQueuesControllerFindOne(id, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        textUnitQueuesControllerGetCurrentTextUnitQueue(options?: any): AxiosPromise<TextUnitQueueDto> {
-            return localVarFp.textUnitQueuesControllerGetCurrentTextUnitQueue(options).then((request) => request(axios, basePath));
+        displayQueuesControllerFindAll(options?: any): AxiosPromise<Array<GetDisplayQueueDto>> {
+            return localVarFp.displayQueuesControllerFindAll(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2734,26 +3090,26 @@ export const TextUnitQueuesApiFactory = function (configuration?: Configuration,
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitQueuesControllerRemove(id: string, options?: any): AxiosPromise<void> {
-            return localVarFp.textUnitQueuesControllerRemove(id, options).then((request) => request(axios, basePath));
+        displayQueuesControllerFindOne(id: string, options?: any): AxiosPromise<GetDisplayQueueDto> {
+            return localVarFp.displayQueuesControllerFindOne(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {SetCurrentTextUnitQueueDto} setCurrentTextUnitQueueDto 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitQueuesControllerSetCurrentTextUnitQueue(setCurrentTextUnitQueueDto: SetCurrentTextUnitQueueDto, options?: any): AxiosPromise<void> {
-            return localVarFp.textUnitQueuesControllerSetCurrentTextUnitQueue(setCurrentTextUnitQueueDto, options).then((request) => request(axios, basePath));
+        displayQueuesControllerRemove(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.displayQueuesControllerRemove(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {TextUnitQueueDto} textUnitQueueDto 
+         * @param {UpdateDisplayQueueDto} updateDisplayQueueDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitQueuesControllerUpdate(textUnitQueueDto: TextUnitQueueDto, options?: any): AxiosPromise<void> {
-            return localVarFp.textUnitQueuesControllerUpdate(textUnitQueueDto, options).then((request) => request(axios, basePath));
+        displayQueuesControllerUpdate(updateDisplayQueueDto: UpdateDisplayQueueDto, options?: any): AxiosPromise<GetDisplayQueueDto> {
+            return localVarFp.displayQueuesControllerUpdate(updateDisplayQueueDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2767,13 +3123,13 @@ export const TextUnitQueuesApiFactory = function (configuration?: Configuration,
 export class TextUnitQueuesApi extends BaseAPI {
     /**
      * 
-     * @param {TextUnitQueueDto} textUnitQueueDto 
+     * @param {CreateDisplayQueueDto} createDisplayQueueDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TextUnitQueuesApi
      */
-    public textUnitQueuesControllerCreate(textUnitQueueDto: TextUnitQueueDto, options?: RawAxiosRequestConfig) {
-        return TextUnitQueuesApiFp(this.configuration).textUnitQueuesControllerCreate(textUnitQueueDto, options).then((request) => request(this.axios, this.basePath));
+    public displayQueuesControllerCreate(createDisplayQueueDto: CreateDisplayQueueDto, options?: RawAxiosRequestConfig) {
+        return TextUnitQueuesApiFp(this.configuration).displayQueuesControllerCreate(createDisplayQueueDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2782,29 +3138,8 @@ export class TextUnitQueuesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TextUnitQueuesApi
      */
-    public textUnitQueuesControllerFindAll(options?: RawAxiosRequestConfig) {
-        return TextUnitQueuesApiFp(this.configuration).textUnitQueuesControllerFindAll(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TextUnitQueuesApi
-     */
-    public textUnitQueuesControllerFindOne(id: string, options?: RawAxiosRequestConfig) {
-        return TextUnitQueuesApiFp(this.configuration).textUnitQueuesControllerFindOne(id, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TextUnitQueuesApi
-     */
-    public textUnitQueuesControllerGetCurrentTextUnitQueue(options?: RawAxiosRequestConfig) {
-        return TextUnitQueuesApiFp(this.configuration).textUnitQueuesControllerGetCurrentTextUnitQueue(options).then((request) => request(this.axios, this.basePath));
+    public displayQueuesControllerFindAll(options?: RawAxiosRequestConfig) {
+        return TextUnitQueuesApiFp(this.configuration).displayQueuesControllerFindAll(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2814,30 +3149,30 @@ export class TextUnitQueuesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TextUnitQueuesApi
      */
-    public textUnitQueuesControllerRemove(id: string, options?: RawAxiosRequestConfig) {
-        return TextUnitQueuesApiFp(this.configuration).textUnitQueuesControllerRemove(id, options).then((request) => request(this.axios, this.basePath));
+    public displayQueuesControllerFindOne(id: string, options?: RawAxiosRequestConfig) {
+        return TextUnitQueuesApiFp(this.configuration).displayQueuesControllerFindOne(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {SetCurrentTextUnitQueueDto} setCurrentTextUnitQueueDto 
+     * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TextUnitQueuesApi
      */
-    public textUnitQueuesControllerSetCurrentTextUnitQueue(setCurrentTextUnitQueueDto: SetCurrentTextUnitQueueDto, options?: RawAxiosRequestConfig) {
-        return TextUnitQueuesApiFp(this.configuration).textUnitQueuesControllerSetCurrentTextUnitQueue(setCurrentTextUnitQueueDto, options).then((request) => request(this.axios, this.basePath));
+    public displayQueuesControllerRemove(id: string, options?: RawAxiosRequestConfig) {
+        return TextUnitQueuesApiFp(this.configuration).displayQueuesControllerRemove(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {TextUnitQueueDto} textUnitQueueDto 
+     * @param {UpdateDisplayQueueDto} updateDisplayQueueDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TextUnitQueuesApi
      */
-    public textUnitQueuesControllerUpdate(textUnitQueueDto: TextUnitQueueDto, options?: RawAxiosRequestConfig) {
-        return TextUnitQueuesApiFp(this.configuration).textUnitQueuesControllerUpdate(textUnitQueueDto, options).then((request) => request(this.axios, this.basePath));
+    public displayQueuesControllerUpdate(updateDisplayQueueDto: UpdateDisplayQueueDto, options?: RawAxiosRequestConfig) {
+        return TextUnitQueuesApiFp(this.configuration).displayQueuesControllerUpdate(updateDisplayQueueDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2851,13 +3186,13 @@ export const TextUnitTagApiAxiosParamCreator = function (configuration?: Configu
     return {
         /**
          * 
-         * @param {TextUnitTagDto} textUnitTagDto 
+         * @param {CreateTextUnitTagDto} createTextUnitTagDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitTagControllerCreate: async (textUnitTagDto: TextUnitTagDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'textUnitTagDto' is not null or undefined
-            assertParamExists('textUnitTagControllerCreate', 'textUnitTagDto', textUnitTagDto)
+        textUnitTagControllerCreate: async (createTextUnitTagDto: CreateTextUnitTagDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createTextUnitTagDto' is not null or undefined
+            assertParamExists('textUnitTagControllerCreate', 'createTextUnitTagDto', createTextUnitTagDto)
             const localVarPath = `/api/text-unit-tag`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2881,7 +3216,7 @@ export const TextUnitTagApiAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(textUnitTagDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(createTextUnitTagDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2998,15 +3333,15 @@ export const TextUnitTagApiAxiosParamCreator = function (configuration?: Configu
         /**
          * 
          * @param {string} id 
-         * @param {TextUnitTagDto} textUnitTagDto 
+         * @param {UpdateTextUnitTagDto} updateTextUnitTagDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitTagControllerUpdate: async (id: string, textUnitTagDto: TextUnitTagDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        textUnitTagControllerUpdate: async (id: string, updateTextUnitTagDto: UpdateTextUnitTagDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('textUnitTagControllerUpdate', 'id', id)
-            // verify required parameter 'textUnitTagDto' is not null or undefined
-            assertParamExists('textUnitTagControllerUpdate', 'textUnitTagDto', textUnitTagDto)
+            // verify required parameter 'updateTextUnitTagDto' is not null or undefined
+            assertParamExists('textUnitTagControllerUpdate', 'updateTextUnitTagDto', updateTextUnitTagDto)
             const localVarPath = `/api/text-unit-tag/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -3031,7 +3366,7 @@ export const TextUnitTagApiAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(textUnitTagDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(updateTextUnitTagDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3050,12 +3385,12 @@ export const TextUnitTagApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {TextUnitTagDto} textUnitTagDto 
+         * @param {CreateTextUnitTagDto} createTextUnitTagDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async textUnitTagControllerCreate(textUnitTagDto: TextUnitTagDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TextUnitTag>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitTagControllerCreate(textUnitTagDto, options);
+        async textUnitTagControllerCreate(createTextUnitTagDto: CreateTextUnitTagDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTextUnitTagDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitTagControllerCreate(createTextUnitTagDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TextUnitTagApi.textUnitTagControllerCreate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -3065,7 +3400,7 @@ export const TextUnitTagApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async textUnitTagControllerFindAll(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TextUnitTagDto>>> {
+        async textUnitTagControllerFindAll(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetTextUnitTagDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitTagControllerFindAll(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TextUnitTagApi.textUnitTagControllerFindAll']?.[localVarOperationServerIndex]?.url;
@@ -3077,7 +3412,7 @@ export const TextUnitTagApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async textUnitTagControllerFindOne(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TextUnitTagDto>> {
+        async textUnitTagControllerFindOne(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTextUnitTagDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitTagControllerFindOne(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TextUnitTagApi.textUnitTagControllerFindOne']?.[localVarOperationServerIndex]?.url;
@@ -3098,12 +3433,12 @@ export const TextUnitTagApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} id 
-         * @param {TextUnitTagDto} textUnitTagDto 
+         * @param {UpdateTextUnitTagDto} updateTextUnitTagDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async textUnitTagControllerUpdate(id: string, textUnitTagDto: TextUnitTagDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TextUnitTag>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitTagControllerUpdate(id, textUnitTagDto, options);
+        async textUnitTagControllerUpdate(id: string, updateTextUnitTagDto: UpdateTextUnitTagDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTextUnitTagDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitTagControllerUpdate(id, updateTextUnitTagDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TextUnitTagApi.textUnitTagControllerUpdate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -3120,19 +3455,19 @@ export const TextUnitTagApiFactory = function (configuration?: Configuration, ba
     return {
         /**
          * 
-         * @param {TextUnitTagDto} textUnitTagDto 
+         * @param {CreateTextUnitTagDto} createTextUnitTagDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitTagControllerCreate(textUnitTagDto: TextUnitTagDto, options?: any): AxiosPromise<TextUnitTag> {
-            return localVarFp.textUnitTagControllerCreate(textUnitTagDto, options).then((request) => request(axios, basePath));
+        textUnitTagControllerCreate(createTextUnitTagDto: CreateTextUnitTagDto, options?: any): AxiosPromise<GetTextUnitTagDto> {
+            return localVarFp.textUnitTagControllerCreate(createTextUnitTagDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitTagControllerFindAll(options?: any): AxiosPromise<Array<TextUnitTagDto>> {
+        textUnitTagControllerFindAll(options?: any): AxiosPromise<Array<GetTextUnitTagDto>> {
             return localVarFp.textUnitTagControllerFindAll(options).then((request) => request(axios, basePath));
         },
         /**
@@ -3141,7 +3476,7 @@ export const TextUnitTagApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitTagControllerFindOne(id: string, options?: any): AxiosPromise<TextUnitTagDto> {
+        textUnitTagControllerFindOne(id: string, options?: any): AxiosPromise<GetTextUnitTagDto> {
             return localVarFp.textUnitTagControllerFindOne(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3156,12 +3491,12 @@ export const TextUnitTagApiFactory = function (configuration?: Configuration, ba
         /**
          * 
          * @param {string} id 
-         * @param {TextUnitTagDto} textUnitTagDto 
+         * @param {UpdateTextUnitTagDto} updateTextUnitTagDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitTagControllerUpdate(id: string, textUnitTagDto: TextUnitTagDto, options?: any): AxiosPromise<TextUnitTag> {
-            return localVarFp.textUnitTagControllerUpdate(id, textUnitTagDto, options).then((request) => request(axios, basePath));
+        textUnitTagControllerUpdate(id: string, updateTextUnitTagDto: UpdateTextUnitTagDto, options?: any): AxiosPromise<GetTextUnitTagDto> {
+            return localVarFp.textUnitTagControllerUpdate(id, updateTextUnitTagDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3175,13 +3510,13 @@ export const TextUnitTagApiFactory = function (configuration?: Configuration, ba
 export class TextUnitTagApi extends BaseAPI {
     /**
      * 
-     * @param {TextUnitTagDto} textUnitTagDto 
+     * @param {CreateTextUnitTagDto} createTextUnitTagDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TextUnitTagApi
      */
-    public textUnitTagControllerCreate(textUnitTagDto: TextUnitTagDto, options?: RawAxiosRequestConfig) {
-        return TextUnitTagApiFp(this.configuration).textUnitTagControllerCreate(textUnitTagDto, options).then((request) => request(this.axios, this.basePath));
+    public textUnitTagControllerCreate(createTextUnitTagDto: CreateTextUnitTagDto, options?: RawAxiosRequestConfig) {
+        return TextUnitTagApiFp(this.configuration).textUnitTagControllerCreate(createTextUnitTagDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3219,13 +3554,13 @@ export class TextUnitTagApi extends BaseAPI {
     /**
      * 
      * @param {string} id 
-     * @param {TextUnitTagDto} textUnitTagDto 
+     * @param {UpdateTextUnitTagDto} updateTextUnitTagDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TextUnitTagApi
      */
-    public textUnitTagControllerUpdate(id: string, textUnitTagDto: TextUnitTagDto, options?: RawAxiosRequestConfig) {
-        return TextUnitTagApiFp(this.configuration).textUnitTagControllerUpdate(id, textUnitTagDto, options).then((request) => request(this.axios, this.basePath));
+    public textUnitTagControllerUpdate(id: string, updateTextUnitTagDto: UpdateTextUnitTagDto, options?: RawAxiosRequestConfig) {
+        return TextUnitTagApiFp(this.configuration).textUnitTagControllerUpdate(id, updateTextUnitTagDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -3239,13 +3574,13 @@ export const TextUnitsApiAxiosParamCreator = function (configuration?: Configura
     return {
         /**
          * 
-         * @param {TextUnitDto} textUnitDto 
+         * @param {CreateTextUnitDto} createTextUnitDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitControllerCreate: async (textUnitDto: TextUnitDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'textUnitDto' is not null or undefined
-            assertParamExists('textUnitControllerCreate', 'textUnitDto', textUnitDto)
+        textUnitControllerCreate: async (createTextUnitDto: CreateTextUnitDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createTextUnitDto' is not null or undefined
+            assertParamExists('textUnitControllerCreate', 'createTextUnitDto', createTextUnitDto)
             const localVarPath = `/api/text-units`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3269,7 +3604,7 @@ export const TextUnitsApiAxiosParamCreator = function (configuration?: Configura
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(textUnitDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(createTextUnitDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3318,41 +3653,8 @@ export const TextUnitsApiAxiosParamCreator = function (configuration?: Configura
         textUnitControllerFindOne: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('textUnitControllerFindOne', 'id', id)
-            const localVarPath = `/api/text-units/by-id/{id}`
+            const localVarPath = `/api/text-units/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        textUnitControllerGetCurrentTextUnit: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/text-units/current`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3418,52 +3720,13 @@ export const TextUnitsApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
-         * @param {SetCurrentTextUnitDto} setCurrentTextUnitDto 
+         * @param {UpdateTextUnitDto} updateTextUnitDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitControllerSetCurrentTextUnit: async (setCurrentTextUnitDto: SetCurrentTextUnitDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'setCurrentTextUnitDto' is not null or undefined
-            assertParamExists('textUnitControllerSetCurrentTextUnit', 'setCurrentTextUnitDto', setCurrentTextUnitDto)
-            const localVarPath = `/api/text-units/current`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(setCurrentTextUnitDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {TextUnitDto} textUnitDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        textUnitControllerUpdate: async (textUnitDto: TextUnitDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'textUnitDto' is not null or undefined
-            assertParamExists('textUnitControllerUpdate', 'textUnitDto', textUnitDto)
+        textUnitControllerUpdate: async (updateTextUnitDto: UpdateTextUnitDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateTextUnitDto' is not null or undefined
+            assertParamExists('textUnitControllerUpdate', 'updateTextUnitDto', updateTextUnitDto)
             const localVarPath = `/api/text-units`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3487,7 +3750,7 @@ export const TextUnitsApiAxiosParamCreator = function (configuration?: Configura
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(textUnitDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(updateTextUnitDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3506,12 +3769,12 @@ export const TextUnitsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {TextUnitDto} textUnitDto 
+         * @param {CreateTextUnitDto} createTextUnitDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async textUnitControllerCreate(textUnitDto: TextUnitDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitControllerCreate(textUnitDto, options);
+        async textUnitControllerCreate(createTextUnitDto: CreateTextUnitDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitControllerCreate(createTextUnitDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TextUnitsApi.textUnitControllerCreate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -3521,7 +3784,7 @@ export const TextUnitsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async textUnitControllerFindAll(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TextUnitDto>>> {
+        async textUnitControllerFindAll(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetTextUnitDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitControllerFindAll(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TextUnitsApi.textUnitControllerFindAll']?.[localVarOperationServerIndex]?.url;
@@ -3533,21 +3796,10 @@ export const TextUnitsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async textUnitControllerFindOne(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TextUnitDto>> {
+        async textUnitControllerFindOne(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTextUnitDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitControllerFindOne(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TextUnitsApi.textUnitControllerFindOne']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async textUnitControllerGetCurrentTextUnit(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TextUnitDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitControllerGetCurrentTextUnit(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TextUnitsApi.textUnitControllerGetCurrentTextUnit']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -3564,24 +3816,12 @@ export const TextUnitsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {SetCurrentTextUnitDto} setCurrentTextUnitDto 
+         * @param {UpdateTextUnitDto} updateTextUnitDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async textUnitControllerSetCurrentTextUnit(setCurrentTextUnitDto: SetCurrentTextUnitDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitControllerSetCurrentTextUnit(setCurrentTextUnitDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TextUnitsApi.textUnitControllerSetCurrentTextUnit']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {TextUnitDto} textUnitDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async textUnitControllerUpdate(textUnitDto: TextUnitDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitControllerUpdate(textUnitDto, options);
+        async textUnitControllerUpdate(updateTextUnitDto: UpdateTextUnitDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitControllerUpdate(updateTextUnitDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TextUnitsApi.textUnitControllerUpdate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -3598,19 +3838,19 @@ export const TextUnitsApiFactory = function (configuration?: Configuration, base
     return {
         /**
          * 
-         * @param {TextUnitDto} textUnitDto 
+         * @param {CreateTextUnitDto} createTextUnitDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitControllerCreate(textUnitDto: TextUnitDto, options?: any): AxiosPromise<void> {
-            return localVarFp.textUnitControllerCreate(textUnitDto, options).then((request) => request(axios, basePath));
+        textUnitControllerCreate(createTextUnitDto: CreateTextUnitDto, options?: any): AxiosPromise<void> {
+            return localVarFp.textUnitControllerCreate(createTextUnitDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitControllerFindAll(options?: any): AxiosPromise<Array<TextUnitDto>> {
+        textUnitControllerFindAll(options?: any): AxiosPromise<Array<GetTextUnitDto>> {
             return localVarFp.textUnitControllerFindAll(options).then((request) => request(axios, basePath));
         },
         /**
@@ -3619,16 +3859,8 @@ export const TextUnitsApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitControllerFindOne(id: string, options?: any): AxiosPromise<TextUnitDto> {
+        textUnitControllerFindOne(id: string, options?: any): AxiosPromise<GetTextUnitDto> {
             return localVarFp.textUnitControllerFindOne(id, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        textUnitControllerGetCurrentTextUnit(options?: any): AxiosPromise<TextUnitDto> {
-            return localVarFp.textUnitControllerGetCurrentTextUnit(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3641,21 +3873,12 @@ export const TextUnitsApiFactory = function (configuration?: Configuration, base
         },
         /**
          * 
-         * @param {SetCurrentTextUnitDto} setCurrentTextUnitDto 
+         * @param {UpdateTextUnitDto} updateTextUnitDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitControllerSetCurrentTextUnit(setCurrentTextUnitDto: SetCurrentTextUnitDto, options?: any): AxiosPromise<void> {
-            return localVarFp.textUnitControllerSetCurrentTextUnit(setCurrentTextUnitDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {TextUnitDto} textUnitDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        textUnitControllerUpdate(textUnitDto: TextUnitDto, options?: any): AxiosPromise<void> {
-            return localVarFp.textUnitControllerUpdate(textUnitDto, options).then((request) => request(axios, basePath));
+        textUnitControllerUpdate(updateTextUnitDto: UpdateTextUnitDto, options?: any): AxiosPromise<void> {
+            return localVarFp.textUnitControllerUpdate(updateTextUnitDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3669,13 +3892,13 @@ export const TextUnitsApiFactory = function (configuration?: Configuration, base
 export class TextUnitsApi extends BaseAPI {
     /**
      * 
-     * @param {TextUnitDto} textUnitDto 
+     * @param {CreateTextUnitDto} createTextUnitDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TextUnitsApi
      */
-    public textUnitControllerCreate(textUnitDto: TextUnitDto, options?: RawAxiosRequestConfig) {
-        return TextUnitsApiFp(this.configuration).textUnitControllerCreate(textUnitDto, options).then((request) => request(this.axios, this.basePath));
+    public textUnitControllerCreate(createTextUnitDto: CreateTextUnitDto, options?: RawAxiosRequestConfig) {
+        return TextUnitsApiFp(this.configuration).textUnitControllerCreate(createTextUnitDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3701,16 +3924,6 @@ export class TextUnitsApi extends BaseAPI {
 
     /**
      * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TextUnitsApi
-     */
-    public textUnitControllerGetCurrentTextUnit(options?: RawAxiosRequestConfig) {
-        return TextUnitsApiFp(this.configuration).textUnitControllerGetCurrentTextUnit(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -3722,42 +3935,34 @@ export class TextUnitsApi extends BaseAPI {
 
     /**
      * 
-     * @param {SetCurrentTextUnitDto} setCurrentTextUnitDto 
+     * @param {UpdateTextUnitDto} updateTextUnitDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TextUnitsApi
      */
-    public textUnitControllerSetCurrentTextUnit(setCurrentTextUnitDto: SetCurrentTextUnitDto, options?: RawAxiosRequestConfig) {
-        return TextUnitsApiFp(this.configuration).textUnitControllerSetCurrentTextUnit(setCurrentTextUnitDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {TextUnitDto} textUnitDto 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TextUnitsApi
-     */
-    public textUnitControllerUpdate(textUnitDto: TextUnitDto, options?: RawAxiosRequestConfig) {
-        return TextUnitsApiFp(this.configuration).textUnitControllerUpdate(textUnitDto, options).then((request) => request(this.axios, this.basePath));
+    public textUnitControllerUpdate(updateTextUnitDto: UpdateTextUnitDto, options?: RawAxiosRequestConfig) {
+        return TextUnitsApiFp(this.configuration).textUnitControllerUpdate(updateTextUnitDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
 
 
 /**
- * UploadedFilesApi - axios parameter creator
+ * UsersApi - axios parameter creator
  * @export
  */
-export const UploadedFilesApiAxiosParamCreator = function (configuration?: Configuration) {
+export const UsersApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {CreateUserDto} createUserDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadedFilesControllerGetCurrentFileForOrganization: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/uploaded-files/current`;
+        userControllerCreateUser: async (createUserDto: CreateUserDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createUserDto' is not null or undefined
+            assertParamExists('userControllerCreateUser', 'createUserDto', createUserDto)
+            const localVarPath = `/api/users`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3765,7 +3970,7 @@ export const UploadedFilesApiAxiosParamCreator = function (configuration?: Confi
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -3775,9 +3980,12 @@ export const UploadedFilesApiAxiosParamCreator = function (configuration?: Confi
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createUserDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3786,47 +3994,14 @@ export const UploadedFilesApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadedFilesControllerGetFilesForOrganization: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/uploaded-files`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        uploadedFilesControllerRemove: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        userControllerDeleteUser: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('uploadedFilesControllerRemove', 'id', id)
-            const localVarPath = `/api/uploaded-files/{id}`
+            assertParamExists('userControllerDeleteUser', 'id', id)
+            const localVarPath = `/api/users/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3856,14 +4031,84 @@ export const UploadedFilesApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
-         * @param {RenameUploadedFileDto} renameUploadedFileDto 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadedFilesControllerRenameFile: async (renameUploadedFileDto: RenameUploadedFileDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'renameUploadedFileDto' is not null or undefined
-            assertParamExists('uploadedFilesControllerRenameFile', 'renameUploadedFileDto', renameUploadedFileDto)
-            const localVarPath = `/api/uploaded-files`;
+        userControllerGetUser: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('userControllerGetUser', 'id', id)
+            const localVarPath = `/api/users/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerGetUsers: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/users`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {UpdateUserDto} updateUserDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerUpdateUser: async (updateUserDto: UpdateUserDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateUserDto' is not null or undefined
+            assertParamExists('userControllerUpdateUser', 'updateUserDto', updateUserDto)
+            const localVarPath = `/api/users`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3886,79 +4131,7 @@ export const UploadedFilesApiAxiosParamCreator = function (configuration?: Confi
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(renameUploadedFileDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {SetCurrentUploadedFileDto} setCurrentUploadedFileDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        uploadedFilesControllerSetCurrentUploadedFile: async (setCurrentUploadedFileDto: SetCurrentUploadedFileDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'setCurrentUploadedFileDto' is not null or undefined
-            assertParamExists('uploadedFilesControllerSetCurrentUploadedFile', 'setCurrentUploadedFileDto', setCurrentUploadedFileDto)
-            const localVarPath = `/api/uploaded-files/current`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(setCurrentUploadedFileDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        uploadedFilesControllerUploadMultipleFiles: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/uploaded-files`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateUserDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3969,21 +4142,46 @@ export const UploadedFilesApiAxiosParamCreator = function (configuration?: Confi
 };
 
 /**
- * UploadedFilesApi - functional programming interface
+ * UsersApi - functional programming interface
  * @export
  */
-export const UploadedFilesApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = UploadedFilesApiAxiosParamCreator(configuration)
+export const UsersApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = UsersApiAxiosParamCreator(configuration)
     return {
         /**
          * 
+         * @param {CreateUserDto} createUserDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async uploadedFilesControllerGetCurrentFileForOrganization(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UploadedFileDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadedFilesControllerGetCurrentFileForOrganization(options);
+        async userControllerCreateUser(createUserDto: CreateUserDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerCreateUser(createUserDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UploadedFilesApi.uploadedFilesControllerGetCurrentFileForOrganization']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['UsersApi.userControllerCreateUser']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userControllerDeleteUser(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerDeleteUser(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UsersApi.userControllerDeleteUser']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userControllerGetUser(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerGetUser(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UsersApi.userControllerGetUser']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -3991,191 +4189,140 @@ export const UploadedFilesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async uploadedFilesControllerGetFilesForOrganization(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<UploadedFileDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadedFilesControllerGetFilesForOrganization(options);
+        async userControllerGetUsers(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<User>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerGetUsers(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UploadedFilesApi.uploadedFilesControllerGetFilesForOrganization']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['UsersApi.userControllerGetUsers']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @param {string} id 
+         * @param {UpdateUserDto} updateUserDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async uploadedFilesControllerRemove(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadedFilesControllerRemove(id, options);
+        async userControllerUpdateUser(updateUserDto: UpdateUserDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerUpdateUser(updateUserDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UploadedFilesApi.uploadedFilesControllerRemove']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {RenameUploadedFileDto} renameUploadedFileDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async uploadedFilesControllerRenameFile(renameUploadedFileDto: RenameUploadedFileDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadedFilesControllerRenameFile(renameUploadedFileDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UploadedFilesApi.uploadedFilesControllerRenameFile']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {SetCurrentUploadedFileDto} setCurrentUploadedFileDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async uploadedFilesControllerSetCurrentUploadedFile(setCurrentUploadedFileDto: SetCurrentUploadedFileDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadedFilesControllerSetCurrentUploadedFile(setCurrentUploadedFileDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UploadedFilesApi.uploadedFilesControllerSetCurrentUploadedFile']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async uploadedFilesControllerUploadMultipleFiles(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadedFilesControllerUploadMultipleFiles(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UploadedFilesApi.uploadedFilesControllerUploadMultipleFiles']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['UsersApi.userControllerUpdateUser']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
- * UploadedFilesApi - factory interface
+ * UsersApi - factory interface
  * @export
  */
-export const UploadedFilesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = UploadedFilesApiFp(configuration)
+export const UsersApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = UsersApiFp(configuration)
     return {
         /**
          * 
+         * @param {CreateUserDto} createUserDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadedFilesControllerGetCurrentFileForOrganization(options?: any): AxiosPromise<UploadedFileDto> {
-            return localVarFp.uploadedFilesControllerGetCurrentFileForOrganization(options).then((request) => request(axios, basePath));
+        userControllerCreateUser(createUserDto: CreateUserDto, options?: any): AxiosPromise<User> {
+            return localVarFp.userControllerCreateUser(createUserDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerDeleteUser(id: number, options?: any): AxiosPromise<void> {
+            return localVarFp.userControllerDeleteUser(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerGetUser(id: number, options?: any): AxiosPromise<User> {
+            return localVarFp.userControllerGetUser(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadedFilesControllerGetFilesForOrganization(options?: any): AxiosPromise<Array<UploadedFileDto>> {
-            return localVarFp.uploadedFilesControllerGetFilesForOrganization(options).then((request) => request(axios, basePath));
+        userControllerGetUsers(options?: any): AxiosPromise<Array<User>> {
+            return localVarFp.userControllerGetUsers(options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} id 
+         * @param {UpdateUserDto} updateUserDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadedFilesControllerRemove(id: string, options?: any): AxiosPromise<void> {
-            return localVarFp.uploadedFilesControllerRemove(id, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {RenameUploadedFileDto} renameUploadedFileDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        uploadedFilesControllerRenameFile(renameUploadedFileDto: RenameUploadedFileDto, options?: any): AxiosPromise<void> {
-            return localVarFp.uploadedFilesControllerRenameFile(renameUploadedFileDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {SetCurrentUploadedFileDto} setCurrentUploadedFileDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        uploadedFilesControllerSetCurrentUploadedFile(setCurrentUploadedFileDto: SetCurrentUploadedFileDto, options?: any): AxiosPromise<void> {
-            return localVarFp.uploadedFilesControllerSetCurrentUploadedFile(setCurrentUploadedFileDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        uploadedFilesControllerUploadMultipleFiles(options?: any): AxiosPromise<void> {
-            return localVarFp.uploadedFilesControllerUploadMultipleFiles(options).then((request) => request(axios, basePath));
+        userControllerUpdateUser(updateUserDto: UpdateUserDto, options?: any): AxiosPromise<object> {
+            return localVarFp.userControllerUpdateUser(updateUserDto, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * UploadedFilesApi - object-oriented interface
+ * UsersApi - object-oriented interface
  * @export
- * @class UploadedFilesApi
+ * @class UsersApi
  * @extends {BaseAPI}
  */
-export class UploadedFilesApi extends BaseAPI {
+export class UsersApi extends BaseAPI {
     /**
      * 
+     * @param {CreateUserDto} createUserDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UploadedFilesApi
+     * @memberof UsersApi
      */
-    public uploadedFilesControllerGetCurrentFileForOrganization(options?: RawAxiosRequestConfig) {
-        return UploadedFilesApiFp(this.configuration).uploadedFilesControllerGetCurrentFileForOrganization(options).then((request) => request(this.axios, this.basePath));
+    public userControllerCreateUser(createUserDto: CreateUserDto, options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).userControllerCreateUser(createUserDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public userControllerDeleteUser(id: number, options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).userControllerDeleteUser(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public userControllerGetUser(id: number, options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).userControllerGetUser(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UploadedFilesApi
+     * @memberof UsersApi
      */
-    public uploadedFilesControllerGetFilesForOrganization(options?: RawAxiosRequestConfig) {
-        return UploadedFilesApiFp(this.configuration).uploadedFilesControllerGetFilesForOrganization(options).then((request) => request(this.axios, this.basePath));
+    public userControllerGetUsers(options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).userControllerGetUsers(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {string} id 
+     * @param {UpdateUserDto} updateUserDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UploadedFilesApi
+     * @memberof UsersApi
      */
-    public uploadedFilesControllerRemove(id: string, options?: RawAxiosRequestConfig) {
-        return UploadedFilesApiFp(this.configuration).uploadedFilesControllerRemove(id, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {RenameUploadedFileDto} renameUploadedFileDto 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UploadedFilesApi
-     */
-    public uploadedFilesControllerRenameFile(renameUploadedFileDto: RenameUploadedFileDto, options?: RawAxiosRequestConfig) {
-        return UploadedFilesApiFp(this.configuration).uploadedFilesControllerRenameFile(renameUploadedFileDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {SetCurrentUploadedFileDto} setCurrentUploadedFileDto 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UploadedFilesApi
-     */
-    public uploadedFilesControllerSetCurrentUploadedFile(setCurrentUploadedFileDto: SetCurrentUploadedFileDto, options?: RawAxiosRequestConfig) {
-        return UploadedFilesApiFp(this.configuration).uploadedFilesControllerSetCurrentUploadedFile(setCurrentUploadedFileDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UploadedFilesApi
-     */
-    public uploadedFilesControllerUploadMultipleFiles(options?: RawAxiosRequestConfig) {
-        return UploadedFilesApiFp(this.configuration).uploadedFilesControllerUploadMultipleFiles(options).then((request) => request(this.axios, this.basePath));
+    public userControllerUpdateUser(updateUserDto: UpdateUserDto, options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).userControllerUpdateUser(updateUserDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

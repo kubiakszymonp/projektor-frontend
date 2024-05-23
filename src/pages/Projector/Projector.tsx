@@ -3,19 +3,16 @@ import "./Projector.css";
 import { setPageTitle } from "../../services/page-title";
 import { useParams } from "react-router-dom";
 import { projectorApi, projectorSettingsApi } from "../../api";
-import {
-  DisplayStateDisplayTypeEnum,
-  GetProjectorStateDto,
-} from "../../api/generated";
-import { StreamPlayer } from "../Streamer/StreamPlayer";
 import { ProjectorMediaDisplay } from "./MediaDisplay";
 import { ProjectorTextDisplay } from "./TextDisplay";
 import { useNotifyOrganizationEdit } from "../../services/useNofifyOrganizationEdit";
+import { GetDisplayDto, GetDisplayDtoDisplayTypeEnum, GetProjectorSettingsDto } from "../../api/generated";
 
 export const ProjectorPage = (props: { isPreview: boolean }) => {
   const { organizationId: rawOrganizationId } = useParams();
   const organizationId = parseInt(rawOrganizationId || "0");
-  const [projectorState, setProjectorState] = useState<GetProjectorStateDto>();
+  const [displayState, setDisplayState] = useState<GetDisplayDto>();
+  const [projectorSettings, setProjectorSettings] = useState<GetProjectorSettingsDto>();
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -30,7 +27,7 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
       screenHeight: height,
       screenWidth: width,
     });
-  }, [projectorState]);
+  }, [projectorSettings]);
 
   useEffect(() => {
     getDisplayState();
@@ -45,7 +42,10 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
         organizationId
       );
 
-    setProjectorState(projectorDisplay.data);
+    const projectorSettings = await projectorSettingsApi.projectorSettingsControllerGetSetting();
+
+    setProjectorSettings(projectorSettings.data);
+    setDisplayState(projectorDisplay.data);
   };
 
   useNotifyOrganizationEdit(getDisplayState, String(organizationId));
@@ -53,18 +53,15 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
   return (
     <div
       className="projector-container"
-      style={{ backgroundColor: projectorState?.settings.backgroundColor }}
+      style={{ backgroundColor: projectorSettings?.backgroundColor }}
     >
-      {projectorState?.emptyDisplay === false && (
+      {projectorSettings && displayState?.emptyDisplay === false && (
         <>
-          {projectorState?.displayType === DisplayStateDisplayTypeEnum.Text && (
-            <ProjectorTextDisplay projectorState={projectorState} />
+          {displayState?.displayType === GetDisplayDtoDisplayTypeEnum.Text && (
+            <ProjectorTextDisplay displayState={displayState} projectorSettings={projectorSettings} />
           )}
-          {projectorState?.displayType === DisplayStateDisplayTypeEnum.Media && (
-            <ProjectorMediaDisplay projectorState={projectorState} />
-          )}
-          {projectorState?.displayType === DisplayStateDisplayTypeEnum.Hls && (
-            <StreamPlayer organizationId={organizationId} />
+          {displayState?.displayType === GetDisplayDtoDisplayTypeEnum.Media && (
+            <ProjectorMediaDisplay displayState={displayState} projectorSettings={projectorSettings} />
           )}
         </>
       )}

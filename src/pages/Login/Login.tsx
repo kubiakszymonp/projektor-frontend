@@ -46,12 +46,17 @@ export const LoginPage = () => {
     setPageTitle("Logowanie");
   }, []);
 
-  const [accessCode, setAccessCode] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
   const [errorMessage, setErrorMessage] = React.useState("");
 
   const handleSubmit = () => {
     authApi
-      .authControllerLogin({ accessCode })
+      .authControllerLogin({
+        email,
+        password,
+      })
       .then((res) => {
         const jwt = res.data;
         jwtPersistance.saveJwt(jwt);
@@ -112,12 +117,29 @@ export const LoginPage = () => {
                 margin="normal"
                 required
                 fullWidth
-                name="accessCode"
-                label="Kod dostępu"
-                type="password"
-                id="accessCode"
+                name="email"
+                label="Email"
+                type="text"
+                id="email"
                 onChange={(e) => {
-                  setAccessCode(e.target.value);
+                  setEmail(e.target.value);
+                }}
+              />
+              <TextField
+                inputProps={{
+                  form: {
+                    autocomplete: "off",
+                  },
+                }}
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Hasło"
+                type="password"
+                id="password"
+                onChange={(e) => {
+                  setPassword(e.target.value);
                 }}
               />
               <Button

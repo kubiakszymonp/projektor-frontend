@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import { textUnitApi, textUnitQueuesApi } from "../../api";
-import { TextUnitDto, TextUnitQueueDto } from "../../api/generated";
+import { GetDisplayQueueDto, GetTextUnitDto } from "../../api/generated";
 
 export const AddTextUnitToQueueDialog: React.FC<{
   open: boolean;
@@ -21,65 +21,60 @@ export const AddTextUnitToQueueDialog: React.FC<{
   textUnitId: number;
 }> = ({ open, handleClose, textUnitId }) => {
   const [searchPlaylistText, setSearchPlaylistText] = useState<string>("");
-  const [modifiedPlaylists, setModifiedPlaylists] = useState<
-    TextUnitQueueDto[]
-  >([]);
-  const [currentTextUnit, setCurrentTextUnit] = useState<TextUnitDto>();
-  const [allQueues, setAllQueues] = useState<TextUnitQueueDto[]>([]);
+  const [textUnit, setTextUnit] = useState<GetTextUnitDto>();
+  const [allQueues, setAllQueues] = useState<GetDisplayQueueDto[]>([]);
 
   useEffect(() => {
     setSearchPlaylistText("");
-    setModifiedPlaylists([]);
     fetchQueues();
     fetchTextUnit();
   }, [open]);
 
   const onSave = async () => {
-    const promises = modifiedPlaylists.map((playlist) => {
-      return textUnitQueuesApi.textUnitQueuesControllerUpdate(playlist);
+
+    await textUnitApi.textUnitControllerUpdate({
+      id: textUnitId,
+      displayQueueIds: textUnit?.queues.map((q) => q.id) ?? [],
     });
 
-    await Promise.all(promises);
     handleClose();
   };
 
   const fetchQueues = async () => {
-    const res = await textUnitQueuesApi.textUnitQueuesControllerFindAll();
+    const res = await textUnitQueuesApi.displayQueuesControllerFindAll();
     setAllQueues(res.data);
   };
 
   const fetchTextUnit = async () => {
     const res = await textUnitApi.textUnitControllerFindOne(String(textUnitId));
-    setCurrentTextUnit(res.data);
+    setTextUnit(res.data);
   };
 
-  const textUnitInsideQueue = (textUnitId: number, queue: TextUnitQueueDto) => {
-    return queue.content.textUnits.some(
-      (textUnit) => textUnit.id === textUnitId
-    );
+  const textUnitInsideQueue = (textUnit: GetTextUnitDto, queue: GetDisplayQueueDto) => {
+    return textUnit.queues.some((q) => q.id === queue.id);
   };
 
-  const onModifyQueue = (queue: TextUnitQueueDto, value: boolean) => {
-    if (currentTextUnit === undefined)
-      throw new Error("Text unit is undefined");
-    const newQueue = { ...queue };
-    if (value) {
-      newQueue.content.textUnits.push({
-        id: currentTextUnit.id,
-        title: currentTextUnit.title,
+  const onModifyQueue = (queue: GetDisplayQueueDto, value: boolean) => {
+
+    if (!textUnit) return;
+    let queues = textUnit.queues;
+
+    if (value === true) {
+      queues.push({
+        id: queue.id,
+        position: 0,
+        queueName: "",
+        textTitle: ""
       });
-    } else {
-      newQueue.content.textUnits = newQueue.content.textUnits.filter(
-        (s) => s.id !== currentTextUnit.id
-      );
     }
-    setAllQueues(allQueues.map((p) => (p.id === queue.id ? newQueue : p)));
+    else {
+      queues = queues.filter((q) => q.id !== queue.id);
+    }
 
-    setModifiedPlaylists(
-      modifiedPlaylists.some((p) => p.id === queue.id)
-        ? modifiedPlaylists.map((p) => (p.id === queue.id ? newQueue : p))
-        : [...modifiedPlaylists, newQueue]
-    );
+    setTextUnit({
+      ...textUnit,
+      queues: queues
+    });
   };
 
   return (
@@ -118,9 +113,9 @@ export const AddTextUnitToQueueDialog: React.FC<{
                   {queue.name}
                 </Typography>
                 <Button color="info">
-                  {currentTextUnit && (
+                  {textUnit && (
                     <Checkbox
-                      checked={textUnitInsideQueue(currentTextUnit.id, queue)}
+                      checked={textUnitInsideQueue(textUnit, queue)}
                       onChange={(_e, checked) => onModifyQueue(queue, checked)}
                     />
                   )}

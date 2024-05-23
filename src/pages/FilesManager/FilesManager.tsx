@@ -10,24 +10,24 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { getStaticResourceUrl, uploadedFilesApi } from "../../api";
-import { UploadedFileDto } from "../../api/generated";
+import { displayStateApi, getStaticResourceUrl, uploadedFilesApi } from "../../api";
 import { useEffect, useRef, useState } from "react";
 import { MoreVert } from "@mui/icons-material";
 import { FilePreviewModal } from "./FilePreviewModal";
+import { GetMediaFileDto } from "../../api/generated";
 
 export const FilesManager: React.FC = () => {
   const [fileInfosGrouped, setFileInfosGrouped] = useState<
     {
       date: Date;
-      files: UploadedFileDto[];
+      files: GetMediaFileDto[];
     }[]
   >([]);
-  const [fileInfos, setFileInfos] = useState<UploadedFileDto[]>([]);
-  const [menuOpenedForFile, setMenuOpenedForFile] = useState<UploadedFileDto>();
+  const [fileInfos, setFileInfos] = useState<GetMediaFileDto[]>([]);
+  const [menuOpenedForFile, setMenuOpenedForFile] = useState<GetMediaFileDto>();
   const [filePreviewModalOpen, setFilePreviewModalOpen] = useState(false);
   const [currentPreviewFile, setCurrentPreviewFile] =
-    useState<UploadedFileDto | null>(null);
+    useState<GetMediaFileDto | null>(null);
 
   useEffect(() => {
     loadData();
@@ -55,21 +55,19 @@ export const FilesManager: React.FC = () => {
 
   const fetchFileInfos = async () => {
     const filesInfo =
-      await uploadedFilesApi.uploadedFilesControllerGetFilesForOrganization();
+      await uploadedFilesApi.mediaFilesControllerGetFilesForOrganization();
     setFileInfos(filesInfo.data);
     setFileInfosGrouped(groupFilesByDate(filesInfo.data));
   };
 
   const fetchCurrentProjectorDisplayedImageId = async () => {
-    const currentProjectorDisplayedImageId =
-      await uploadedFilesApi.uploadedFilesControllerGetCurrentFileForOrganization();
-    setCurrentProjectorDisplayedImageId(
-      currentProjectorDisplayedImageId.data.id
-    );
+    const displayState =
+      await displayStateApi.displayStateControllerGetDisplayState();
+    setCurrentProjectorDisplayedImageId(displayState.data.mediaFileId);
   };
 
-  const groupFilesByDate = (fileInfos: UploadedFileDto[]) => {
-    const groupedFiles: { [key: string]: UploadedFileDto[] } = {};
+  const groupFilesByDate = (fileInfos: GetMediaFileDto[]) => {
+    const groupedFiles: { [key: string]: GetMediaFileDto[] } = {};
     fileInfos.forEach((fileInfo) => {
       const date = new Date(fileInfo.createdAt || new Date());
       const dayStartMillis = new Date(
@@ -107,22 +105,22 @@ export const FilesManager: React.FC = () => {
     for (let i = 0; i < files!.length; i++) {
       formData.append("files", files![i]);
     }
-    await uploadedFilesApi.uploadedFilesControllerUploadMultipleFiles({
+    await uploadedFilesApi.mediaFilesControllerUploadMultipleFiles({
       data: formData,
     });
     loadData();
   };
 
   const deleteFile = async () => {
-    await uploadedFilesApi.uploadedFilesControllerRemove(
+    await uploadedFilesApi.mediaFilesControllerRemove(
       String(menuOpenedForFile?.id)
     );
     loadData();
   };
 
   const setAsCurrentCastingFile = async () => {
-    await uploadedFilesApi.uploadedFilesControllerSetCurrentUploadedFile({
-      id: String(menuOpenedForFile?.id),
+    await displayStateApi.displayStateControllerUpdateDisplayState({
+      mediaFileId: menuOpenedForFile?.id,
     });
     loadData();
   };
@@ -241,7 +239,7 @@ export const FilesManager: React.FC = () => {
                         }}
                       >
                         <img
-                          src={getStaticResourceUrl(fileInfo.previewUrl)}
+                          src={getStaticResourceUrl(fileInfo.url)}
                           alt={fileInfo.name}
                           style={{
                             objectFit: "cover",

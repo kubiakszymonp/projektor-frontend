@@ -11,15 +11,15 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { UploadedFileDto } from "../../api/generated";
-import {  getStaticResourceUrl, uploadedFilesApi } from "../../api";
+import { displayStateApi, getStaticResourceUrl, uploadedFilesApi } from "../../api";
 import { useRef, useState } from "react";
 import { MoreVert } from "@mui/icons-material";
+import { GetMediaFileDto } from "../../api/generated";
 
 export const FilePreviewModal: React.FC<{
   open: boolean;
   handleClose: () => void;
-  currentFile: UploadedFileDto | null;
+  currentFile: GetMediaFileDto | null;
   nextFile: () => void;
   previousFile: () => void;
   refresh: () => void;
@@ -35,8 +35,8 @@ export const FilePreviewModal: React.FC<{
   };
 
   const setAsCurrentCastingFile = async () => {
-    await uploadedFilesApi.uploadedFilesControllerSetCurrentUploadedFile({
-      id: String(currentFile?.id),
+    await displayStateApi.displayStateControllerUpdateDisplayState({
+      mediaFileId: currentFile?.id,
     });
     refresh();
   };

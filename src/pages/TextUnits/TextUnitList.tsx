@@ -20,27 +20,29 @@ import {
 } from "@mui/material";
 import Fuse from "fuse.js";
 import { useEffect, useMemo, useState } from "react";
-import { textUnitApi, textUnitQueuesApi, textUnitTagApi } from "../../api";
+import { displayStateApi, textUnitApi, textUnitQueuesApi, textUnitTagApi } from "../../api";
 import { TextUnitEditDialog } from "./TextUnitEditDialog";
 import { AddTextUnitToQueueDialog } from "./AddTextUnitToQueueDialog";
 import { MoreVert } from "@mui/icons-material";
-import { TextUnitDto, TextUnitTagDto } from "../../api/generated";
 import { ManageTagsDialog } from "./ManageTagsDialog";
+import { GetTextUnitDto, GetTextUnitTagDto } from "../../api/generated";
+import { TextUnitAddDialog } from "./TextUnitAddDialog";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 
 export const TextUnitList: React.FC = () => {
   const [textUnitEditDialogOpen, setTextUnitEditDialogOpen] = useState(false);
+  const [textUnitCreateDialogOpen, setTextUnitCreateDialogOpen] = useState(false);
   const [textUnitAddToQueueDialogOpen, setTextUnitAddToQueueDialogOpen] =
     useState(false);
   const [manageTagsDialogOpen, setManageTagsDialogOpen] = useState(false);
-  const [textUnitList, setTextUnitList] = useState<TextUnitDto[]>([]);
-  const [displayTextUnits, setDisplayTextUnits] = useState<TextUnitDto[]>([]);
+  const [textUnitList, setTextUnitList] = useState<GetTextUnitDto[]>([]);
+  const [displayTextUnits, setDisplayTextUnits] = useState<GetTextUnitDto[]>([]);
   const [searchText, setSearchText] = useState<string>("");
-  const [tags, setTags] = useState<TextUnitTagDto[]>([]);
+  const [tags, setTags] = useState<GetTextUnitTagDto[]>([]);
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
-  const [selectedTextUnit, setSelectedTextUnit] = useState<TextUnitDto | null>(
+  const [selectedTextUnit, setSelectedTextUnit] = useState<GetTextUnitDto | null>(
     null
   );
 
@@ -71,6 +73,7 @@ export const TextUnitList: React.FC = () => {
     setTextUnitEditDialogOpen(false);
     setTextUnitAddToQueueDialogOpen(false);
     setManageTagsDialogOpen(false);
+    setTextUnitCreateDialogOpen(false);
   };
 
   const fetchTags = async () => {
@@ -91,15 +94,17 @@ export const TextUnitList: React.FC = () => {
     setTextUnitList(res.data);
   };
 
-  const setTextUnitForDisplay = async (textUnit: TextUnitDto | null) => {
+  const setTextUnitForDisplay = async (textUnit: GetTextUnitDto | null) => {
     if (!textUnit) return;
-    await textUnitApi.textUnitControllerSetCurrentTextUnit({
-      id: textUnit.id,
+    await displayStateApi.displayStateControllerUpdateDisplayState({
+      textUnitId: textUnit.id,
+      textUnitPart: 0,
+      textUnitPartPage: 0,
     });
   };
 
   const onChangeFilter = () => {
-    let filtered: TextUnitDto[] = textUnitList;
+    let filtered: GetTextUnitDto[] = textUnitList;
 
     if (selectedTags.length > 0) {
       filtered = textUnitList.filter((textUnit) =>
@@ -127,7 +132,7 @@ export const TextUnitList: React.FC = () => {
     setTextUnitEditDialogOpen(true);
   };
 
-  const onEditTextUnit = (textUnit: TextUnitDto) => {
+  const onEditTextUnit = (textUnit: GetTextUnitDto) => {
     setSelectedTextUnit(textUnit);
     setTextUnitEditDialogOpen(true);
   };
@@ -143,11 +148,19 @@ export const TextUnitList: React.FC = () => {
 
   return (
     <>
-      <TextUnitEditDialog
-        open={textUnitEditDialogOpen}
+      {selectedTextUnit && (
+        <TextUnitEditDialog
+          open={textUnitEditDialogOpen}
+          handleClose={handleClose}
+          textUnitId={selectedTextUnit.id}
+        />
+      )}
+
+      <TextUnitAddDialog
         handleClose={handleClose}
-        textUnitId={selectedTextUnit?.id || null}
+        open={textUnitCreateDialogOpen}
       />
+
       {selectedTextUnit && (
         <AddTextUnitToQueueDialog
           handleClose={handleClose}

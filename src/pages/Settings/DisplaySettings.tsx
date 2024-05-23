@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import { projectorSettingsApi } from "../../api";
-import { ProjectorSettingsConfigurationDto, TextStrategy } from "../../api/generated";
+import { GetProjectorSettingsDto, TextStrategy } from "../../api/generated";
 
 interface FieldWithDescription {
   fieldName: string;
@@ -120,29 +120,29 @@ const DISPLAY_SETTINGS: FieldWithDescription[] = [
 ];
 
 export const DisplaySettings = () => {
-  const [currentProjectorState, setCurrentProjectorState] =
-    useState<ProjectorSettingsConfigurationDto>();
+  const [projectorSettings, setProjectorSettings] =
+    useState<GetProjectorSettingsDto>();
 
   useEffect(() => {
     saveCurrentSettings();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentProjectorState]);
+  }, [projectorSettings]);
 
   useEffect(() => {
     fetchCurrentSettings();
   }, []);
 
   const saveCurrentSettings = async () => {
-    if (!currentProjectorState) return;
+    if (!projectorSettings) return;
     await projectorSettingsApi.projectorSettingsControllerUpdate(
-      currentProjectorState
+      projectorSettings
     );
   };
 
   const fetchCurrentSettings = async () => {
     const state =
       await projectorSettingsApi.projectorSettingsControllerGetSetting();
-    setCurrentProjectorState(state.data);
+    setProjectorSettings(state.data);
   };
 
   return (
@@ -163,7 +163,7 @@ export const DisplaySettings = () => {
       >
         Ustawienia
       </Typography>
-      {currentProjectorState && (
+      {projectorSettings && (
         <Stack direction={"column"}>
           <Typography variant="h5" sx={{ p: 2 }}>
             Ustawienia tekstu
@@ -175,10 +175,10 @@ export const DisplaySettings = () => {
               id="outlined-basic"
               label={field.name}
               variant="outlined"
-              value={(currentProjectorState as any)[field.fieldName]}
+              value={(projectorSettings as any)[field.fieldName]}
               onChange={(e) => {
-                setCurrentProjectorState({
-                  ...currentProjectorState,
+                setProjectorSettings({
+                  ...projectorSettings,
                   [field.fieldName]: e.target.value,
                 });
               }}
@@ -190,12 +190,12 @@ export const DisplaySettings = () => {
               labelId="demo-select-small-label"
               id="demo-select-small"
               value={
-                (currentProjectorState as any)[TEXT_STRATEGY_INPUT.fieldName]
+                (projectorSettings as any)[TEXT_STRATEGY_INPUT.fieldName]
               }
               label="Tryb wyświetlania tekstu"
               onChange={(e) => {
-                setCurrentProjectorState({
-                  ...currentProjectorState,
+                setProjectorSettings({
+                  ...projectorSettings,
                   [TEXT_STRATEGY_INPUT.fieldName]: e.target.value,
                 });
               }}
@@ -217,10 +217,10 @@ export const DisplaySettings = () => {
               id="outlined-basic"
               label={field.name}
               variant="outlined"
-              value={(currentProjectorState as any)[field.fieldName]}
+              value={(projectorSettings as any)[field.fieldName]}
               onChange={(e) => {
-                setCurrentProjectorState({
-                  ...currentProjectorState,
+                setProjectorSettings({
+                  ...projectorSettings,
                   [field.fieldName]: e.target.value,
                 });
               }}

@@ -1,73 +1,69 @@
 import { Box, Card, Checkbox, FormControlLabel, Typography } from "@mui/material";
 import React, { RefObject, useEffect, useMemo, useState } from "react";
-import { Song } from "song-parser";
-import { DisplayState, MovePageDtoDirectionEnum, TextUnitDto, TextUnitQueueDto } from "../../api/generated";
 import { displayStateApi, textUnitApi, textUnitQueuesApi } from "../../api";
 import { OnPreviewClickHandler } from "./OnPreviewClick";
+import { GetDisplayDto, GetDisplayQueueDto, GetDisplayStateDto, GetTextUnitDto, MovePageDtoDirectionEnum } from "../../api/generated";
+import { ParsedTextUnit } from "text-parser";
 
 export const TextController: React.FC<{
-    currentDisplayState: DisplayState,
+    displayState: GetDisplayStateDto,
     previewRef: RefObject<HTMLDivElement>
 }> =
-    ({ currentDisplayState, previewRef }) => {
+    ({ displayState, previewRef }) => {
 
-        const [currentTextUnit, setCurrentTextUnit] = useState<TextUnitDto>();
-        const [currentTextUnitQueue, setCurrentTextUnitQueue] =
-            useState<TextUnitQueueDto>();
+        const [textUnit, setTextUnit] = useState<GetTextUnitDto>();
+        const [displayQueue, setDisplayQueue] =
+            useState<GetDisplayQueueDto>();
 
         const currentSongParsed = useMemo(() => {
-            if (!currentTextUnit) return null;
-            return new Song(currentTextUnit?.content || "");
-        }, [currentTextUnit]);
+            if (!textUnit) return null;
+            return new ParsedTextUnit(textUnit.content);
+        }, [textUnit]);
 
         useEffect(() => {
             loadState();
         }, []);
 
-        const loadState = async () => {
-            fetchCurrentTextUnit();
-            fetchCurrentQueue();
+        const loadState = () => {
+            fetchTextUnit(displayState.textUnitId);
+            fetchQueue(displayState.textUnitQueueId);
         }
 
         const currentTextUnitQueueIsNotEmpty = () => {
-            if (!currentTextUnitQueue) return false;
-            if (!currentTextUnitQueue.content) return false;
-            if (!currentTextUnitQueue.content.textUnits) return false;
-            return currentTextUnitQueue.content.textUnits.length > 0;
+            return displayQueue?.queueTextUnits?.length;
         };
 
         const setCurrentTextUnitRequest = async (textUnitId: number) => {
-            await textUnitApi.textUnitControllerSetCurrentTextUnit({
-                id: textUnitId,
+            await displayStateApi.displayStateControllerUpdateDisplayState({
+                textUnitId: textUnitId,
+                textUnitPart: 0,
+                textUnitPartPage: 0,
             });
             await loadState();
         };
 
-        const fetchCurrentTextUnit = async () => {
-            const textUnit = await textUnitApi.textUnitControllerGetCurrentTextUnit();
-            setCurrentTextUnit(textUnit.data);
+        const fetchTextUnit = async (id: number) => {
+            const textUnit = await textUnitApi.textUnitControllerFindOne(id.toString());
+            setTextUnit(textUnit.data);
         };
 
-        const fetchCurrentQueue = async () => {
-            const queue =
-                await textUnitQueuesApi.textUnitQueuesControllerGetCurrentTextUnitQueue();
-            setCurrentTextUnitQueue(queue.data);
+        const fetchQueue = async (id: number) => {
+            const queue = await textUnitQueuesApi.displayQueuesControllerFindOne(id.toString());
+            setDisplayQueue(queue.data);
         };
 
         const setScreenOnOff = async (off: boolean) => {
             await displayStateApi.displayStateControllerUpdateDisplayState({
                 emptyDisplay: off,
-            });
+            })
             await loadState();
         };
 
         const selectTextUnitPart = async (index: number) => {
             await displayStateApi.displayStateControllerUpdateDisplayState({
-                textState: {
-                    textUnitId: currentDisplayState!.textState.textUnitId,
-                    textUnitPart: index,
-                    textUnitPartPage: 0,
-                },
+                textUnitId: displayState.textUnitId,
+                textUnitPart: index,
+                textUnitPartPage: 0,
             });
             await loadState();
         };
@@ -94,8 +90,8 @@ export const TextController: React.FC<{
                         boxSizing: "border-box",
                     }}
                 >
-                    <Typography variant="h4">{currentTextUnit?.title}</Typography>
-                    {currentSongParsed?.songParts.map((part, index: number) => {
+                    <Typography variant="h4">{textUnit?.title}</Typography>
+                    {currentSongParsed?.parsedTextUnitParts.map((part, index: number) => {
                         return (
                             <Card
                                 key={index}
@@ -104,20 +100,20 @@ export const TextController: React.FC<{
                                     my: 1,
                                     p: 1,
                                     backgroundColor:
-                                        currentDisplayState?.textState.textUnitPart === index
+                                        displayState?.textUnitPart === index
                                             ? "#2e3133"
                                             : "#06090a",
                                 }}
                             >
-                                <Typography variant="h5">{part.songPartName}</Typography>
+                                <Typography variant="h5">{part.explicitLabel ?? part.defaultLabel}</Typography>
                             </Card>
                         );
                     })}
-                    {currentDisplayState && (
+                    {displayState && (
                         <FormControlLabel
                             control={
                                 <Checkbox
-                                    checked={currentDisplayState.emptyDisplay}
+                                    checked={displayState.emptyDisplay}
                                     sx={{ "& .MuiSvgIcon-root": { fontSize: 32 } }}
                                 />
                             }
@@ -128,25 +124,25 @@ export const TextController: React.FC<{
                         />
                     )}
                     <Box>
-                        <Typography variant="h5">{currentTextUnitQueue?.name}</Typography>
+                        <Typography variant="h5">{displayQueue?.name}</Typography>
                         {!currentTextUnitQueueIsNotEmpty() && (
                             <Typography>[Brak tekstów]</Typography>
                         )}
-                        {currentTextUnitQueue?.content?.textUnits.map((textUnit, index) => {
+                        {displayQueue?.queueTextUnits?.map((queueTextUnit, index) => {
                             return (
                                 <Card
                                     key={index}
-                                    onClick={() => setCurrentTextUnitRequest(textUnit.id)}
+                                    onClick={() => setCurrentTextUnitRequest(queueTextUnit.id)}
                                     sx={{
                                         my: 1,
                                         p: 1,
                                         backgroundColor:
-                                            currentDisplayState?.textState.textUnitId === textUnit.id
+                                            displayState?.textUnitId === queueTextUnit.id
                                                 ? "#2e3133"
                                                 : "#06090a",
                                     }}
                                 >
-                                    <Typography variant="h5">{textUnit.title}</Typography>
+                                    <Typography variant="h5">{queueTextUnit.textTitle}</Typography>
                                 </Card>
                             );
                         })}

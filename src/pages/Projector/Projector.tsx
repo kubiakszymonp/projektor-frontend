@@ -5,8 +5,9 @@ import { useParams } from "react-router-dom";
 import { projectorApi, projectorSettingsApi } from "../../api";
 import { ProjectorMediaDisplay } from "./MediaDisplay";
 import { ProjectorTextDisplay } from "./TextDisplay";
-import { useNotifyOrganizationEdit } from "../../services/useNofifyOrganizationEdit";
+import { useNotifyOnProjectorUpdate } from "../../services/useNofifyOrganizationEdit";
 import { GetDisplayDto, GetDisplayDtoDisplayTypeEnum, GetProjectorSettingsDto } from "../../api/generated";
+import { WebRtcStreamReciever } from "../WebRtc/WebRtcStreamReciever";
 
 export const ProjectorPage = (props: { isPreview: boolean }) => {
   const { organizationId: rawOrganizationId } = useParams();
@@ -48,7 +49,7 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
     setDisplayState(projectorDisplay.data);
   };
 
-  useNotifyOrganizationEdit(getDisplayState, String(organizationId));
+  useNotifyOnProjectorUpdate(getDisplayState, String(organizationId));
 
   return (
     <div
@@ -62,6 +63,9 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
           )}
           {displayState?.displayType === GetDisplayDtoDisplayTypeEnum.Media && (
             <ProjectorMediaDisplay displayState={displayState} projectorSettings={projectorSettings} />
+          )}
+          {displayState?.displayType === GetDisplayDtoDisplayTypeEnum.WebRtc && (
+            <WebRtcStreamReciever displayState={displayState} />
           )}
         </>
       )}

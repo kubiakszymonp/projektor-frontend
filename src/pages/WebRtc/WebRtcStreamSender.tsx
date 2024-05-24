@@ -1,9 +1,11 @@
 import { Button } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Computer, Face, Forest, PlayArrow, Stop } from "@mui/icons-material";
 import { GetDisplayDto, GetDisplayDtoDisplayTypeEnum } from "../../api/generated";
 import { displayPartsToString } from "typescript";
-import { displayStateApi, webRtcStreamApi } from "../../api";
+import { displayStateApi, projectorApi, webRtcStreamApi } from "../../api";
+import { useNotifyOnProjectorUpdate } from "../../services/useNofifyOrganizationEdit";
+import { jwtPersistance } from "../../services/jwt-persistance";
 
 enum CameraType {
   FRONT = "user",
@@ -19,16 +21,34 @@ enum ConnectionState {
 
 export const WebRtcStreamSender: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const videoRefRemote = useRef<HTMLVideoElement>(null);
   const [isCapturing, setIsCapturing] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
-
+  const organizationId = useMemo(() => jwtPersistance.getDecodedJwt()?.organizationId, []);
   const [webRtcState, setWebRtcState] = useState(ConnectionState.Uninitialized);
+  const [projectorState, setProjectorState] = useState<GetDisplayDto>();
+  const [peerConnection, setPeerConnection] = useState<RTCPeerConnection>();
+
+  const onProjectorUpdate = async () => {
+    const projectorState = await projectorApi.projectorControllerGetProjectorState();
+    setProjectorState(projectorState.data);
+  };
+
+  useNotifyOnProjectorUpdate(onProjectorUpdate, String(organizationId));
 
   useEffect(() => {
     setWebRtcAsDisplayType();
     return stopCamera;
   }, []);
 
+  useEffect(() => {
+
+    if (webRtcState !== ConnectionState.WaitingForAnswer) return;
+    const sdpAnswer = projectorState?.webRtcState?.answer;
+    if (!sdpAnswer) return;
+    peerConnection?.setRemoteDescription(sdpAnswer as any);
+
+  }, [projectorState]);
 
   const setWebRtcAsDisplayType = async () => {
 
@@ -95,30 +115,45 @@ export const WebRtcStreamSender: React.FC = () => {
   };
 
   const beginStream = async () => {
-    const peerConnection = new RTCPeerConnection();
-    const stream = videoRef.current?.srcObject as MediaStream;
-    stream.getTracks().forEach((track) => peerConnection.addTrack(track, stream));
-    const offer = await peerConnection.createOffer();
-    await peerConnection.setLocalDescription(offer);
-    
-    peerConnection.onicegatheringstatechange = async () => {
-      if (peerConnection.iceGatheringState === "complete") {
-        await webRtcStreamApi.webRtcControllerSetOffer({
-          payload: peerConnection.localDescription!
-        });
-      }
+    const stream = videoRef!.current!.srcObject! as MediaStream;
+
+    const peerConnection1 = new RTCPeerConnection();
+    const peerConnection2 = new RTCPeerConnection();
+
+    stream.getTracks().forEach(track => peerConnection1.addTrack(track, stream));
+
+    peerConnection1.onicegatheringstatechange = async (event) => {
+        if (peerConnection1.iceGatheringState === 'complete') {
+            console.log('peerConnection1 ICE candidates: ', peerConnection1.localDescription);
+            await peerConnection2.setRemoteDescription(peerConnection1.localDescription!);
+            const answer = await peerConnection2.createAnswer();
+            await peerConnection2.setLocalDescription(answer);
+        }
     }
 
-    setWebRtcState(ConnectionState.WaitingForAnswer);
-  };
+    peerConnection2.onicegatheringstatechange = async (event) => {
+        if (peerConnection1.iceGatheringState === 'complete') {
+            console.log('peerConnection2 ICE state: ', peerConnection2.iceConnectionState);
+            await peerConnection1.setRemoteDescription(peerConnection2.localDescription!);
+        }
+    };
 
-  const clearCanvas = (
-    canvas: HTMLCanvasElement,
-    context: CanvasRenderingContext2D
-  ) => {
-    if (!context || !canvas) return;
-    context.fillStyle = "black";
-    context.fillRect(0, 0, canvas.width, canvas.height);
+    peerConnection2.ontrack = (event) => {
+        console.log('peerConnection2 received remote stream');
+        videoRefRemote.current!.srcObject = event.streams[0];
+    };
+
+    const offer = await peerConnection1.createOffer();
+    await peerConnection1.setLocalDescription(offer);
+    webRtcStreamApi.webRtcControllerSetOffer({ payload: peerConnection1.localDescription! });
+
+    peerConnection1.onconnectionstatechange = (event) => {
+        console.log('peerConnection1 connection state: ', peerConnection1.connectionState);
+    };
+
+    peerConnection2.onconnectionstatechange = (event) => {
+        console.log('peerConnection2 connection state: ', peerConnection2.connectionState);
+    };
   };
 
   const startCapturing = async (cameraType: CameraType) => {
@@ -229,6 +264,9 @@ export const WebRtcStreamSender: React.FC = () => {
           style={{
           }}
         ></video>
+        <video muted autoPlay ref={videoRefRemote}>
+
+        </video>
       </div>
 
     </div>

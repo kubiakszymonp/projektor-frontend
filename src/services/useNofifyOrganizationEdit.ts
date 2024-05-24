@@ -4,7 +4,7 @@ import { environment } from "../environment";
 
 const ORGANIZATION_UPDATE_EVENT_NAME = 'organizationUpdated';
 
-export const useNotifyOrganizationEdit = (onChange: () => void, organizationId: string) => {
+export const useNotifyOnProjectorUpdate = (onChange: () => void, organizationId: string) => {
     return useEffect(() => {
         const socket = io(environment.BACKEND_HOST, {
             secure: true,

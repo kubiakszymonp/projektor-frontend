@@ -9,7 +9,7 @@ import {
 } from "../../api";
 import { useLoading } from "../../components/loading/loading-context";
 import { TextController } from "./TextController";
-import { useNotifyOrganizationEdit } from "../../services/useNofifyOrganizationEdit";
+import { useNotifyOnProjectorUpdate } from "../../services/useNofifyOrganizationEdit";
 import { GetDisplayDto, GetDisplayDtoDisplayTypeEnum, GetDisplayStateDto, GetProjectorSettingsDto } from "../../api/generated";
 import { io } from "socket.io-client";
 import { environment } from "../../environment";
@@ -25,27 +25,17 @@ export const Controller = () => {
   const organizationId = useMemo(() => jwtPersistance.getDecodedJwt()?.organizationId, []);
 
   useEffect(() => {
-    const socket = io(environment.BACKEND_HOST, {
-      query: { organizationId: organizationId }
-    });
-
-    socket.on("organizationUpdated", () => {
-      console.log("organizationUpdated")
-    });
-
     setLoading(true);
     loadState();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-
-
-
-
   const loadState = async () => {
     fetchDisplayState();
     fetchProjectorSettings();
   };
+
+  useNotifyOnProjectorUpdate(loadState, String(organizationId));
 
   const fetchDisplayState = async () => {
     const state = await displayStateApi.displayStateControllerGetDisplayState();
@@ -57,8 +47,6 @@ export const Controller = () => {
       await projectorSettingsApi.projectorSettingsControllerGetSetting();
     setProjectorSettings(settings.data);
   };
-
-  useNotifyOrganizationEdit(loadState, String(organizationId));
 
   return (
     <div style={{ position: "relative" }}>

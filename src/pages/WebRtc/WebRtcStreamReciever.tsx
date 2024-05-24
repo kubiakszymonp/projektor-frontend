@@ -8,21 +8,31 @@ export const WebRtcStreamReciever: React.FC<{ displayState: GetDisplayDto }> = (
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
+
   useInterval(() => {
     if (!videoRef.current) return;
     resize(videoRef.current!);
   }, 200);
 
   useEffect(() => {
+    console.log("displayState", displayState);
+    if (displayState.webRtcState?.answer) return;
     acceptOfferAndSendAnswer(displayState.webRtcState?.offer);
   }, [displayState]);
 
   const acceptOfferAndSendAnswer = async (offer: any) => {
-
+    console.log("acceptOfferAndSendAnswer", offer)
     const peerConnection = new RTCPeerConnection();
-    await peerConnection.setRemoteDescription(offer);
+    await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
     const answer = await peerConnection.createAnswer();
     await peerConnection.setLocalDescription(answer);
+
+
+    peerConnection.ontrack = (event) => {
+      console.log("Received track event:", event);
+      const video = videoRef.current!;
+      video.srcObject = event.streams[0];
+    };
 
     peerConnection.onicegatheringstatechange = async () => {
       if (peerConnection.iceGatheringState === "complete") {
@@ -30,6 +40,14 @@ export const WebRtcStreamReciever: React.FC<{ displayState: GetDisplayDto }> = (
           payload: peerConnection.localDescription!
         });
       }
+    };
+
+    peerConnection.onconnectionstatechange = () => {
+      console.log("peerConnection.connectionState", peerConnection.connectionState);
+    };
+
+    peerConnection.onnegotiationneeded = async () => {
+      console.log("onnegotiationneeded");
     }
   };
 
@@ -70,6 +88,7 @@ export const WebRtcStreamReciever: React.FC<{ displayState: GetDisplayDto }> = (
         height: "100%",
       }}
     >
+      RECIEVER
       <video muted ref={videoRef}></video>
     </div>
   );

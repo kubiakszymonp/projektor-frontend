@@ -1224,6 +1224,19 @@ export interface WebRtcConnectionStructure {
      */
     'answer': object;
 }
+/**
+ * 
+ * @export
+ * @interface WebRtcSdpDto
+ */
+export interface WebRtcSdpDto {
+    /**
+     * 
+     * @type {object}
+     * @memberof WebRtcSdpDto
+     */
+    'payload': object;
+}
 
 /**
  * AuthApi - axios parameter creator
@@ -4323,6 +4336,249 @@ export class UsersApi extends BaseAPI {
      */
     public userControllerUpdateUser(updateUserDto: UpdateUserDto, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).userControllerUpdateUser(updateUserDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * WebrtcStreamApi - axios parameter creator
+ * @export
+ */
+export const WebrtcStreamApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        webRtcControllerGetState: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/webrtc-stream`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {WebRtcSdpDto} webRtcSdpDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        webRtcControllerSetAnswer: async (webRtcSdpDto: WebRtcSdpDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'webRtcSdpDto' is not null or undefined
+            assertParamExists('webRtcControllerSetAnswer', 'webRtcSdpDto', webRtcSdpDto)
+            const localVarPath = `/api/webrtc-stream/answer`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(webRtcSdpDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {WebRtcSdpDto} webRtcSdpDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        webRtcControllerSetOffer: async (webRtcSdpDto: WebRtcSdpDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'webRtcSdpDto' is not null or undefined
+            assertParamExists('webRtcControllerSetOffer', 'webRtcSdpDto', webRtcSdpDto)
+            const localVarPath = `/api/webrtc-stream/offer`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(webRtcSdpDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * WebrtcStreamApi - functional programming interface
+ * @export
+ */
+export const WebrtcStreamApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = WebrtcStreamApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async webRtcControllerGetState(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.webRtcControllerGetState(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WebrtcStreamApi.webRtcControllerGetState']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {WebRtcSdpDto} webRtcSdpDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async webRtcControllerSetAnswer(webRtcSdpDto: WebRtcSdpDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.webRtcControllerSetAnswer(webRtcSdpDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WebrtcStreamApi.webRtcControllerSetAnswer']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {WebRtcSdpDto} webRtcSdpDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async webRtcControllerSetOffer(webRtcSdpDto: WebRtcSdpDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.webRtcControllerSetOffer(webRtcSdpDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WebrtcStreamApi.webRtcControllerSetOffer']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * WebrtcStreamApi - factory interface
+ * @export
+ */
+export const WebrtcStreamApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = WebrtcStreamApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        webRtcControllerGetState(options?: any): AxiosPromise<void> {
+            return localVarFp.webRtcControllerGetState(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {WebRtcSdpDto} webRtcSdpDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        webRtcControllerSetAnswer(webRtcSdpDto: WebRtcSdpDto, options?: any): AxiosPromise<void> {
+            return localVarFp.webRtcControllerSetAnswer(webRtcSdpDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {WebRtcSdpDto} webRtcSdpDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        webRtcControllerSetOffer(webRtcSdpDto: WebRtcSdpDto, options?: any): AxiosPromise<void> {
+            return localVarFp.webRtcControllerSetOffer(webRtcSdpDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * WebrtcStreamApi - object-oriented interface
+ * @export
+ * @class WebrtcStreamApi
+ * @extends {BaseAPI}
+ */
+export class WebrtcStreamApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WebrtcStreamApi
+     */
+    public webRtcControllerGetState(options?: RawAxiosRequestConfig) {
+        return WebrtcStreamApiFp(this.configuration).webRtcControllerGetState(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {WebRtcSdpDto} webRtcSdpDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WebrtcStreamApi
+     */
+    public webRtcControllerSetAnswer(webRtcSdpDto: WebRtcSdpDto, options?: RawAxiosRequestConfig) {
+        return WebrtcStreamApiFp(this.configuration).webRtcControllerSetAnswer(webRtcSdpDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {WebRtcSdpDto} webRtcSdpDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WebrtcStreamApi
+     */
+    public webRtcControllerSetOffer(webRtcSdpDto: WebRtcSdpDto, options?: RawAxiosRequestConfig) {
+        return WebrtcStreamApiFp(this.configuration).webRtcControllerSetOffer(webRtcSdpDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

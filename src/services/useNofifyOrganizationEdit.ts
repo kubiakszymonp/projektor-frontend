@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { io } from "socket.io-client";
 import { environment } from "../environment";
 
+const ORGANIZATION_UPDATE_EVENT_NAME = 'organizationUpdated';
 
 export const useNotifyOrganizationEdit = (onChange: () => void, organizationId: string) => {
     return useEffect(() => {
@@ -10,7 +11,7 @@ export const useNotifyOrganizationEdit = (onChange: () => void, organizationId: 
             query: { organizationId },
         });
 
-        socket.on("changed", () => {
+        socket.on(ORGANIZATION_UPDATE_EVENT_NAME, () => {
             onChange();
         });
 

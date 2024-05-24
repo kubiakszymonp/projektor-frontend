@@ -11,6 +11,9 @@ import { useLoading } from "../../components/loading/loading-context";
 import { TextController } from "./TextController";
 import { useNotifyOrganizationEdit } from "../../services/useNofifyOrganizationEdit";
 import { GetDisplayDto, GetDisplayDtoDisplayTypeEnum, GetDisplayStateDto, GetProjectorSettingsDto } from "../../api/generated";
+import { io } from "socket.io-client";
+import { environment } from "../../environment";
+
 
 export const Controller = () => {
   const [projectorSettings, setProjectorSettings] =
@@ -19,13 +22,24 @@ export const Controller = () => {
     React.useState<GetDisplayStateDto>();
   const { setLoading } = useLoading();
   const previewRef = useRef<HTMLDivElement>(null);
-  const organizationId = useMemo(() => jwtPersistance.getDecodedJwt()?.id, []);
+  const organizationId = useMemo(() => jwtPersistance.getDecodedJwt()?.organizationId, []);
 
   useEffect(() => {
+    const socket = io(environment.BACKEND_HOST, {
+      query: { organizationId: organizationId }
+    });
+
+    socket.on("organizationUpdated", () => {
+      console.log("organizationUpdated")
+    });
+
     setLoading(true);
     loadState();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+
+
 
 
   const loadState = async () => {

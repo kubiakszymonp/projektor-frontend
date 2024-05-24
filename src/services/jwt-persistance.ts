@@ -17,13 +17,23 @@ export class JWTPersistance {
     return localStorage.getItem("jwt") !== null;
   }
 
-  getDecodedJwt(): { id: number } | null {
+  getDecodedJwt(): {
+    email: string;
+    id: number;
+    role: string;
+    organizationId: number;
+  } | null {
     const jwt = this.getJwt();
     if (!jwt) {
       return null;
     }
-    const decoded = jwtDecode<{ organization: { id: number } }>(jwt);
-    return decoded.organization;
+    const decoded = jwtDecode<{
+      email: string;
+      id: number;
+      role: string;
+      organizationId: number;
+    }>(jwt);
+    return decoded;
   }
 }
 export const jwtPersistance = new JWTPersistance();

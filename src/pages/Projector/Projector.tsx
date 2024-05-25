@@ -8,6 +8,7 @@ import { ProjectorTextDisplay } from "./TextDisplay";
 import { useNotifyOnProjectorUpdate } from "../../services/useNofifyOrganizationEdit";
 import { GetDisplayDto, GetDisplayDtoDisplayTypeEnum, GetProjectorSettingsDto } from "../../api/generated";
 import { WebRtcStreamReciever } from "../WebRtc/WebRtcStreamReciever";
+import zIndex from "@mui/material/styles/zIndex";
 
 export const ProjectorPage = (props: { isPreview: boolean }) => {
   const { organizationId: rawOrganizationId } = useParams();
@@ -52,23 +53,28 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
   useNotifyOnProjectorUpdate(getDisplayState, String(organizationId));
 
   return (
-    <div
-      className="projector-container"
-      style={{ backgroundColor: projectorSettings?.backgroundColor }}
-    >
-      {projectorSettings && displayState?.emptyDisplay === false && (
-        <>
-          {displayState?.displayType === GetDisplayDtoDisplayTypeEnum.Text && (
-            <ProjectorTextDisplay displayState={displayState} projectorSettings={projectorSettings} />
-          )}
-          {displayState?.displayType === GetDisplayDtoDisplayTypeEnum.Media && (
-            <ProjectorMediaDisplay displayState={displayState} projectorSettings={projectorSettings} />
-          )}
-          {displayState?.displayType === GetDisplayDtoDisplayTypeEnum.WebRtc && (
-            <WebRtcStreamReciever displayState={displayState} />
-          )}
-        </>
+    <>
+      <div
+        className="projector-container"
+        style={{ backgroundColor: projectorSettings?.backgroundColor }}
+      >
+        {projectorSettings && (
+          <>
+            {displayState?.displayType === GetDisplayDtoDisplayTypeEnum.Text && (
+              <ProjectorTextDisplay displayState={displayState} projectorSettings={projectorSettings} />
+            )}
+            {displayState?.displayType === GetDisplayDtoDisplayTypeEnum.Media && (
+              <ProjectorMediaDisplay displayState={displayState} projectorSettings={projectorSettings} />
+            )}
+            {displayState?.displayType === GetDisplayDtoDisplayTypeEnum.WebRtc && (
+              <WebRtcStreamReciever displayState={displayState} />
+            )}
+          </>
+        )}
+      </div>
+      {displayState?.emptyDisplay === false && (
+        <div style={{ zIndex: 10, height: "100vh", width: "100vw", position: "fixed", backgroundColor: projectorSettings?.backgroundColor }}></div>
       )}
-    </div>
+    </>
   );
 };

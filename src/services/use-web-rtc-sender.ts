@@ -26,7 +26,7 @@ export const createPeerConnectionWithOffer = async (stream: MediaStream) => {
 export const createPeerConnectionWithAnswer = async (offer: RTCSessionDescriptionInit) => {
     return new Promise<RTCPeerConnection>(async (resolve, reject) => {
         const pc = new RTCPeerConnection();
-        await pc.setRemoteDescription(new RTCSessionDescription(offer));
+        await pc.setRemoteDescription(offer);
         const answer = await pc.createAnswer();
         await pc.setLocalDescription(answer);
 

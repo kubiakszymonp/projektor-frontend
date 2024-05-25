@@ -6,7 +6,7 @@ import { displayStateApi, projectorApi, webRtcStreamApi } from "../../api";
 import { useNotifyOnProjectorUpdate } from "../../services/useNofifyOrganizationEdit";
 import { jwtPersistance } from "../../services/jwt-persistance";
 import { CapturingStateType, useMediaCapture } from "../../services/user-media-capture.provider";
-import { createPeerConnectionWithOffer } from "../../services/use-web-rtc-sender";
+import { ConnectingState, acceptRtcAnswer, createPeerConnectionWithOffer, getWebRtcState } from "../../services/web-rtc-utils";
 
 export const WebRtcStream: React.FC = () => {
     const localVideoRef = useRef<HTMLVideoElement>(null);
@@ -17,7 +17,8 @@ export const WebRtcStream: React.FC = () => {
 
     useEffect(() => {
         return () => {
-            setCapturingType(CapturingStateType.NONE);
+            stopCapture();
+            stopStream();
         };
     }, []);
 
@@ -39,8 +40,8 @@ export const WebRtcStream: React.FC = () => {
     useNotifyOnProjectorUpdate(onProjectorUpdate, String(organizationId));
 
     useEffect(() => {
-        if (projectorState?.webRtcState?.offer && projectorState?.webRtcState?.answer) {
-            acceptAnswer();
+        if (getWebRtcState(projectorState?.webRtcState) === ConnectingState.ANSWER_READY) {
+            acceptRtcAnswer(pc1!, projectorState?.webRtcState?.answer! as any);
         }
     }, [projectorState]);
 
@@ -64,17 +65,15 @@ export const WebRtcStream: React.FC = () => {
         setCapturingType(CapturingStateType.BACK);
     };
 
-    const stopCaptureAndStream = () => {
-        const stream = localVideoRef.current!.srcObject as MediaStream;
-        const tracks = stream.getTracks();
-        tracks.forEach(track => track.stop());
-        localVideoRef.current!.srcObject = null;
+    const stopStream = () => {
         pc1?.close();
         setPc1(undefined);
-    };
+    }
 
-    const acceptAnswer = async () => {
-        pc1?.setRemoteDescription(new RTCSessionDescription(projectorState!.webRtcState!.answer! as any));
+    const stopCapture = () => {
+        setCapturingType(CapturingStateType.NONE);
+        if(localVideoRef?.current) localVideoRef.current.srcObject = null;
+        stopStream();
     };
 
     return (

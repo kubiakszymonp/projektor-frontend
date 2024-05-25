@@ -5,6 +5,7 @@ import { GetDisplayDto, GetDisplayDtoDisplayTypeEnum } from "../../api/generated
 import { displayStateApi, projectorApi, webRtcStreamApi } from "../../api";
 import { useNotifyOnProjectorUpdate } from "../../services/useNofifyOrganizationEdit";
 import { jwtPersistance } from "../../services/jwt-persistance";
+import { ConnectingState, createPeerConnectionWithAnswer, getWebRtcState, onTrackEventAsVideoSource } from "../../services/web-rtc-utils";
 
 export const WebRtcStreamReciever2: React.FC = () => {
     const remoteVideoRef = useRef<HTMLVideoElement>(null);
@@ -12,8 +13,13 @@ export const WebRtcStreamReciever2: React.FC = () => {
     const [projectorState, setProjectorState] = useState<GetDisplayDto>();
     const [pc2, setPc2] = useState<RTCPeerConnection>();
 
+    useEffect(() => {
+        return () => {
+            pc2?.close();
+        };
+    }, []);
+
     const onProjectorUpdate = async () => {
-        console.log("onProjectorUpdate");
         const projectorState = await projectorApi.projectorControllerGetProjectorState();
         setProjectorState(projectorState.data);
     };
@@ -21,40 +27,18 @@ export const WebRtcStreamReciever2: React.FC = () => {
     useNotifyOnProjectorUpdate(onProjectorUpdate, String(organizationId));
 
     useEffect(() => {
-        if (projectorState?.webRtcState?.offer && !projectorState?.webRtcState?.answer) {
-            console.log("Offer sent, answer null");
+        if (getWebRtcState(projectorState?.webRtcState) === ConnectingState.OFFER_READY) {
             acceptOfferAndSendAnswer();
         }
     }, [projectorState]);
 
     const acceptOfferAndSendAnswer = async () => {
-        const pc2 = new RTCPeerConnection();
+        const pc2 = await createPeerConnectionWithAnswer(projectorState!.webRtcState!.offer! as any, async (event) => {
+            onTrackEventAsVideoSource(event, remoteVideoRef);
+        });
+
         setPc2(pc2);
-
-        pc2.ontrack = (event) => {
-            console.log("Received track event:", event);
-            const video = remoteVideoRef.current!;
-             video.srcObject = event.streams[0];
-
-        };
-
-        await pc2.setRemoteDescription(new RTCSessionDescription(projectorState!.webRtcState!.offer! as any));
-        const answer = await pc2.createAnswer();
-        await pc2.setLocalDescription(answer);
-
-        pc2.onicegatheringstatechange = async () => {
-            if (pc2.iceGatheringState === "complete") {
-                await webRtcStreamApi.webRtcControllerSetAnswer({ payload: pc2.localDescription! });
-            }
-        };
-
-        pc2.onconnectionstatechange = () => {
-            console.log("pc2.connectionState", pc2.connectionState);
-        };
-
-        pc2.onnegotiationneeded = async () => {
-            console.log("onnegotiationneeded");
-        }
+        await webRtcStreamApi.webRtcControllerSetAnswer({ payload: pc2.localDescription! });
     }
 
     return (

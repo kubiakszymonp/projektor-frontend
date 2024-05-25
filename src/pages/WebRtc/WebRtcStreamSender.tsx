@@ -115,45 +115,35 @@ export const WebRtcStreamSender: React.FC = () => {
   };
 
   const beginStream = async () => {
-    const stream = videoRef!.current!.srcObject! as MediaStream;
+    const pc = new RTCPeerConnection();
+    setPeerConnection(pc);
+    const stream = videoRef.current?.srcObject as MediaStream;
+    const tracks = stream.getTracks();
+    console.log("tracks", tracks)
+    tracks.forEach((track) => pc.addTrack(track, stream));
+    const offer = await pc.createOffer();
+    await pc.setLocalDescription(offer);
 
-    const peerConnection1 = new RTCPeerConnection();
-    const peerConnection2 = new RTCPeerConnection();
+    pc.onicegatheringstatechange = async () => {
+      if (pc.iceGatheringState === "complete") {
+        await webRtcStreamApi.webRtcControllerSetOffer({
+          payload: offer!
+        });
+      }
+    };
 
-    stream.getTracks().forEach(track => peerConnection1.addTrack(track, stream));
+    pc.onconnectionstatechange = () => {
+      console.log("peerConnection.connectionState", pc.connectionState);
+      if (pc.connectionState === "connected") {
+        // setIsStreaming(true);
+      }
+    };
 
-    peerConnection1.onicegatheringstatechange = async (event) => {
-        if (peerConnection1.iceGatheringState === 'complete') {
-            console.log('peerConnection1 ICE candidates: ', peerConnection1.localDescription);
-            await peerConnection2.setRemoteDescription(peerConnection1.localDescription!);
-            const answer = await peerConnection2.createAnswer();
-            await peerConnection2.setLocalDescription(answer);
-        }
+    pc.ontrack = (event) => {
+      console.log("Received track event:", event);
     }
 
-    peerConnection2.onicegatheringstatechange = async (event) => {
-        if (peerConnection1.iceGatheringState === 'complete') {
-            console.log('peerConnection2 ICE state: ', peerConnection2.iceConnectionState);
-            await peerConnection1.setRemoteDescription(peerConnection2.localDescription!);
-        }
-    };
-
-    peerConnection2.ontrack = (event) => {
-        console.log('peerConnection2 received remote stream');
-        videoRefRemote.current!.srcObject = event.streams[0];
-    };
-
-    const offer = await peerConnection1.createOffer();
-    await peerConnection1.setLocalDescription(offer);
-    webRtcStreamApi.webRtcControllerSetOffer({ payload: peerConnection1.localDescription! });
-
-    peerConnection1.onconnectionstatechange = (event) => {
-        console.log('peerConnection1 connection state: ', peerConnection1.connectionState);
-    };
-
-    peerConnection2.onconnectionstatechange = (event) => {
-        console.log('peerConnection2 connection state: ', peerConnection2.connectionState);
-    };
+    setWebRtcState(ConnectionState.WaitingForAnswer);
   };
 
   const startCapturing = async (cameraType: CameraType) => {

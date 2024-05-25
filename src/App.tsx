@@ -13,6 +13,7 @@ import { FilesManager } from "./pages/FilesManager/FilesManager";
 import { LoadingSpinner } from "./components/loading-spinner";
 import { LoadingProvider } from "./components/loading/loading-context";
 import { WebRtcStreamSender } from "./pages/WebRtc/WebRtcStreamSender";
+import { WebRtcStream } from "./pages/WebRtc/web-rtc-signaling";
 
 function App() {
   const defaultTheme = createTheme({
@@ -40,7 +41,7 @@ function App() {
             element={<ProjectorPage isPreview={true} />}
           />
           <Route path="/files-manager" element={<FilesManager />} />
-          <Route path="/stream" element={<WebRtcStreamSender />} />
+          <Route path="/stream" element={<WebRtcStream />} />
         </Routes>
       </LoadingProvider>
     </ThemeProvider>

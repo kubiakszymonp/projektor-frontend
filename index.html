@@ -16,7 +16,9 @@
             const peerConnection1 = new RTCPeerConnection();
             const peerConnection2 = new RTCPeerConnection();
 
-            document.getElementById('localVideo').srcObject.getTracks().forEach(track => peerConnection1.addTrack(track, document.getElementById('localVideo').srcObject));
+            var stream = document.getElementById('localVideo').srcObject;
+            debugger
+            stream.getTracks().forEach(track => peerConnection1.addTrack(track, stream));
 
             peerConnection1.onicegatheringstatechange = async (event) => {
                 if (peerConnection1.iceGatheringState === 'complete') {
@@ -35,6 +37,7 @@
             };
 
             peerConnection2.ontrack = (event) => {
+                debugger
                 console.log('peerConnection2 received remote stream');
                 document.getElementById('remoteVideo').srcObject = event.streams[0];
             };

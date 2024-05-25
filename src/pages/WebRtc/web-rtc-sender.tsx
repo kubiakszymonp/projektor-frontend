@@ -6,6 +6,7 @@ import { displayStateApi, projectorApi, webRtcStreamApi } from "../../api";
 import { useNotifyOnProjectorUpdate } from "../../services/useNofifyOrganizationEdit";
 import { jwtPersistance } from "../../services/jwt-persistance";
 import { CapturingStateType, useMediaCapture } from "../../services/user-media-capture.provider";
+import { createPeerConnectionWithOffer } from "../../services/use-web-rtc-sender";
 
 export const WebRtcStream: React.FC = () => {
     const localVideoRef = useRef<HTMLVideoElement>(null);
@@ -51,22 +52,12 @@ export const WebRtcStream: React.FC = () => {
     }, [stream]);
 
     const startStreamAndSendOffer = async () => {
-        
-        if (!stream) return;
-        const pc1 = new RTCPeerConnection();
-        setPc1(pc1);
-        const tracks = stream.getTracks();
-        tracks.forEach(track => {
-            pc1.addTrack(track, stream);
-        });
-        const offer = await pc1.createOffer();
-        await pc1.setLocalDescription(offer);
 
-        pc1.onicegatheringstatechange = async () => {
-            if (pc1.iceGatheringState === "complete") {
-                await webRtcStreamApi.webRtcControllerSetOffer({ payload: pc1.localDescription! });
-            }
-        };
+        if (!stream) return;
+
+        const p = await createPeerConnectionWithOffer(stream);
+        setPc1(p);
+        await webRtcStreamApi.webRtcControllerSetOffer({ payload: p.localDescription! });
     };
 
     const startCapture = async () => {

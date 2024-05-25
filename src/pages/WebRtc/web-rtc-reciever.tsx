@@ -5,7 +5,6 @@ import { GetDisplayDto, GetDisplayDtoDisplayTypeEnum } from "../../api/generated
 import { displayStateApi, projectorApi, webRtcStreamApi } from "../../api";
 import { useNotifyOnProjectorUpdate } from "../../services/useNofifyOrganizationEdit";
 import { jwtPersistance } from "../../services/jwt-persistance";
-import { createPeerConnectionWithAnswer } from "../../services/use-web-rtc-sender";
 
 export const WebRtcStreamReciever2: React.FC = () => {
     const remoteVideoRef = useRef<HTMLVideoElement>(null);
@@ -29,17 +28,33 @@ export const WebRtcStreamReciever2: React.FC = () => {
     }, [projectorState]);
 
     const acceptOfferAndSendAnswer = async () => {
-        if (!projectorState?.webRtcState?.offer) return;
-        const peerConnection = await createPeerConnectionWithAnswer(projectorState?.webRtcState?.offer as RTCSessionDescription);
+        const pc2 = new RTCPeerConnection();
         setPc2(pc2);
 
-        peerConnection.ontrack = (event) => {
+        pc2.ontrack = (event) => {
             console.log("Received track event:", event);
             const video = remoteVideoRef.current!;
-            video.srcObject = event.streams[0];
+             video.srcObject = event.streams[0];
+
         };
 
-        await webRtcStreamApi.webRtcControllerSetAnswer({ payload: peerConnection.localDescription! });
+        await pc2.setRemoteDescription(new RTCSessionDescription(projectorState!.webRtcState!.offer! as any));
+        const answer = await pc2.createAnswer();
+        await pc2.setLocalDescription(answer);
+
+        pc2.onicegatheringstatechange = async () => {
+            if (pc2.iceGatheringState === "complete") {
+                await webRtcStreamApi.webRtcControllerSetAnswer({ payload: pc2.localDescription! });
+            }
+        };
+
+        pc2.onconnectionstatechange = () => {
+            console.log("pc2.connectionState", pc2.connectionState);
+        };
+
+        pc2.onnegotiationneeded = async () => {
+            console.log("onnegotiationneeded");
+        }
     }
 
     return (

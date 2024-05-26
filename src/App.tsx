@@ -12,11 +12,9 @@ import { TextUnitQueueList } from "./pages/TextUnitQueues/TextUnitQueueList";
 import { FilesManager } from "./pages/FilesManager/FilesManager";
 import { LoadingSpinner } from "./components/loading-spinner";
 import { LoadingProvider } from "./components/loading/loading-context";
-import { WebRtcStreamSender } from "./pages/WebRtc/WebRtcStreamSender";
 import { WebRtcStream } from "./pages/WebRtc/web-rtc-sender";
-import { WebRtcStreamReciever } from "./pages/WebRtc/WebRtcStreamReciever";
-import { WebRtcStreamReciever2 } from "./pages/WebRtc/web-rtc-reciever";
 import MediaCaptureProvider from "./services/user-media-capture.provider";
+import { WebRtcStreamReciever } from "./pages/WebRtc/web-rtc-reciever";
 
 function App() {
   const defaultTheme = createTheme({
@@ -46,7 +44,6 @@ function App() {
             />
             <Route path="/files-manager" element={<FilesManager />} />
             <Route path="/stream" element={<WebRtcStream />} />
-            <Route path="/stream-reciever" element={<WebRtcStreamReciever2 />} />
           </Routes>
         </LoadingProvider>
       </MediaCaptureProvider>

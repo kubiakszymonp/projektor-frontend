@@ -7,8 +7,8 @@ import { ProjectorMediaDisplay } from "./MediaDisplay";
 import { ProjectorTextDisplay } from "./TextDisplay";
 import { useNotifyOnProjectorUpdate } from "../../services/useNofifyOrganizationEdit";
 import { GetDisplayDto, GetDisplayDtoDisplayTypeEnum, GetProjectorSettingsDto } from "../../api/generated";
-import { WebRtcStreamReciever } from "../WebRtc/WebRtcStreamReciever";
 import zIndex from "@mui/material/styles/zIndex";
+import { WebRtcStreamReciever } from "../WebRtc/web-rtc-reciever";
 
 export const ProjectorPage = (props: { isPreview: boolean }) => {
   const { organizationId: rawOrganizationId } = useParams();
@@ -67,13 +67,20 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
               <ProjectorMediaDisplay displayState={displayState} projectorSettings={projectorSettings} />
             )}
             {displayState?.displayType === GetDisplayDtoDisplayTypeEnum.WebRtc && (
-              <WebRtcStreamReciever displayState={displayState} />
+              <WebRtcStreamReciever />
             )}
           </>
         )}
       </div>
-      {displayState?.emptyDisplay === false && (
-        <div style={{ zIndex: 10, height: "100vh", width: "100vw", position: "fixed", backgroundColor: projectorSettings?.backgroundColor }}></div>
+      {displayState?.emptyDisplay === true && (
+        <div id="black-cover-empty-display" style={{
+          zIndex: 10,
+          height: "100vh",
+          width: "100vw",
+          position: "fixed",
+          backgroundColor: projectorSettings?.backgroundColor,
+          top: 0
+        }}></div>
       )}
     </>
   );

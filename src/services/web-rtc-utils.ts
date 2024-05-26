@@ -52,7 +52,7 @@ export const onTrackEventAsVideoSource = (ontrackEvent: RTCTrackEvent, videoRef:
 }
 
 export const acceptRtcAnswer = async (pc: RTCPeerConnection, answer: RTCSessionDescriptionInit) => {
-    await pc.setRemoteDescription(answer);
+    await pc?.setRemoteDescription(answer);
 }
 
 

@@ -549,6 +549,18 @@ export interface GetQueueTextUnit {
     'id': number;
     /**
      * 
+     * @type {number}
+     * @memberof GetQueueTextUnit
+     */
+    'displayQueueId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetQueueTextUnit
+     */
+    'textUnitId': number;
+    /**
+     * 
      * @type {string}
      * @memberof GetQueueTextUnit
      */

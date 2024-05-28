@@ -22,7 +22,6 @@ import Fuse from "fuse.js";
 import { useEffect, useMemo, useState } from "react";
 import { displayStateApi, textUnitApi, textUnitQueuesApi, textUnitTagApi } from "../../api";
 import { TextUnitEditDialog } from "./TextUnitEditDialog";
-import { AddTextUnitToQueueDialog } from "./AddTextUnitToQueueDialog";
 import { MoreVert } from "@mui/icons-material";
 import { ManageTagsDialog } from "./ManageTagsDialog";
 import { GetTextUnitDto, GetTextUnitTagDto } from "../../api/generated";
@@ -34,8 +33,6 @@ const ITEM_PADDING_TOP = 8;
 export const TextUnitList: React.FC = () => {
   const [textUnitEditDialogOpen, setTextUnitEditDialogOpen] = useState(false);
   const [textUnitCreateDialogOpen, setTextUnitCreateDialogOpen] = useState(false);
-  const [textUnitAddToQueueDialogOpen, setTextUnitAddToQueueDialogOpen] =
-    useState(false);
   const [manageTagsDialogOpen, setManageTagsDialogOpen] = useState(false);
   const [textUnitList, setTextUnitList] = useState<GetTextUnitDto[]>([]);
   const [displayTextUnits, setDisplayTextUnits] = useState<GetTextUnitDto[]>([]);
@@ -71,7 +68,6 @@ export const TextUnitList: React.FC = () => {
 
   const closeAllModals = () => {
     setTextUnitEditDialogOpen(false);
-    setTextUnitAddToQueueDialogOpen(false);
     setManageTagsDialogOpen(false);
     setTextUnitCreateDialogOpen(false);
   };
@@ -160,14 +156,6 @@ export const TextUnitList: React.FC = () => {
         handleClose={handleClose}
         open={textUnitCreateDialogOpen}
       />
-
-      {selectedTextUnit && (
-        <AddTextUnitToQueueDialog
-          handleClose={handleClose}
-          textUnitId={selectedTextUnit.id}
-          open={textUnitAddToQueueDialogOpen}
-        />
-      )}
       <ManageTagsDialog handleClose={handleClose} open={manageTagsDialogOpen} />
       <Box
         sx={{
@@ -324,10 +312,10 @@ export const TextUnitList: React.FC = () => {
                         color="info"
                         onClick={() => {
                           setSelectedTextUnit(textUnit);
-                          setTextUnitAddToQueueDialogOpen(true);
+                          onEditTextUnit(textUnit);
                         }}
                       >
-                        Playlisty
+                        Edytuj
                       </Button>
                     </>
                   )}
@@ -354,11 +342,11 @@ export const TextUnitList: React.FC = () => {
         </MenuItem>
         <MenuItem
           onClick={() => {
-            setTextUnitAddToQueueDialogOpen(true);
+            onEditTextUnit(selectedTextUnit!);
             handleCloseTextUnitMenu();
           }}
         >
-          Playlisty
+          Edytuj
         </MenuItem>
       </Menu>
     </>

@@ -20,10 +20,9 @@ import { textUnitApi, textUnitTagApi } from "../../api";
 import { useEffect, useState } from "react";
 import { TransitionAlert } from "../../components/alert.component";
 import { CustomPopover } from "../../components/popover";
-import { GetTextUnitTagDto, UpdateTextUnitDto } from "../../api/generated";
+import { CreateTextUnitDto, GetTextUnitTagDto, UpdateTextUnitDto } from "../../api/generated";
+import { TextUnitInputs } from "./text-unit-inputs";
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
 
 
 const SONG_HELP_TEXT = `Tekst składa się z części oddzielonych nową linią. Każda z części może rozpoczynać się znacznikiem tytułowym wewnątrz kwadratowych nawiasów.\n
@@ -45,41 +44,24 @@ export const TextUnitEditDialog: React.FC<{
   handleClose: () => void;
   textUnitId: number;
 }> = ({ open, handleClose, textUnitId }) => {
-  const [availableTags, setAvailableTags] = useState<GetTextUnitTagDto[]>([]);
-  const [allTags, setAllTags] = useState<GetTextUnitTagDto[]>([]);
   const [textUnit, setTextUnit] =
-    useState<UpdateTextUnitDto>();
+    useState<CreateTextUnitDto>();
 
   useEffect(() => {
-    fetchTags();
     loadTextUnit();
   }, [open]);
 
-  useEffect(() => {
-    filterAvailableTags();
-  }, [textUnit?.textUnitTagIds, allTags]);
-
-  const onClickTag = (tag: GetTextUnitTagDto) => {
-    if (!textUnit || !textUnit.textUnitTagIds) return;
-    const isTagAlreadyAdded = textUnit.textUnitTagIds.some((t) => t === tag.id);
-    if (isTagAlreadyAdded) {
-      setTextUnit({
-        ...textUnit,
-        textUnitTagIds: textUnit.textUnitTagIds.filter((t) => t !== tag.id),
-      });
-    }
-    else {
-      setTextUnit({
-        ...textUnit,
-        textUnitTagIds: [...textUnit.textUnitTagIds, tag.id],
-      });
-    }
-  };
-
   const loadTextUnit = async () => {
     const res = await textUnitApi.textUnitControllerFindOne(String(textUnitId));
-    setTextUnit(res.data);
-
+    setTextUnit({
+      title: res.data.title,
+      content: res.data.content,
+      textUnitTagIds: res.data.tags.map((tag) => tag.id),
+      description: res.data.description,
+      displayQueueIds: res.data.queues.map((queue) => queue.displayQueueId),
+      partsOrder: res.data.partsOrder,
+      transposition: res.data.transposition,
+    });
   };
 
   const handleDelete = async () => {
@@ -87,18 +69,10 @@ export const TextUnitEditDialog: React.FC<{
     handleClose();
   };
 
-  const fetchTags = async () => {
-    const res = await textUnitTagApi.textUnitTagControllerFindAll();
-    setAllTags(res.data);
-  };
-
-  const filterAvailableTags = () => {
-    setAvailableTags(allTags.filter((tag) => !textUnit!.textUnitTagIds!.includes(tag.id)));
-  };
 
   const onSave = async () => {
     if (!textUnit) return;
-    await textUnitApi.textUnitControllerUpdate(textUnit);
+    await textUnitApi.textUnitControllerUpdate({ ...textUnit, id: textUnitId });
     handleClose();
   };
 
@@ -109,91 +83,13 @@ export const TextUnitEditDialog: React.FC<{
       </DialogTitle>
       <DialogContent>
         {textUnit && (
-          <>
-            <TextField
-              required
-              id="title"
-              name="title"
-              label="Tytuł tekstu"
-              type="text"
-              fullWidth
-              variant="standard"
-              value={textUnit.title}
-              onChange={(e) => {
-                setTextUnit({ ...textUnit, title: e.target.value });
-              }}
-            />
-            <Box sx={{ pt: 2 }}>
-              <TextField
-                fullWidth
-                required
-                id="outlined-multiline-static"
-                label="Zawartość tekstu"
-                multiline
-                value={textUnit.content}
-                onChange={(e) => {
-                  setTextUnit({
-                    ...textUnit,
-                    content: e.target.value,
-                  });
-                }}
-              />
-            </Box>
-            <FormControl sx={{ mt: 4, mb: 2 }} fullWidth>
-              <InputLabel id="demo-multiple-checkbox-label">Dodaj tagi</InputLabel>
-              <Select
-                labelId="demo-multiple-checkbox-label"
-                id="demo-multiple-checkbox"
-                value={""}
-                MenuProps={{
-                  PaperProps: {
-                    style: {
-                      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-                      width: 250,
-                    },
-                  },
-                }}
-                renderValue={() => ""}
-                input={<OutlinedInput label="Wybrane tagi" />}
-              >
-                {availableTags.map((tag) => (
-                  <MenuItem
-                    key={tag.id}
-                    value={tag.id}
-                    onClick={() => {
-                      onClickTag(tag);
-                    }}
-                  >
-                    <ListItemText primary={tag.name} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <Stack direction="row" flexWrap={"wrap"}>
-              {textUnit.textUnitTagIds?.map((tagId) => {
-                const tag = allTags.find((t) => t.id === tagId);
-
-                return (tag &&
-                  <Chip
-                    key={tagId}
-                    label={tag.name}
-                    variant="outlined"
-                    onDelete={() => {
-                      onClickTag(tag);
-                    }}
-                  />
-                )
-              })}
-            </Stack>
-          </>
+          <TextUnitInputs setTextUnit={setTextUnit} textUnit={textUnit} />
         )}
-
       </DialogContent>
       <DialogActions>
         <CustomPopover text={SONG_HELP_TEXT} />
         <Button
           color="error"
-          disabled={textUnitId === -1}
           onClick={handleDelete}
         >
           Usuń

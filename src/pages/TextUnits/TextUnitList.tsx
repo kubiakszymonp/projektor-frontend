@@ -125,7 +125,7 @@ export const TextUnitList: React.FC = () => {
 
   const onAddTextUnit = () => {
     setSelectedTextUnit(null);
-    setTextUnitEditDialogOpen(true);
+    setTextUnitCreateDialogOpen(true);
   };
 
   const onEditTextUnit = (textUnit: GetTextUnitDto) => {
@@ -309,7 +309,7 @@ export const TextUnitList: React.FC = () => {
                         Rzutuj
                       </Button>
                       <Button
-                        color="info"
+                        color="warning"
                         onClick={() => {
                           setSelectedTextUnit(textUnit);
                           onEditTextUnit(textUnit);

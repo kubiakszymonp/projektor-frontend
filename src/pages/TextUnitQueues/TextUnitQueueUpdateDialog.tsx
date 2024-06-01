@@ -2,16 +2,13 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  TextField,
-  Box,
   DialogActions,
   Button,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import { textUnitQueuesApi } from "../../api";
-import { DragAndDropItem } from "./TextUnitQueueList";
-import { TextUnitQueueDragAndDrop } from "./TextUnitQueueDragAndDropComponent";
-import { GetDisplayQueueDto, UpdateDisplayQueueDto, UpdateTextUnitDto } from "../../api/generated";
+import { CreateDisplayQueueDto, GetDisplayQueueDto } from "../../api/generated";
+import { DisplayQueueInputs } from "./display-queue-inputs";
 
 
 export const TextUnitQueueEditDialog: React.FC<{
@@ -19,51 +16,31 @@ export const TextUnitQueueEditDialog: React.FC<{
   handleClose: () => void;
   textUnitQueueId: number;
 }> = ({ open, handleClose, textUnitQueueId }) => {
-  const [queueTextUnits, setQueueTextUnits] = useState<DragAndDropItem[]>([]);
   const [displayQueue, setDisplayQueue] = useState<GetDisplayQueueDto>();
+  const [editedDisplayQueue, setEditedDisplayQueue] = useState<CreateDisplayQueueDto>();
 
   useEffect(() => {
     fetchTextUnitQueue();
   }, [open]);
-
-  useEffect(() => {
-    if (!displayQueue) return;
-    setQueueTextUnits(
-      displayQueue.queueTextUnits.map((textUnit) => ({
-        key: String(textUnit.id),
-        text: textUnit.textTitle,
-      }))
-    );
-  }, [displayQueue]);
-
 
   const fetchTextUnitQueue = async () => {
     const res = await textUnitQueuesApi.displayQueuesControllerFindOne(textUnitQueueId.toString());
     setDisplayQueue(res.data);
   };
 
-
   const onSave = async () => {
     if (!displayQueue) return;
     await textUnitQueuesApi.displayQueuesControllerUpdate({
-      id: displayQueue.id,
-      name: displayQueue.name,
-      description: displayQueue.description,
-      textUnitIds: displayQueue.queueTextUnits.map((textUnit) => textUnit.id),
+      ...editedDisplayQueue,
+      id: textUnitQueueId,
     });
 
     handleClose();
   };
 
-  const onDeleteItem = (key: string) => {
-    setQueueTextUnits(
-      queueTextUnits.filter((textUnit) => textUnit.key !== key)
-    );
-  };
-
   const onDelete = async () => {
     if (!displayQueue) return;
-    await textUnitQueuesApi.displayQueuesControllerRemove(displayQueue.id.toString());
+    await textUnitQueuesApi.displayQueuesControllerRemove(textUnitQueueId.toString());
     handleClose();
   };
 
@@ -75,40 +52,10 @@ export const TextUnitQueueEditDialog: React.FC<{
       </DialogTitle>
       <DialogContent>
         {displayQueue && (
-          <>
-            <TextField
-              autoFocus
-              required
-              id="title"
-              name="title"
-              label="Nazwa kolejki"
-              type="text"
-              fullWidth
-              variant="standard"
-              value={displayQueue.name}
-              onChange={(e) => {
-                setDisplayQueue({
-                  ...displayQueue,
-                  name: e.target.value,
-                });
-              }}
-            />
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                pt: 3,
-              }}
-            >
-              {queueTextUnits.length > 0 && (
-                <TextUnitQueueDragAndDrop
-                  textUnitsInQueue={queueTextUnits}
-                  setTextUnitsInQueue={setQueueTextUnits}
-                  onDeleteItem={onDeleteItem}
-                />
-              )}
-            </Box>
-          </>
+          <DisplayQueueInputs
+            displayQueue={displayQueue}
+            editedDisplayQueue={editedDisplayQueue!}
+            setEditedDisplayQueue={setEditedDisplayQueue} />
         )}
       </DialogContent>
       <DialogActions>

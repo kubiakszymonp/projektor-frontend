@@ -1,4 +1,4 @@
-import { RefObject } from "react";
+import { RefObject, useEffect, useState } from "react";
 import { MovePageDtoDirectionEnum } from "../../api/generated";
 
 export const OnPreviewClickHandler: React.FC<{
@@ -6,22 +6,37 @@ export const OnPreviewClickHandler: React.FC<{
     movePage: (direction: MovePageDtoDirectionEnum) => void
 }> = ({ previewRef, movePage }) => {
 
-    const width = previewRef.current?.offsetWidth;
-    const height = previewRef.current?.offsetHeight;
-    const top = previewRef.current?.offsetTop;
+    const [style, setStyle] = useState<React.CSSProperties>({});
+
+    useEffect(() => {
+        const updatePosition = () => {
+            if (previewRef.current) {
+                const rect = previewRef.current.getBoundingClientRect();
+                setStyle({
+                    left: rect.left,
+                    top: - window.scrollY,
+                    width: rect.width,
+                    height: rect.height,
+                    position: "fixed",
+                    color: "red",
+                    zIndex: 50,
+                    display: "flex",
+                });
+            }
+        };
+
+        updatePosition();
+        window.addEventListener("scroll", updatePosition);
+        window.addEventListener("resize", updatePosition);
+
+        return () => {
+            window.removeEventListener("scroll", updatePosition);
+            window.removeEventListener("resize", updatePosition);
+        };
+    }, [previewRef]);
 
     return (
-        <div
-            style={{
-                top: top,
-                display: "flex",
-                width: width,
-                position: "absolute",
-                color: "red",
-                zIndex: 50,
-                height: height,
-            }}
-        >
+        <div style={style}>
             <div
                 style={{ flex: 1 }}
                 onClick={() => {
@@ -34,5 +49,6 @@ export const OnPreviewClickHandler: React.FC<{
                     movePage(MovePageDtoDirectionEnum.Next);
                 }}
             ></div>
-        </div>)
+        </div>
+    );
 };

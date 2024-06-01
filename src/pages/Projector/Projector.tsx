@@ -2,19 +2,21 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./Projector.css";
 import { setPageTitle } from "../../services/page-title";
 import { useParams } from "react-router-dom";
-import { projectorApi, projectorSettingsApi } from "../../api";
+import { projectorApi, projectorSettingsApi, webRtcStreamApi } from "../../api";
 import { ProjectorMediaDisplay } from "./MediaDisplay";
 import { ProjectorTextDisplay } from "./TextDisplay";
 import { useNotifyOnProjectorUpdate } from "../../services/useNofifyOrganizationEdit";
 import { GetDisplayDto, GetDisplayDtoDisplayTypeEnum, GetProjectorSettingsDto } from "../../api/generated";
 import zIndex from "@mui/material/styles/zIndex";
 import { WebRtcStreamReciever } from "../WebRtc/web-rtc-reciever";
+import { generateRandomText } from "../../util/generate-random-text";
 
 export const ProjectorPage = (props: { isPreview: boolean }) => {
   const { organizationId: rawOrganizationId } = useParams();
   const organizationId = parseInt(rawOrganizationId || "0");
   const [displayState, setDisplayState] = useState<GetDisplayDto>();
   const [projectorSettings, setProjectorSettings] = useState<GetProjectorSettingsDto>();
+  const [screenIdentifier] = useState<string>(generateRandomText());
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -33,10 +35,18 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
 
   useEffect(() => {
     getDisplayState();
+    sendScreenId();
     if (props.isPreview) return;
     window.addEventListener("resize", setScreenDimensions);
     return () => window.removeEventListener("resize", setScreenDimensions);
   }, []);
+
+
+  const sendScreenId = async () => {
+    await webRtcStreamApi.webRtcControllerSetScreen({
+      screenId: screenIdentifier
+    });
+  }
 
   const getDisplayState = async () => {
     const projectorDisplay =
@@ -50,7 +60,7 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
     setDisplayState(projectorDisplay.data);
   };
 
-  useNotifyOnProjectorUpdate(getDisplayState, String(organizationId));
+  useNotifyOnProjectorUpdate(getDisplayState, { organizationId });
 
   return (
     <>
@@ -67,7 +77,7 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
               <ProjectorMediaDisplay displayState={displayState} projectorSettings={projectorSettings} />
             )}
             {displayState?.displayType === GetDisplayDtoDisplayTypeEnum.WebRtc && (
-              <WebRtcStreamReciever />
+              <WebRtcStreamReciever screenId={screenIdentifier} projectorState={displayState} />
             )}
           </>
         )}

@@ -7,7 +7,6 @@ export const AutoscalingIframe = forwardRef(
       originalWidth: number;
       originalHeight: number;
       desiredWidth: number;
-      desiredHeight: number;
       url: string;
       onLoad?: () => void;
     },

@@ -59,8 +59,8 @@ export const TextUnitEditDialog: React.FC<{
       textUnitTagIds: res.data.tags.map((tag) => tag.id),
       description: res.data.description,
       displayQueueIds: res.data.queues.map((queue) => queue.displayQueueId),
-      partsOrder: res.data.partsOrder,
-      transposition: res.data.transposition,
+      partsOrder: res.data.partsOrder ?? "",
+      transposition: res.data.transposition ?? 0,
     });
   };
 

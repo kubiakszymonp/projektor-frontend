@@ -7,10 +7,8 @@ import { useNotifyOnProjectorUpdate } from "../../services/useNofifyOrganization
 import { jwtPersistance } from "../../services/jwt-persistance";
 import { ConnectingState, createPeerConnectionWithAnswer, getWebRtcState, onTrackEventAsVideoSource } from "../../services/web-rtc-utils";
 
-export const WebRtcStreamReciever: React.FC = () => {
+export const WebRtcStreamReciever: React.FC<{ screenId: string, projectorState: GetDisplayDto }> = ({ screenId, projectorState }) => {
     const remoteVideoRef = useRef<HTMLVideoElement>(null);
-    const organizationId = useMemo(() => jwtPersistance.getDecodedJwt()?.organizationId, []);
-    const [projectorState, setProjectorState] = useState<GetDisplayDto>();
     const [peerConnection, setPeerConnection] = useState<RTCPeerConnection>();
 
     useEffect(() => {
@@ -19,26 +17,21 @@ export const WebRtcStreamReciever: React.FC = () => {
         };
     }, []);
 
-    const onProjectorUpdate = async () => {
-        const projectorState = await projectorApi.projectorControllerGetProjectorState();
-        setProjectorState(projectorState.data);
-    };
-
-    useNotifyOnProjectorUpdate(onProjectorUpdate, String(organizationId));
-
     useEffect(() => {
-        if (getWebRtcState(projectorState?.webRtcState) === ConnectingState.OFFER_READY) {
+        const screenWebRtcState = projectorState?.webRtcState?.find(s => s.screenId === screenId);
+        if (getWebRtcState(screenWebRtcState) === ConnectingState.OFFER_READY) {
             acceptOfferAndSendAnswer();
         }
     }, [projectorState]);
 
     const acceptOfferAndSendAnswer = async () => {
-        const pc = await createPeerConnectionWithAnswer(projectorState!.webRtcState!.offer! as any, async (event) => {
+        const screenWebRtcState = projectorState?.webRtcState?.find(s => s.screenId === screenId);
+        const pc = await createPeerConnectionWithAnswer(screenWebRtcState!.offer! as any, async (event) => {
             onTrackEventAsVideoSource(event, remoteVideoRef);
         });
 
         setPeerConnection(pc);
-        await webRtcStreamApi.webRtcControllerSetAnswer({ payload: pc.localDescription! });
+        await webRtcStreamApi.webRtcControllerSetAnswer({ payload: pc.localDescription!, screenId });
     }
 
     return (

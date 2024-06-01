@@ -26,22 +26,27 @@ export const createPeerConnectionWithOffer = async (stream: MediaStream) => {
 
 export const createPeerConnectionWithAnswer = async (offer: RTCSessionDescriptionInit, onTrackCallback: (event: RTCTrackEvent) => void) => {
     return new Promise<RTCPeerConnection>(async (resolve, reject) => {
-        const pc = new RTCPeerConnection();
-        pc.ontrack = onTrackCallback;
-        pc.onicegatheringstatechange = async () => {
-            if (pc.iceGatheringState === "complete") {
-                console.log("[createPeerConnectionWithAnswer] iceGatheringState complete")
-                resolve(pc);
+        try {
+            const pc = new RTCPeerConnection();
+            pc.ontrack = onTrackCallback;
+            pc.onicegatheringstatechange = async () => {
+                if (pc.iceGatheringState === "complete") {
+                    console.log("[createPeerConnectionWithAnswer] iceGatheringState complete")
+                    resolve(pc);
+                }
             }
+
+            pc.onconnectionstatechange = () => {
+                console.log("peerConnection.connectionState", pc.connectionState);
+            };
+
+            await pc.setRemoteDescription(offer);
+            const answer = await pc.createAnswer();
+            await pc.setLocalDescription(answer);
+
+        } catch (e) {
+            console.log("[createPeerConnectionWithAnswer] error", e);
         }
-
-        pc.onconnectionstatechange = () => {
-            console.log("peerConnection.connectionState", pc.connectionState);
-        };
-
-        await pc.setRemoteDescription(offer);
-        const answer = await pc.createAnswer();
-        await pc.setLocalDescription(answer);
     });
 };
 
@@ -52,7 +57,11 @@ export const onTrackEventAsVideoSource = (ontrackEvent: RTCTrackEvent, videoRef:
 }
 
 export const acceptRtcAnswer = async (pc: RTCPeerConnection, answer: RTCSessionDescriptionInit) => {
-    await pc?.setRemoteDescription(answer);
+    try {
+        await pc?.setRemoteDescription(answer);
+    } catch (e) {
+        console.log("[acceptRtcAnswer] error", e);
+    }
 }
 
 

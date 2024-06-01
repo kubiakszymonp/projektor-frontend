@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@mui/material";
 import { Camera, Computer, Face, Forest, NotInterested, PlayArrow, Stop } from "@mui/icons-material";
-import { GetDisplayDto, GetDisplayDtoDisplayTypeEnum } from "../../api/generated";
+import { GetDisplayDto, GetDisplayDtoDisplayTypeEnum, WebrtcStreamApi } from "../../api/generated";
 import { displayStateApi, projectorApi, webRtcStreamApi } from "../../api";
 import { useNotifyOnProjectorUpdate } from "../../services/useNofifyOrganizationEdit";
 import { jwtPersistance } from "../../services/jwt-persistance";
@@ -12,23 +12,30 @@ export const WebRtcStream: React.FC = () => {
     const localVideoRef = useRef<HTMLVideoElement>(null);
     const organizationId = useMemo(() => jwtPersistance.getDecodedJwt()?.organizationId, []);
     const [projectorState, setProjectorState] = useState<GetDisplayDto>();
-    const [peerConnection, setPeerConnection] = useState<RTCPeerConnection>();
+    const [peerConnections, setPeerConnections] = useState<PeerConnectionWithScreenId[]>([]);
     const { setCapturingType, stream } = useMediaCapture();
+    const [activeScreenIds, setActiveScreenIds] = useState<string[]>([]);
 
     useEffect(() => {
         clear();
+        fetchScreenIds();
         return () => {
             hideDisplay();
             stopCapture();
             stopStream();
-            clear();
         };
     }, []);
 
     const clear = async () => {
-        await webRtcStreamApi.webRtcControllerSetOffer({ payload: null as any });
-        await webRtcStreamApi.webRtcControllerSetAnswer({ payload: null as any });
+        await webRtcStreamApi.webRtcControllerClearOrganization();
+    }
+
+    const fetchScreenIds = async () => {
+        const res = await webRtcStreamApi.webRtcControllerGetState();
+        const screenIds = res.data.map(s => s.screenId);
+        setActiveScreenIds(screenIds);
     };
+
 
     const hideDisplay = async () => {
         await displayStateApi.displayStateControllerUpdateDisplayState({
@@ -37,17 +44,21 @@ export const WebRtcStream: React.FC = () => {
     }
 
     const onProjectorUpdate = async () => {
-        console.log("onProjectorUpdate");
         const projectorState = await projectorApi.projectorControllerGetProjectorState();
         setProjectorState(projectorState.data);
     };
 
-    useNotifyOnProjectorUpdate(onProjectorUpdate, String(organizationId));
+    useNotifyOnProjectorUpdate(onProjectorUpdate, { organizationId });
 
     useEffect(() => {
-        if (getWebRtcState(projectorState?.webRtcState) === ConnectingState.ANSWER_READY) {
-            acceptRtcAnswer(peerConnection!, projectorState?.webRtcState?.answer! as any);
-        }
+        projectorState?.webRtcState?.forEach(state => {
+            if (getWebRtcState(state) === ConnectingState.ANSWER_READY) {
+                const peerConnection = peerConnections.find(pc => pc.screenId === state.screenId)?.peerConnection;
+                if (peerConnection && state.answer) {
+                    acceptRtcAnswer(peerConnection, state.answer as any);
+                }
+            }
+        });
     }, [projectorState]);
 
     useEffect(() => {
@@ -58,15 +69,22 @@ export const WebRtcStream: React.FC = () => {
     }, [stream]);
 
     const startStreamAndSendOffer = async () => {
-
         if (!stream) return;
         await displayStateApi.displayStateControllerUpdateDisplayState({
             displayType: GetDisplayDtoDisplayTypeEnum.WebRtc,
             emptyDisplay: false
         });
-        const p = await createPeerConnectionWithOffer(stream);
-        setPeerConnection(p);
-        await webRtcStreamApi.webRtcControllerSetOffer({ payload: p.localDescription! });
+
+        const peerConnections = activeScreenIds.map(async screenId => {
+            const pc = await createPeerConnectionWithOffer(stream);
+            await webRtcStreamApi.webRtcControllerSetOffer({ payload: pc.localDescription!, screenId });
+            return {
+                peerConnection: pc,
+                screenId
+            };
+        });
+
+        setPeerConnections(await Promise.all(peerConnections));
     };
 
     const startCapture = async (captureType: CapturingStateType) => {
@@ -74,8 +92,8 @@ export const WebRtcStream: React.FC = () => {
     };
 
     const stopStream = async () => {
-        peerConnection?.close();
-        setPeerConnection(undefined);
+        peerConnections?.forEach(pc => pc.peerConnection.close());
+        setPeerConnections([]);
         await hideDisplay();
     }
 
@@ -98,42 +116,45 @@ export const WebRtcStream: React.FC = () => {
                         width: "100%",
                     }}
                 >
-                    <Button
-                        sx={{ m: 1 }}
-                        variant="contained"
-                        color="primary"
-                        onClick={() => startCapture(CapturingStateType.FRONT)}
-                    >
-                        <Face />
-                    </Button>
-                    <Button
-                        sx={{ m: 1 }}
-                        variant="contained"
-                        color="primary"
-                        onClick={() => startCapture(CapturingStateType.BACK)}
-                    >
-                        <Forest />
-                    </Button>
-                    <Button
-                        sx={{ m: 1 }}
-                        variant="contained"
-                        color="primary"
-                        onClick={() => startCapture(CapturingStateType.SCREEN)}
-                    >
-                        <Computer />
-                    </Button>
-                    {
-                        stream && (
+                    {!stream && (
+                        <>
                             <Button
                                 sx={{ m: 1 }}
                                 variant="contained"
-                                color="error"
-                                onClick={() => startCapture(CapturingStateType.NONE)}
+                                color="primary"
+                                onClick={() => startCapture(CapturingStateType.FRONT)}
                             >
-                                <NotInterested />
+                                <Face />
                             </Button>
-                        )
-                    }
+                            <Button
+                                sx={{ m: 1 }}
+                                variant="contained"
+                                color="primary"
+                                onClick={() => startCapture(CapturingStateType.BACK)}
+                            >
+                                <Forest />
+                            </Button>
+                            <Button
+                                sx={{ m: 1 }}
+                                variant="contained"
+                                color="primary"
+                                onClick={() => startCapture(CapturingStateType.SCREEN)}
+                            >
+                                <Computer />
+                            </Button>
+                        </>
+                    )}
+
+                    {stream && (
+                        <Button
+                            sx={{ m: 1 }}
+                            variant="contained"
+                            color="error"
+                            onClick={() => startCapture(CapturingStateType.NONE)}
+                        >
+                            <NotInterested />
+                        </Button>
+                    )}
                 </div>
                 <div
                     style={{
@@ -145,7 +166,7 @@ export const WebRtcStream: React.FC = () => {
                         bottom: "5%",
                     }}
                 >
-                    {!peerConnection && (
+                    {peerConnections?.length === 0 && (
                         <Button
                             sx={{ m: 1 }}
                             variant="contained"
@@ -156,7 +177,7 @@ export const WebRtcStream: React.FC = () => {
                             <PlayArrow fontSize="large" />
                         </Button>
                     )}
-                    {peerConnection && (
+                    {peerConnections?.length > 0 && (
                         <Button
                             sx={{ m: 1 }}
                             variant="contained"
@@ -187,3 +208,8 @@ export const WebRtcStream: React.FC = () => {
         </>
     );
 };
+
+export interface PeerConnectionWithScreenId {
+    peerConnection: RTCPeerConnection;
+    screenId: string;
+}

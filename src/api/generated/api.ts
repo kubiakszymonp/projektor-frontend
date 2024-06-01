@@ -195,6 +195,19 @@ export type CreateUserDtoRoleEnum = typeof CreateUserDtoRoleEnum[keyof typeof Cr
 /**
  * 
  * @export
+ * @interface ExportWebRtcScreenDto
+ */
+export interface ExportWebRtcScreenDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ExportWebRtcScreenDto
+     */
+    'screenId': string;
+}
+/**
+ * 
+ * @export
  * @interface GetDisplayDto
  */
 export interface GetDisplayDto {
@@ -224,10 +237,10 @@ export interface GetDisplayDto {
     'mediaFile'?: GetMediaFileDto;
     /**
      * 
-     * @type {WebRtcConnectionStructure}
+     * @type {Array<WebRtcConnectionStructure>}
      * @memberof GetDisplayDto
      */
-    'webRtcState'?: WebRtcConnectionStructure;
+    'webRtcState'?: Array<WebRtcConnectionStructure>;
 }
 
 export const GetDisplayDtoDisplayTypeEnum = {
@@ -1235,6 +1248,12 @@ export interface WebRtcConnectionStructure {
      * @memberof WebRtcConnectionStructure
      */
     'answer': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof WebRtcConnectionStructure
+     */
+    'screenId': string;
 }
 /**
  * 
@@ -1248,6 +1267,12 @@ export interface WebRtcSdpDto {
      * @memberof WebRtcSdpDto
      */
     'payload': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof WebRtcSdpDto
+     */
+    'screenId': string;
 }
 
 /**
@@ -4364,6 +4389,39 @@ export const WebrtcStreamApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        webRtcControllerClearOrganization: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/webrtc-stream`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         webRtcControllerGetState: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/webrtc-stream`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -4386,6 +4444,45 @@ export const WebrtcStreamApiAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {ExportWebRtcScreenDto} exportWebRtcScreenDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        webRtcControllerRemoveScreen: async (exportWebRtcScreenDto: ExportWebRtcScreenDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'exportWebRtcScreenDto' is not null or undefined
+            assertParamExists('webRtcControllerRemoveScreen', 'exportWebRtcScreenDto', exportWebRtcScreenDto)
+            const localVarPath = `/api/webrtc-stream/screen`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(exportWebRtcScreenDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4470,6 +4567,45 @@ export const WebrtcStreamApiAxiosParamCreator = function (configuration?: Config
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {ExportWebRtcScreenDto} exportWebRtcScreenDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        webRtcControllerSetScreen: async (exportWebRtcScreenDto: ExportWebRtcScreenDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'exportWebRtcScreenDto' is not null or undefined
+            assertParamExists('webRtcControllerSetScreen', 'exportWebRtcScreenDto', exportWebRtcScreenDto)
+            const localVarPath = `/api/webrtc-stream/screen`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(exportWebRtcScreenDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -4485,10 +4621,33 @@ export const WebrtcStreamApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async webRtcControllerGetState(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async webRtcControllerClearOrganization(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.webRtcControllerClearOrganization(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WebrtcStreamApi.webRtcControllerClearOrganization']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async webRtcControllerGetState(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<WebRtcConnectionStructure>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.webRtcControllerGetState(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WebrtcStreamApi.webRtcControllerGetState']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {ExportWebRtcScreenDto} exportWebRtcScreenDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async webRtcControllerRemoveScreen(exportWebRtcScreenDto: ExportWebRtcScreenDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.webRtcControllerRemoveScreen(exportWebRtcScreenDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WebrtcStreamApi.webRtcControllerRemoveScreen']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -4515,6 +4674,18 @@ export const WebrtcStreamApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['WebrtcStreamApi.webRtcControllerSetOffer']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @param {ExportWebRtcScreenDto} exportWebRtcScreenDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async webRtcControllerSetScreen(exportWebRtcScreenDto: ExportWebRtcScreenDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.webRtcControllerSetScreen(exportWebRtcScreenDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WebrtcStreamApi.webRtcControllerSetScreen']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -4530,8 +4701,25 @@ export const WebrtcStreamApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        webRtcControllerGetState(options?: any): AxiosPromise<void> {
+        webRtcControllerClearOrganization(options?: any): AxiosPromise<void> {
+            return localVarFp.webRtcControllerClearOrganization(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        webRtcControllerGetState(options?: any): AxiosPromise<Array<WebRtcConnectionStructure>> {
             return localVarFp.webRtcControllerGetState(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {ExportWebRtcScreenDto} exportWebRtcScreenDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        webRtcControllerRemoveScreen(exportWebRtcScreenDto: ExportWebRtcScreenDto, options?: any): AxiosPromise<void> {
+            return localVarFp.webRtcControllerRemoveScreen(exportWebRtcScreenDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -4551,6 +4739,15 @@ export const WebrtcStreamApiFactory = function (configuration?: Configuration, b
         webRtcControllerSetOffer(webRtcSdpDto: WebRtcSdpDto, options?: any): AxiosPromise<void> {
             return localVarFp.webRtcControllerSetOffer(webRtcSdpDto, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {ExportWebRtcScreenDto} exportWebRtcScreenDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        webRtcControllerSetScreen(exportWebRtcScreenDto: ExportWebRtcScreenDto, options?: any): AxiosPromise<void> {
+            return localVarFp.webRtcControllerSetScreen(exportWebRtcScreenDto, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -4567,8 +4764,29 @@ export class WebrtcStreamApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof WebrtcStreamApi
      */
+    public webRtcControllerClearOrganization(options?: RawAxiosRequestConfig) {
+        return WebrtcStreamApiFp(this.configuration).webRtcControllerClearOrganization(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WebrtcStreamApi
+     */
     public webRtcControllerGetState(options?: RawAxiosRequestConfig) {
         return WebrtcStreamApiFp(this.configuration).webRtcControllerGetState(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {ExportWebRtcScreenDto} exportWebRtcScreenDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WebrtcStreamApi
+     */
+    public webRtcControllerRemoveScreen(exportWebRtcScreenDto: ExportWebRtcScreenDto, options?: RawAxiosRequestConfig) {
+        return WebrtcStreamApiFp(this.configuration).webRtcControllerRemoveScreen(exportWebRtcScreenDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4591,6 +4809,17 @@ export class WebrtcStreamApi extends BaseAPI {
      */
     public webRtcControllerSetOffer(webRtcSdpDto: WebRtcSdpDto, options?: RawAxiosRequestConfig) {
         return WebrtcStreamApiFp(this.configuration).webRtcControllerSetOffer(webRtcSdpDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {ExportWebRtcScreenDto} exportWebRtcScreenDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WebrtcStreamApi
+     */
+    public webRtcControllerSetScreen(exportWebRtcScreenDto: ExportWebRtcScreenDto, options?: RawAxiosRequestConfig) {
+        return WebrtcStreamApiFp(this.configuration).webRtcControllerSetScreen(exportWebRtcScreenDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

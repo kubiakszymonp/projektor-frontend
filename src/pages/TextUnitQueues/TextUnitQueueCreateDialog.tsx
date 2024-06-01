@@ -2,63 +2,53 @@ import {
     Dialog,
     DialogTitle,
     DialogContent,
-    TextField,
     DialogActions,
     Button,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import { textUnitQueuesApi } from "../../api";
-import { CreateDisplayQueueDto } from "../../api/generated";
-
-const emptyTextUnitQueueObject: CreateDisplayQueueDto = {
-    name: "",
-    description: "",
-    textUnitIds: [],
-}
+import { CreateDisplayQueueDto, GetDisplayQueueDto } from "../../api/generated";
+import { DisplayQueueInputs } from "./display-queue-inputs";
 
 export const TextUnitQueueCreateDialog: React.FC<{
     open: boolean;
     handleClose: () => void;
 }> = ({ open, handleClose }) => {
-    const [displayQueue, setDisplayQueue] =
-        useState<CreateDisplayQueueDto>(emptyTextUnitQueueObject);
+    const [displayQueue, setDisplayQueue] = useState<GetDisplayQueueDto>();
+    const [editedDisplayQueue, setEditedDisplayQueue] = useState<CreateDisplayQueueDto>();
 
     useEffect(() => {
-        setDisplayQueue(emptyTextUnitQueueObject);
+        setDisplayQueue({
+            description: "",
+            name: "",
+            queueTextUnits: [],
+            id: 0,
+        });
     }, [open]);
 
     const onSave = async () => {
-        await textUnitQueuesApi.displayQueuesControllerCreate(displayQueue);
+        if (!editedDisplayQueue) return;
+        await textUnitQueuesApi.displayQueuesControllerCreate(editedDisplayQueue);
         handleClose();
     };
 
     return (
+
         <Dialog fullWidth open={open} onClose={handleClose}>
             <DialogTitle>
-                Utwórz kolejkę
+                Edytuj kolejkę
             </DialogTitle>
             <DialogContent>
-                <TextField
-                    autoFocus
-                    required
-                    id="title"
-                    name="title"
-                    label="Nazwa kolejki"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    value={displayQueue?.name}
-                    onChange={(e) => {
-                        setDisplayQueue({
-                            ...displayQueue,
-                            name: e.target.value,
-                        });
-                    }}
-                />
+                {displayQueue && (
+                    <DisplayQueueInputs
+                        displayQueue={displayQueue}
+                        editedDisplayQueue={editedDisplayQueue!}
+                        setEditedDisplayQueue={setEditedDisplayQueue} />
+                )}
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>Anuluj</Button>
-                <Button onClick={onSave}>Utwórz</Button>
+                <Button onClick={onSave}>Zapisz</Button>
             </DialogActions>
         </Dialog>
     );

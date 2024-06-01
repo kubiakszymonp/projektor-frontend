@@ -44,7 +44,7 @@ export const AutoFlowText: React.FC<{
       setFontSize(calculationsFontSize);
       setVisible(true);
     }
-  }, [calculationsFontSize]);
+  }, [calculationsFontSize, visible]);
 
   return (
     <div
@@ -55,7 +55,7 @@ export const AutoFlowText: React.FC<{
         backgroundColor: "black",
         height: "100%",
         width: "100%",
-        overflow: "hidden",
+        // overflow: "hidden",
       }}
     >
       {visible && (
@@ -72,7 +72,7 @@ export const AutoFlowText: React.FC<{
             position: "fixed",
             paddingBlock: settings.marginBlock,
             paddingInline: settings.marginInline,
-            overflow: "hidden",
+            // overflow: "hidden",
           }}
           dangerouslySetInnerHTML={{
             __html: text.replaceAll("\n", "<br/>"),

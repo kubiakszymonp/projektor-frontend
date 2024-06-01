@@ -38,7 +38,6 @@ export const TextUnitQueueDragAndDrop: React.FC<{
       result.source.index,
       result.destination.index
     );
-
     setTextUnitsInQueue(itemsNew);
   };
   const grid = 8;

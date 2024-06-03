@@ -6,33 +6,47 @@ import { displayStateApi, projectorApi, webRtcStreamApi } from "../../api";
 import { useNotifyOnProjectorUpdate } from "../../services/useNofifyOrganizationEdit";
 import { jwtPersistance } from "../../services/jwt-persistance";
 import { ConnectingState, createPeerConnectionWithAnswer, getWebRtcState, onTrackEventAsVideoSource } from "../../services/web-rtc-utils";
+import { Socket, io } from "socket.io-client";
+import { environment } from "../../environment";
 
 export const WebRtcStreamReciever: React.FC<{ screenId: string, projectorState: GetDisplayDto }> = ({ screenId, projectorState }) => {
     const remoteVideoRef = useRef<HTMLVideoElement>(null);
     const [peerConnection, setPeerConnection] = useState<RTCPeerConnection>();
+    const [isConnected, setIsConnected] = useState(false);
+    const organizationId = useMemo(() => jwtPersistance.getDecodedJwt()?.organizationId, []);
+    const [socket, setSocket] = useState<Socket | null>(null);
+
 
     useEffect(() => {
+        const socket = io(environment.BACKEND_HOST, {
+            secure: true,
+            query: { organizationId, role: "RECIEVER" },
+            transports: ["websocket"]
+        });
+
+        socket.on("offer", async (answer: RTCSessionDescriptionInit) => {
+            console.log(`[WebRtcSender] received offer`);
+            if (remoteVideoRef?.current?.srcObject) {
+                remoteVideoRef.current.srcObject = null;
+            }
+
+            const pc = await createPeerConnectionWithAnswer(answer, async (event) => {
+                onTrackEventAsVideoSource(event, remoteVideoRef);
+            });
+            setPeerConnection(pc);
+            pc.onconnectionstatechange = () => {
+                setIsConnected(pc.connectionState === "connected");
+            };
+
+            socket.emit("answer", pc.localDescription);
+        });
+
+        setSocket(socket);
+
         return () => {
             peerConnection?.close();
         };
     }, []);
-
-    useEffect(() => {
-        const screenWebRtcState = projectorState?.webRtcState?.find(s => s.screenId === screenId);
-        if (getWebRtcState(screenWebRtcState) === ConnectingState.OFFER_READY) {
-            acceptOfferAndSendAnswer();
-        }
-    }, [projectorState]);
-
-    const acceptOfferAndSendAnswer = async () => {
-        const screenWebRtcState = projectorState?.webRtcState?.find(s => s.screenId === screenId);
-        const pc = await createPeerConnectionWithAnswer(screenWebRtcState!.offer! as any, async (event) => {
-            onTrackEventAsVideoSource(event, remoteVideoRef);
-        });
-
-        setPeerConnection(pc);
-        await webRtcStreamApi.webRtcControllerSetAnswer({ payload: pc.localDescription!, screenId });
-    }
 
     return (
         <>
@@ -50,8 +64,7 @@ export const WebRtcStreamReciever: React.FC<{ screenId: string, projectorState: 
                         width: "100%",
                         height: "100%",
                         objectFit: "contain",
-                        transform: "translate(-50%, -50%)"
-
+                        transform: "translate(-50%, -50%)",
                     }}></video>
                 </div>
             </div>

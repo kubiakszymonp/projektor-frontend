@@ -40,6 +40,10 @@ export const createPeerConnectionWithAnswer = async (offer: RTCSessionDescriptio
                 console.log("peerConnection.connectionState", pc.connectionState);
             };
 
+            pc.onsignalingstatechange = () => {
+                console.log("peerConnection.signalingState", pc.signalingState);
+            }
+
             await pc.setRemoteDescription(offer);
             const answer = await pc.createAnswer();
             await pc.setLocalDescription(answer);
@@ -58,6 +62,8 @@ export const onTrackEventAsVideoSource = (ontrackEvent: RTCTrackEvent, videoRef:
 
 export const acceptRtcAnswer = async (pc: RTCPeerConnection, answer: RTCSessionDescriptionInit) => {
     try {
+        console.log("[acceptRtcAnswer] signalingState", pc.signalingState)
+        if (pc.signalingState === "closed" || pc.signalingState === "stable") return;
         await pc?.setRemoteDescription(answer);
     } catch (e) {
         console.log("[acceptRtcAnswer] error", e);
@@ -66,9 +72,9 @@ export const acceptRtcAnswer = async (pc: RTCPeerConnection, answer: RTCSessionD
 
 
 export enum ConnectingState {
-    UNINITIALIZED,
-    OFFER_READY,
-    ANSWER_READY,
+    UNINITIALIZED = "UNINITIALIZED",
+    OFFER_READY = "OFFER_READY",
+    ANSWER_READY = "ANSWER_READY",
 }
 
 export const getWebRtcState = (webRtcStructure?: WebRtcConnectionStructure) => {

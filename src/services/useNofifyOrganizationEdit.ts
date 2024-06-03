@@ -11,6 +11,7 @@ export const useNotifyOnProjectorUpdate = (onChange: () => void, query?: {
         const socket = io(environment.BACKEND_HOST, {
             secure: true,
             query,
+            transports: ["websocket"]
         });
 
         socket.on(ORGANIZATION_UPDATE_EVENT_NAME, () => {

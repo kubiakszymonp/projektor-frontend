@@ -60,7 +60,7 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
     setDisplayState(projectorDisplay.data);
   };
 
-  useNotifyOnProjectorUpdate(getDisplayState, { organizationId });
+  useNotifyOnProjectorUpdate(getDisplayState, { organizationId, screenId: screenIdentifier });
 
   return (
     <>

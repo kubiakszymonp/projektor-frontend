@@ -16,6 +16,7 @@ import { MoreVert } from "@mui/icons-material";
 import { FilePreviewModal } from "./FilePreviewModal";
 import { GetMediaFileDto } from "../../api/generated";
 import { uploadFilesToBackend } from "../../util/upload-files";
+import StyledBox from "../../components/page-wrapper";
 
 export const FilesManager: React.FC = () => {
   const [fileInfosGrouped, setFileInfosGrouped] = useState<
@@ -132,15 +133,7 @@ export const FilesManager: React.FC = () => {
   };
 
   return (
-    <Box
-      sx={{
-        color: "white",
-        bgcolor: "#06090a",
-        height: "100%",
-        minHeight: "100vh",
-        py: 2,
-      }}
-    >
+    <StyledBox>
       <FilePreviewModal
         open={filePreviewModalOpen}
         currentFile={currentPreviewFile}
@@ -296,6 +289,6 @@ export const FilesManager: React.FC = () => {
           </Menu>
         </Box>
       ))}
-    </Box>
+    </StyledBox>
   );
 };

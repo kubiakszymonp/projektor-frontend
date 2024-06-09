@@ -26,6 +26,7 @@ import { MoreVert } from "@mui/icons-material";
 import { ManageTagsDialog } from "./ManageTagsDialog";
 import { GetTextUnitDto, GetTextUnitTagDto } from "../../api/generated";
 import { TextUnitAddDialog } from "./TextUnitAddDialog";
+import StyledBox from "../../components/page-wrapper";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -48,15 +49,14 @@ export const TextUnitList: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
-    handleClose();
-    refreshData();
+    closeAllModalsAndRefresh();
   }, []);
 
   useEffect(() => {
     onChangeFilter();
   }, [searchText, selectedTags, textUnitList]);
 
-  const handleClose = () => {
+  const closeAllModalsAndRefresh = () => {
     closeAllModals();
     refreshData();
   };
@@ -147,32 +147,17 @@ export const TextUnitList: React.FC = () => {
       {selectedTextUnit && (
         <TextUnitEditDialog
           open={textUnitEditDialogOpen}
-          handleClose={handleClose}
+          handleClose={closeAllModalsAndRefresh}
           textUnitId={selectedTextUnit.id}
         />
       )}
 
       <TextUnitAddDialog
-        handleClose={handleClose}
+        handleClose={closeAllModalsAndRefresh}
         open={textUnitCreateDialogOpen}
       />
-      <ManageTagsDialog handleClose={handleClose} open={manageTagsDialogOpen} />
-      <Box
-        sx={{
-          py: {
-            xs: 1,
-            md: 3,
-          },
-          px: {
-            xs: 1,
-            md: 5,
-          },
-          color: "white",
-          bgcolor: "#06090a",
-          height: "100%",
-          minHeight: "100vh",
-        }}
-      >
+      <ManageTagsDialog handleClose={closeAllModalsAndRefresh} open={manageTagsDialogOpen} />
+      <StyledBox>
         <Box>
           <Stack direction={"row"}>
             <TextField
@@ -324,7 +309,7 @@ export const TextUnitList: React.FC = () => {
             </Card>
           ))}
         </Stack>
-      </Box>
+      </StyledBox>
       <Menu
         id="simple-menu"
         anchorEl={anchorEl}

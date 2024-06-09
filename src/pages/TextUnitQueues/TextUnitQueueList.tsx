@@ -18,6 +18,7 @@ import { TextUnitQueueEditDialog } from "./TextUnitQueueUpdateDialog";
 import { MoreVert } from "@mui/icons-material";
 import { GetDisplayQueueDto, GetTextUnitDto } from "../../api/generated";
 import { TextUnitQueueCreateDialog } from "./TextUnitQueueCreateDialog";
+import StyledBox from "../../components/page-wrapper";
 
 export const TextUnitQueueList = () => {
   const [allDisplayQueues, setAllDisplayQueues] = useState<GetDisplayQueueDto[]>([]);
@@ -109,22 +110,7 @@ export const TextUnitQueueList = () => {
         open={displayQueueCreateDialogOpen}
       />
 
-      <Box
-        sx={{
-          py: {
-            xs: 1,
-            md: 3,
-          },
-          px: {
-            xs: 1,
-            md: 5,
-          },
-          color: "white",
-          bgcolor: "#06090a",
-          height: "100%",
-          minHeight: "100vh",
-        }}
-      >
+      <StyledBox>
         <Box>
           <Stack direction={"row"}>
             <TextField
@@ -243,7 +229,7 @@ export const TextUnitQueueList = () => {
             </MenuItem>
           </Menu>
         </Box>
-      </Box >
+      </StyledBox>
     </>
   );
 };

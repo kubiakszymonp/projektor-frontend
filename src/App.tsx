@@ -15,6 +15,7 @@ import { LoadingProvider } from "./components/loading/loading-context";
 import { WebRtcStream } from "./pages/WebRtc/web-rtc-sender";
 import MediaCaptureProvider from "./services/user-media-capture.provider";
 import { WebRtcStreamReciever } from "./pages/WebRtc/web-rtc-reciever";
+import { ControllerSettings } from "./pages/ControllerSettings/controller-settings";
 
 function App() {
   const defaultTheme = createTheme({
@@ -44,6 +45,7 @@ function App() {
             />
             <Route path="/files-manager" element={<FilesManager />} />
             <Route path="/stream" element={<WebRtcStream />} />
+            <Route path="/controller-settings" element={<ControllerSettings />} />
           </Routes>
         </LoadingProvider>
       </MediaCaptureProvider>

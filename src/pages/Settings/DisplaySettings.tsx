@@ -13,6 +13,7 @@ import {
 import React, { useEffect, useMemo, useState } from "react";
 import { projectorSettingsApi } from "../../api";
 import { GetProjectorSettingsDto, TextStrategy } from "../../api/generated";
+import StyledBox from "../../components/page-wrapper";
 
 interface FieldWithDescription {
   fieldName: string;
@@ -146,14 +147,7 @@ export const DisplaySettings = () => {
   };
 
   return (
-    <Box
-      sx={{
-        py: 3,
-        px: 5,
-        color: "white",
-        bgcolor: "#06090a",
-      }}
-    >
+    <StyledBox>
       <Typography
         component="h3"
         variant="h4"
@@ -228,6 +222,6 @@ export const DisplaySettings = () => {
           ))}
         </Stack>
       )}
-    </Box>
+    </StyledBox>
   );
 };

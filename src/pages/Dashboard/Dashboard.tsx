@@ -5,6 +5,7 @@ import {
   PermMedia,
   QueueOutlined,
   ScreenshotMonitor,
+  SettingsApplications,
   SettingsRemoteOutlined,
   SettingsSuggestRounded,
 } from "@mui/icons-material";
@@ -12,6 +13,7 @@ import { Box, Card, Container, Grid, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { jwtPersistance } from "../../services/jwt-persistance";
 import { useEffect } from "react";
+import StyledBox from "../../components/page-wrapper";
 
 export const Dashboard = () => {
   const navigate = useNavigate();
@@ -62,6 +64,14 @@ export const Dashboard = () => {
       onClick: () => navigate("/stream"),
     },
     {
+      icon: <SettingsApplications fontSize="large" />,
+      title: "Ustawienia kontrolera",
+      description: "",
+      onClick: () => {
+        navigate("/controller-settings");
+      },
+    },
+    {
       icon: <ScreenshotMonitor fontSize="large" />,
       title: "Tryb ekranu",
       description: "",
@@ -81,17 +91,7 @@ export const Dashboard = () => {
     }
   ];
   return (
-    <Box
-      id="highlights"
-      sx={{
-        pt: { xs: 4, sm: 12 },
-        pb: { xs: 8, sm: 16 },
-        color: "white",
-        bgcolor: "#06090a",
-        height: " 100%",
-        minHeight: "100vh",
-      }}
-    >
+    <StyledBox>
       <Container
         sx={{
           position: "relative",
@@ -151,6 +151,7 @@ export const Dashboard = () => {
           ))}
         </Grid>
       </Container>
-    </Box>
+
+    </StyledBox>
   );
 };

@@ -4632,7 +4632,7 @@ export const WebrtcStreamApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async webRtcControllerGetState(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<WebRtcConnectionStructure>>> {
+        async webRtcControllerGetState(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.webRtcControllerGetState(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WebrtcStreamApi.webRtcControllerGetState']?.[localVarOperationServerIndex]?.url;
@@ -4709,7 +4709,7 @@ export const WebrtcStreamApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        webRtcControllerGetState(options?: any): AxiosPromise<Array<WebRtcConnectionStructure>> {
+        webRtcControllerGetState(options?: any): AxiosPromise<void> {
             return localVarFp.webRtcControllerGetState(options).then((request) => request(axios, basePath));
         },
         /**

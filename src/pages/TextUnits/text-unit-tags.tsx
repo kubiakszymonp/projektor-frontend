@@ -9,110 +9,104 @@ import {
     Typography,
 } from "@mui/material";
 import { useState, useEffect, useMemo } from "react";
-import { textUnitQueuesApi } from "../../api";
-import { CreateTextUnitDto, GetDisplayQueueDto } from "../../api/generated";
+import { textUnitQueuesApi, textUnitTagApi } from "../../api";
+import { CreateTextUnitDto, GetDisplayQueueDto, GetTextUnitTagDto, TextUnitTagApi } from "../../api/generated";
 import Fuse from "fuse.js";
+import { SelectableProperty } from "./text-unit-queues";
 
-
-export interface SelectableProperty {
-    id: number;
-    name: string;
-}
-
-export const TextUnitQueues: React.FC<{
+export const TextUnitTags: React.FC<{
     textUnit: CreateTextUnitDto;
     setTextUnit: (textUnit: CreateTextUnitDto) => void;
 }> = ({ textUnit, setTextUnit }) => {
-    const [searchPlaylistText, setSearchPlaylistText] = useState<string>("");
-    const [allQueues, setAllQueues] = useState<GetDisplayQueueDto[]>([]);
+    const [searchTextUnitTagsText, setSearchTextUnitTagsText] = useState<string>("");
+    const [allTags, setAllTags] = useState<GetTextUnitTagDto[]>([]);
 
-    const filteredQueues = useMemo(() => {
-        if (searchPlaylistText === "") return allQueues;
-        const result = new Fuse(allQueues, {
+    const filteredTags = useMemo(() => {
+        if (searchTextUnitTagsText === "") return allTags;
+        const result = new Fuse(allTags, {
             keys: ["name"],
             includeScore: true,
             shouldSort: true,
             minMatchCharLength: 1,
         })
-            .search(searchPlaylistText)
+            .search(searchTextUnitTagsText)
             .map((result) => result.item);
 
         return result;
-    }, [allQueues, searchPlaylistText]);
+    }, [allTags, searchTextUnitTagsText]);
+
+    const selectedTags: SelectableProperty[] = useMemo(() => {
+        return textUnit.textUnitTagIds.map((id) => {
+            const tag = allTags.find((q) => q.id === id);
+            return tag ? { id: tag.id, name: tag.name } : null;
+        }).filter((q) => q !== null) as SelectableProperty[];
+    }, [allTags, textUnit]);
 
     useEffect(() => {
-        setSearchPlaylistText("");
-        fetchQueues();
+        setSearchTextUnitTagsText("");
+        fetchTags();
     }, []);
 
-    const selectedQueues: SelectableProperty[] = useMemo(() => {
-        return textUnit.displayQueueIds.map((id) => {
-            const queue = allQueues.find((q) => q.id === id);
-            return queue ? { id: queue.id, name: queue.name } : null;
-        }).filter((q) => q !== null) as SelectableProperty[];
-    }, [allQueues, textUnit]);
-
-    const fetchQueues = async () => {
-        const res = await textUnitQueuesApi.displayQueuesControllerFindAll();
-        setAllQueues(res.data);
+    const fetchTags = async () => {
+        const res = await textUnitTagApi.textUnitTagControllerFindAll();
+        setAllTags(res.data);
     };
 
-    const queueContainsTextUnit = (queue: GetDisplayQueueDto) => {
-        return textUnit.displayQueueIds.some((q) => q === queue.id);
+    const textUnitHasThisTag = (tag: GetTextUnitTagDto) => {
+        return textUnit.textUnitTagIds.includes(tag.id);
     };
 
-    const onModifyQueue = (queueId: number, value: boolean) => {
+    const onCheckTag = (tagId: number, value: boolean) => {
         if (!textUnit) return;
 
-        let selectedQueues = textUnit.displayQueueIds;
+        let selectedTags = textUnit.textUnitTagIds;
 
         if (value === true) {
-            selectedQueues.push(queueId);
+            selectedTags.push(tagId);
         }
         else {
-            selectedQueues = selectedQueues.filter(q => q !== queueId);
+            selectedTags = selectedTags.filter(q => q !== tagId);
         }
 
         setTextUnit({
             ...textUnit,
-            displayQueueIds: selectedQueues
+            textUnitTagIds: selectedTags
         });
     };
 
     return (
-        <Box>
+        <Box >
             <Stack direction="row" flexWrap={"wrap"} sx={{ py: 1 }} spacing={1}>
-                {selectedQueues.map((queue) => (
+                {selectedTags.map((tag) => (
                     <Chip
-                        key={queue.id}
-                        label={queue.name}
+                        key={tag.id}
+                        label={tag.name}
                         variant="outlined"
                         onDelete={() => {
-                            onModifyQueue(queue.id, false);
+                            onCheckTag(tag.id, false);
                         }}
                         style={{
                             marginBottom: "0.5rem"
                         }}
                     />
-
                 ))}
             </Stack>
             <TextField
                 fullWidth
                 id="outlined-multiline-static"
-                label="Wyszukaj kolejkę"
-                value={searchPlaylistText}
+                label="Wyszukaj tagi"
+                value={searchTextUnitTagsText}
                 onChange={(e) => {
-                    setSearchPlaylistText(e.target.value);
+                    setSearchTextUnitTagsText(e.target.value);
                 }}
             />
             <Box sx={{
-                my: 2,
                 height: 400,
                 overflowY: "auto",
+                my: 2,
             }}>
-                {filteredQueues.map((queue) => (
-                    <Card sx={{ borderRadius: 2, p: 1, my: 1 }} key={queue.id}>
+                {filteredTags.map((tag) => (
+                    <Card sx={{ borderRadius: 2, p: 1, my: 1 }} key={tag.id}>
                         <Stack
                             direction={"row"}
                             justifyContent={"space-between"}
@@ -129,13 +123,13 @@ export const TextUnitQueues: React.FC<{
                                     },
                                 }}
                             >
-                                {queue.name}
+                                {tag.name}
                             </Typography>
                             <Button color="info">
                                 {textUnit && (
                                     <Checkbox
-                                        checked={queueContainsTextUnit(queue)}
-                                        onChange={(_e, checked) => onModifyQueue(queue.id, checked)}
+                                        checked={textUnitHasThisTag(tag)}
+                                        onChange={(_e, checked) => onCheckTag(tag.id, checked)}
                                     />
                                 )}
                             </Button>

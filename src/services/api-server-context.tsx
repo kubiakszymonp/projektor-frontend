@@ -8,6 +8,7 @@ interface ServerContextType {
     setLanServiceApiUrl: (url: string) => void;
     isWanConnected: boolean;
     isLanConnected: boolean;
+    getApiUrl: () => string;
 }
 
 export const ServerContext = createContext<ServerContextType>({
@@ -17,6 +18,7 @@ export const ServerContext = createContext<ServerContextType>({
     setLanServiceApiUrl: () => { },
     isWanConnected: false,
     isLanConnected: false,
+    getApiUrl: () => "",
 });
 
 export const ServerProvider: React.FC<{
@@ -29,6 +31,7 @@ export const ServerProvider: React.FC<{
         setLanServiceApiUrl,
         isWanConnected,
         isLanConnected,
+        getApiUrl
     } = useServerConnectivity();
 
     return (
@@ -40,6 +43,7 @@ export const ServerProvider: React.FC<{
                 setLanServiceApiUrl,
                 isWanConnected,
                 isLanConnected,
+                getApiUrl
             }}
         >
             {children}
@@ -85,6 +89,18 @@ export const useServerConnectivity = (pingInterval: number = 10000) => {
         return () => clearInterval(intervalId); // Cleanup interval on component unmount
     }, [wanServiceApiUrl, lanServiceApiUrl, pingInterval]);
 
+
+    const getApiUrl = () => {
+        // lan always has priority
+        if (isLanConnected) {
+            return lanServiceApiUrl;
+        }
+        if (isWanConnected) {
+            return wanServiceApiUrl;
+        }
+        return "";
+    }
+
     return {
         wanServiceApiUrl,
         setWanServiceApiUrl,
@@ -92,6 +108,7 @@ export const useServerConnectivity = (pingInterval: number = 10000) => {
         setLanServiceApiUrl,
         isWanConnected,
         isLanConnected,
+        getApiUrl,
     };
 };
 

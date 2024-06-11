@@ -6,90 +6,106 @@ import {
     Box,
     DialogActions,
     Button,
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
 } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { DragAndDropItem } from "./TextUnitQueueList";
 import { TextUnitQueueDragAndDrop } from "./TextUnitQueueDragAndDropComponent";
 import { CreateDisplayQueueDto, GetDisplayQueueDto, GetQueueTextUnit, GetTextUnitDto, UpdateDisplayQueueDto, UpdateTextUnitDto } from "../../api/generated";
+import { ExpandMore } from "@mui/icons-material";
+import { TextUnitSelection } from "./text-unit-queue-text-unit-selection";
+import { textUnitApi } from "../../api";
 
 
 export const DisplayQueueInputs: React.FC<{
-    displayQueue: GetDisplayQueueDto;
-    editedDisplayQueue: CreateDisplayQueueDto;
-    setEditedDisplayQueue: (editedDisplayQueue: CreateDisplayQueueDto) => void;
-}> = ({ displayQueue, setEditedDisplayQueue, editedDisplayQueue }) => {
+    displayQueue: CreateDisplayQueueDto;
+    setDisplayQueue: (displayQueue: CreateDisplayQueueDto) => void;
+}> = ({ displayQueue, setDisplayQueue }) => {
 
-    const [queueTextUnits, setQueueTextUnits] = useState<DragAndDropItem[]>([]);
+    const [allTextUnits, setAllTextUnits] = useState<GetTextUnitDto[]>([]);
 
     useEffect(() => {
-        setEditedDisplayQueue({
-            name: displayQueue.name,
-            description: displayQueue.description,
-            textUnitIds: displayQueue.queueTextUnits.map((textUnit) => textUnit.textUnitId),
-        });
+        fetchTextUnits();
+    }, []);
 
-        setQueueTextUnits(displayQueue.queueTextUnits.map(queueTextUit => {
+    const fetchTextUnits = async () => {
+        const res = await textUnitApi.textUnitControllerFindAll();
+        setAllTextUnits(res.data);
+    }
+
+    const queueTextUnits = useMemo(() => {
+
+        return displayQueue.textUnitIds.map((textUnitId) => {
             return {
-                key: String(queueTextUit.textUnitId),
-                text: queueTextUit.textTitle,
+                key: textUnitId.toString(),
+                text: allTextUnits.find(t => t.id === textUnitId)?.title || "",
             }
-        }));
-
-    }, [displayQueue]);
-
-    useEffect(() => {
-        debugger
-        if (!editedDisplayQueue) return;
-        setEditedDisplayQueue({
-            ...editedDisplayQueue,
-            textUnitIds: queueTextUnits.map((textUnit) => Number(textUnit.key)),
         });
-    }, [queueTextUnits]);
+    }, [displayQueue, allTextUnits]);
 
     const onDeleteItem = (key: string) => {
-        setQueueTextUnits(
-            queueTextUnits.filter((textUnit) => textUnit.key !== key)
-        );
+        setDisplayQueue({
+            ...displayQueue,
+            textUnitIds: displayQueue.textUnitIds.filter(t => t !== parseInt(key)),
+        });
     };
 
     return (
         <>
-            {editedDisplayQueue && (
-                <>
-                    <TextField
-                        autoFocus
-                        required
-                        id="title"
-                        name="title"
-                        label="Nazwa kolejki"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        value={displayQueue.name}
-                        onChange={(e) => {
-                            setEditedDisplayQueue({
-                                ...editedDisplayQueue,
-                                name: e.target.value,
-                            });
-                        }}
-                    />
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            pt: 3,
-                        }}
-                    >
-                        {queueTextUnits.length > 0 && (
-                            <TextUnitQueueDragAndDrop
-                                textUnitsInQueue={queueTextUnits}
-                                setTextUnitsInQueue={setQueueTextUnits}
-                                onDeleteItem={onDeleteItem}
-                            />
-                        )}
-                    </Box>
-                </>
-            )}
+            <TextField
+                autoFocus
+                required
+                id="title"
+                name="title"
+                label="Nazwa kolejki"
+                type="text"
+                fullWidth
+                variant="standard"
+                value={displayQueue.name}
+                onChange={(e) => {
+                    setDisplayQueue({
+                        ...displayQueue,
+                        name: e.target.value,
+                    });
+                }}
+            />
+            <Accordion disableGutters sx={{ my: 2 }} defaultExpanded>
+                <AccordionSummary
+                    expandIcon={<ExpandMore />}
+                    aria-controls="panel2-content"
+                    id="panel2-header"
+                >
+                    Ustawienia kolejności playlisty
+                </AccordionSummary>
+                <AccordionDetails>
+                    {queueTextUnits.length > 0 && (
+                        <TextUnitQueueDragAndDrop
+                            textUnitsInQueue={queueTextUnits}
+                            setTextUnitsInQueue={(textUnits: DragAndDropItem[]) => {
+                                setDisplayQueue({
+                                    ...displayQueue,
+                                    textUnitIds: textUnits.map(t => parseInt(t.key)),
+                                });
+                            }}
+                            onDeleteItem={onDeleteItem}
+                        />
+                    )}
+                </AccordionDetails>
+            </Accordion>
+            <Accordion disableGutters sx={{ my: 2 }} defaultExpanded>
+                <AccordionSummary
+                    expandIcon={<ExpandMore />}
+                    aria-controls="panel2-content"
+                    id="panel2-header"
+                >
+                    Dodawanie tekstów
+                </AccordionSummary>
+                <AccordionDetails>
+                    <TextUnitSelection allTextUnits={allTextUnits} displayQueue={displayQueue} setDisplayQueue={setDisplayQueue} />
+                </AccordionDetails>
+            </Accordion>
         </>
     );
 };

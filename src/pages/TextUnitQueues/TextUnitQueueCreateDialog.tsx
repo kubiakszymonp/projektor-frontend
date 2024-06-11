@@ -14,21 +14,19 @@ export const TextUnitQueueCreateDialog: React.FC<{
     open: boolean;
     handleClose: () => void;
 }> = ({ open, handleClose }) => {
-    const [displayQueue, setDisplayQueue] = useState<GetDisplayQueueDto>();
-    const [editedDisplayQueue, setEditedDisplayQueue] = useState<CreateDisplayQueueDto>();
+    const [displayQueue, setDisplayQueue] = useState<CreateDisplayQueueDto>();
 
     useEffect(() => {
         setDisplayQueue({
             description: "",
             name: "",
-            queueTextUnits: [],
-            id: 0,
+            textUnitIds: [],
         });
     }, [open]);
 
     const onSave = async () => {
-        if (!editedDisplayQueue) return;
-        await textUnitQueuesApi.displayQueuesControllerCreate(editedDisplayQueue);
+        if (!displayQueue) return;
+        await textUnitQueuesApi.displayQueuesControllerCreate(displayQueue);
         handleClose();
     };
 
@@ -42,8 +40,7 @@ export const TextUnitQueueCreateDialog: React.FC<{
                 {displayQueue && (
                     <DisplayQueueInputs
                         displayQueue={displayQueue}
-                        editedDisplayQueue={editedDisplayQueue!}
-                        setEditedDisplayQueue={setEditedDisplayQueue} />
+                        setDisplayQueue={setDisplayQueue} />
                 )}
             </DialogContent>
             <DialogActions>

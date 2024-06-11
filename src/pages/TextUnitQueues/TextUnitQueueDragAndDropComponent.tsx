@@ -63,7 +63,7 @@ export const TextUnitQueueDragAndDrop: React.FC<{
             ref={provided.innerRef}
             style={{
               padding: grid,
-              width: "90%",
+              width: "100",
             }}
           >
             {textUnitsInQueue.map((item: any, index: any) => (

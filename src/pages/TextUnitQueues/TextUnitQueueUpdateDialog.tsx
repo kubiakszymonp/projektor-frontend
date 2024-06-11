@@ -16,8 +16,7 @@ export const TextUnitQueueEditDialog: React.FC<{
   handleClose: () => void;
   textUnitQueueId: number;
 }> = ({ open, handleClose, textUnitQueueId }) => {
-  const [displayQueue, setDisplayQueue] = useState<GetDisplayQueueDto>();
-  const [editedDisplayQueue, setEditedDisplayQueue] = useState<CreateDisplayQueueDto>();
+  const [displayQueue, setDisplayQueue] = useState<CreateDisplayQueueDto>();
 
   useEffect(() => {
     fetchTextUnitQueue();
@@ -25,13 +24,17 @@ export const TextUnitQueueEditDialog: React.FC<{
 
   const fetchTextUnitQueue = async () => {
     const res = await textUnitQueuesApi.displayQueuesControllerFindOne(textUnitQueueId.toString());
-    setDisplayQueue(res.data);
+    setDisplayQueue({
+      name: res.data.name,
+      description: res.data.description,
+      textUnitIds: res.data.queueTextUnits.map((t) => t.textUnitId),
+    });
   };
 
   const onSave = async () => {
     if (!displayQueue) return;
     await textUnitQueuesApi.displayQueuesControllerUpdate({
-      ...editedDisplayQueue,
+      ...displayQueue,
       id: textUnitQueueId,
     });
 
@@ -54,8 +57,7 @@ export const TextUnitQueueEditDialog: React.FC<{
         {displayQueue && (
           <DisplayQueueInputs
             displayQueue={displayQueue}
-            editedDisplayQueue={editedDisplayQueue!}
-            setEditedDisplayQueue={setEditedDisplayQueue} />
+            setDisplayQueue={setDisplayQueue} />
         )}
       </DialogContent>
       <DialogActions>

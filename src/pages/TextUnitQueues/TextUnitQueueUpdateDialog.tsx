@@ -14,7 +14,7 @@ import { DisplayQueueInputs } from "./display-queue-inputs";
 export const TextUnitQueueEditDialog: React.FC<{
   open: boolean;
   handleClose: () => void;
-  textUnitQueueId: number;
+  textUnitQueueId: string;
 }> = ({ open, handleClose, textUnitQueueId }) => {
   const [displayQueue, setDisplayQueue] = useState<CreateDisplayQueueDto>();
 

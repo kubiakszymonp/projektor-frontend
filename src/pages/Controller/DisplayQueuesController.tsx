@@ -22,7 +22,7 @@ export const DisplayQueuesController: React.FC<{
         return displayQueue?.queueTextUnits?.length;
     };
 
-    const setCurrentTextUnitRequest = async (textUnitId: number) => {
+    const setCurrentTextUnitRequest = async (textUnitId: string) => {
         await displayStateApi.displayStateControllerUpdateDisplayState({
             textUnitId: textUnitId,
             textUnitPart: 0,
@@ -30,7 +30,7 @@ export const DisplayQueuesController: React.FC<{
         });
     };
 
-    const fetchQueue = async (id: number) => {
+    const fetchQueue = async (id: string) => {
         const queue = await textUnitQueuesApi.displayQueuesControllerFindOne(id.toString());
         setDisplayQueue(queue.data);
     };

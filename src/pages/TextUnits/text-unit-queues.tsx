@@ -15,7 +15,7 @@ import Fuse from "fuse.js";
 
 
 export interface SelectableProperty {
-    id: number;
+    id: string;
     name: string;
 }
 
@@ -61,7 +61,7 @@ export const TextUnitQueues: React.FC<{
         return textUnit.displayQueueIds.some((q) => q === queue.id);
     };
 
-    const onModifyQueue = (queueId: number, value: boolean) => {
+    const onModifyQueue = (queueId: string, value: boolean) => {
         if (!textUnit) return;
 
         let selectedQueues = textUnit.displayQueueIds;

@@ -37,7 +37,7 @@ export const FilesManager: React.FC = () => {
   const [
     currentProjectorDisplayedImageId,
     setCurrentProjectorDisplayedImageId,
-  ] = useState<number | null>(null);
+  ] = useState<string | null>(null);
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);

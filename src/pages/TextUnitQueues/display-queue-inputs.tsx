@@ -48,7 +48,7 @@ export const DisplayQueueInputs: React.FC<{
     const onDeleteItem = (key: string) => {
         setDisplayQueue({
             ...displayQueue,
-            textUnitIds: displayQueue.textUnitIds.filter(t => t !== parseInt(key)),
+            textUnitIds: displayQueue.textUnitIds.filter(t => t !== key),
         });
     };
 
@@ -86,7 +86,7 @@ export const DisplayQueueInputs: React.FC<{
                             setTextUnitsInQueue={(textUnits: DragAndDropItem[]) => {
                                 setDisplayQueue({
                                     ...displayQueue,
-                                    textUnitIds: textUnits.map(t => parseInt(t.key)),
+                                    textUnitIds: textUnits.map(t => t.key),
                                 });
                             }}
                             onDeleteItem={onDeleteItem}

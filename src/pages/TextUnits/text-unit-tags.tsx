@@ -56,7 +56,7 @@ export const TextUnitTags: React.FC<{
         return textUnit.textUnitTagIds.includes(tag.id);
     };
 
-    const onCheckTag = (tagId: number, value: boolean) => {
+    const onCheckTag = (tagId: string, value: boolean) => {
         if (!textUnit) return;
 
         let selectedTags = textUnit.textUnitTagIds;

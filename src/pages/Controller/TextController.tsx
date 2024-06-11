@@ -27,7 +27,7 @@ export const TextController: React.FC<{
             fetchTextUnit(displayState.textUnitId);
         }
 
-        const fetchTextUnit = async (id: number) => {
+        const fetchTextUnit = async (id: string) => {
             const textUnit = await textUnitApi.textUnitControllerFindOne(id.toString());
             setTextUnit(textUnit.data);
         };

@@ -12,8 +12,7 @@ import { WebRtcStreamReciever } from "../WebRtc/web-rtc-reciever";
 import { generateRandomText } from "../../util/generate-random-text";
 
 export const ProjectorPage = (props: { isPreview: boolean }) => {
-  const { organizationId: rawOrganizationId } = useParams();
-  const organizationId = parseInt(rawOrganizationId || "0");
+  const { organizationId } = useParams();
   const [displayState, setDisplayState] = useState<GetDisplayDto>();
   const [projectorSettings, setProjectorSettings] = useState<GetProjectorSettingsDto>();
   const [screenIdentifier] = useState<string>(generateRandomText());
@@ -49,6 +48,7 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
   }
 
   const getDisplayState = async () => {
+    if (!organizationId) return;
     const projectorDisplay =
       await projectorApi.projectorControllerGetProjectorStateByOrganizationId(
         organizationId

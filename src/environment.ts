@@ -5,7 +5,7 @@ const prod = {
 
 const dev = {
   BACKEND_HOST:
-    "http:" + "//" + window.location.hostname + ":3001",
+    window.location.protocol + "//" + window.location.hostname + ":3001",
   SOCKET_HOST: "wss://" + window.location.hostname + ":81",
 };
 

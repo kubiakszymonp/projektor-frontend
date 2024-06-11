@@ -42,7 +42,7 @@ Twoje usta dziś wyrzekły me imię.\n
 export const TextUnitEditDialog: React.FC<{
   open: boolean;
   handleClose: () => void;
-  textUnitId: number;
+  textUnitId: string;
 }> = ({ open, handleClose, textUnitId }) => {
   const [textUnit, setTextUnit] =
     useState<CreateTextUnitDto>();

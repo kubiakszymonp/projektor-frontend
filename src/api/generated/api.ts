@@ -43,10 +43,10 @@ export interface CreateDisplayQueueDto {
     'description'?: string;
     /**
      * 
-     * @type {Array<number>}
+     * @type {Array<string>}
      * @memberof CreateDisplayQueueDto
      */
-    'textUnitIds': Array<number>;
+    'textUnitIds': Array<string>;
 }
 /**
  * 
@@ -111,16 +111,16 @@ export interface CreateTextUnitDto {
     'transposition'?: number;
     /**
      * 
-     * @type {Array<number>}
+     * @type {Array<string>}
      * @memberof CreateTextUnitDto
      */
-    'textUnitTagIds': Array<number>;
+    'textUnitTagIds': Array<string>;
     /**
      * 
-     * @type {Array<number>}
+     * @type {Array<string>}
      * @memberof CreateTextUnitDto
      */
-    'displayQueueIds': Array<number>;
+    'displayQueueIds': Array<string>;
     /**
      * 
      * @type {string}
@@ -173,10 +173,10 @@ export interface CreateUserDto {
     'password': string;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof CreateUserDto
      */
-    'organizationId': number;
+    'organizationId': string;
     /**
      * 
      * @type {string}
@@ -259,10 +259,10 @@ export type GetDisplayDtoDisplayTypeEnum = typeof GetDisplayDtoDisplayTypeEnum[k
 export interface GetDisplayQueueDto {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof GetDisplayQueueDto
      */
-    'id': number;
+    'id': string;
     /**
      * 
      * @type {string}
@@ -289,10 +289,10 @@ export interface GetDisplayQueueDto {
     'description': string;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof GetDisplayQueueDto
      */
-    'organizationId'?: number;
+    'organizationId'?: string;
     /**
      * 
      * @type {Array<GetQueueTextUnit>}
@@ -308,10 +308,10 @@ export interface GetDisplayQueueDto {
 export interface GetDisplayStateDto {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof GetDisplayStateDto
      */
-    'id': number;
+    'id': string;
     /**
      * 
      * @type {string}
@@ -338,10 +338,10 @@ export interface GetDisplayStateDto {
     'emptyDisplay': boolean;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof GetDisplayStateDto
      */
-    'textUnitId': number;
+    'textUnitId': string;
     /**
      * 
      * @type {number}
@@ -356,16 +356,16 @@ export interface GetDisplayStateDto {
     'textUnitPartPage': number;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof GetDisplayStateDto
      */
-    'mediaFileId': number | null;
+    'mediaFileId': string | null;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof GetDisplayStateDto
      */
-    'textUnitQueueId': number;
+    'textUnitQueueId': string;
 }
 
 export const GetDisplayStateDtoDisplayTypeEnum = {
@@ -384,10 +384,10 @@ export type GetDisplayStateDtoDisplayTypeEnum = typeof GetDisplayStateDtoDisplay
 export interface GetMediaFileDto {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof GetMediaFileDto
      */
-    'id': number;
+    'id': string;
     /**
      * 
      * @type {string}
@@ -433,10 +433,10 @@ export interface GetMediaFileDto {
 export interface GetProjectorSettingsDto {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof GetProjectorSettingsDto
      */
-    'id': number;
+    'id': string;
     /**
      * 
      * @type {string}
@@ -556,22 +556,22 @@ export interface GetProjectorSettingsDto {
 export interface GetQueueTextUnit {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof GetQueueTextUnit
      */
-    'id': number;
+    'id': string;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof GetQueueTextUnit
      */
-    'displayQueueId': number;
+    'displayQueueId': string;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof GetQueueTextUnit
      */
-    'textUnitId': number;
+    'textUnitId': string;
     /**
      * 
      * @type {string}
@@ -599,10 +599,10 @@ export interface GetQueueTextUnit {
 export interface GetTextUnitDto {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof GetTextUnitDto
      */
-    'id': number;
+    'id': string;
     /**
      * 
      * @type {string}
@@ -635,10 +635,10 @@ export interface GetTextUnitDto {
     'transposition'?: number;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof GetTextUnitDto
      */
-    'organizationId'?: number;
+    'organizationId'?: string;
     /**
      * 
      * @type {string}
@@ -672,10 +672,10 @@ export interface GetTextUnitDto {
 export interface GetTextUnitTagDto {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof GetTextUnitTagDto
      */
-    'id': number;
+    'id': string;
     /**
      * 
      * @type {string}
@@ -702,10 +702,10 @@ export interface GetTextUnitTagDto {
     'description': string;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof GetTextUnitTagDto
      */
-    'organizationId'?: number;
+    'organizationId'?: string;
 }
 /**
  * 
@@ -787,6 +787,19 @@ export interface Organization {
 /**
  * 
  * @export
+ * @interface PingDto
+ */
+export interface PingDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof PingDto
+     */
+    'date': string;
+}
+/**
+ * 
+ * @export
  * @enum {string}
  */
 
@@ -819,16 +832,16 @@ export interface UpdateDisplayQueueDto {
     'description'?: string;
     /**
      * 
-     * @type {Array<number>}
+     * @type {Array<string>}
      * @memberof UpdateDisplayQueueDto
      */
-    'textUnitIds'?: Array<number>;
+    'textUnitIds'?: Array<string>;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof UpdateDisplayQueueDto
      */
-    'id': number;
+    'id': string;
 }
 /**
  * 
@@ -838,10 +851,10 @@ export interface UpdateDisplayQueueDto {
 export interface UpdateDisplayStateDto {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof UpdateDisplayStateDto
      */
-    'id'?: number;
+    'id'?: string;
     /**
      * 
      * @type {string}
@@ -868,10 +881,10 @@ export interface UpdateDisplayStateDto {
     'emptyDisplay'?: boolean;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof UpdateDisplayStateDto
      */
-    'textUnitId'?: number;
+    'textUnitId'?: string;
     /**
      * 
      * @type {number}
@@ -886,16 +899,16 @@ export interface UpdateDisplayStateDto {
     'textUnitPartPage'?: number;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof UpdateDisplayStateDto
      */
-    'mediaFileId'?: number | null;
+    'mediaFileId'?: string | null;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof UpdateDisplayStateDto
      */
-    'textUnitQueueId'?: number;
+    'textUnitQueueId'?: string;
 }
 
 export const UpdateDisplayStateDtoDisplayTypeEnum = {
@@ -914,10 +927,10 @@ export type UpdateDisplayStateDtoDisplayTypeEnum = typeof UpdateDisplayStateDtoD
 export interface UpdateMediaFileDto {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof UpdateMediaFileDto
      */
-    'id': number;
+    'id': string;
     /**
      * 
      * @type {string}
@@ -933,10 +946,10 @@ export interface UpdateMediaFileDto {
 export interface UpdateProjectorSettingDto {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof UpdateProjectorSettingDto
      */
-    'id'?: number;
+    'id'?: string;
     /**
      * 
      * @type {string}
@@ -1080,16 +1093,16 @@ export interface UpdateTextUnitDto {
     'transposition'?: number;
     /**
      * 
-     * @type {Array<number>}
+     * @type {Array<string>}
      * @memberof UpdateTextUnitDto
      */
-    'textUnitTagIds'?: Array<number>;
+    'textUnitTagIds'?: Array<string>;
     /**
      * 
-     * @type {Array<number>}
+     * @type {Array<string>}
      * @memberof UpdateTextUnitDto
      */
-    'displayQueueIds'?: Array<number>;
+    'displayQueueIds'?: Array<string>;
     /**
      * 
      * @type {string}
@@ -1098,10 +1111,10 @@ export interface UpdateTextUnitDto {
     'partsOrder'?: string;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof UpdateTextUnitDto
      */
-    'id': number;
+    'id': string;
 }
 /**
  * 
@@ -1123,10 +1136,10 @@ export interface UpdateTextUnitTagDto {
     'description'?: string;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof UpdateTextUnitTagDto
      */
-    'id': number;
+    'id': string;
 }
 /**
  * 
@@ -1154,10 +1167,10 @@ export interface UpdateUserDto {
     'password'?: string;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof UpdateUserDto
      */
-    'organizationId'?: number;
+    'organizationId'?: string;
     /**
      * 
      * @type {string}
@@ -1166,10 +1179,10 @@ export interface UpdateUserDto {
     'role'?: UpdateUserDtoRoleEnum;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof UpdateUserDto
      */
-    'id': number;
+    'id': string;
 }
 
 export const UpdateUserDtoRoleEnum = {
@@ -1217,10 +1230,10 @@ export interface User {
     'organization': Organization | null;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof User
      */
-    'organizationId': number | null;
+    'organizationId': string | null;
 }
 
 export const UserRoleEnum = {
@@ -1380,6 +1393,107 @@ export class AuthApi extends BaseAPI {
      */
     public authControllerLogin(loginDto: LoginDto, options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).authControllerLogin(loginDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * DefaultApi - axios parameter creator
+ * @export
+ */
+export const DefaultApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        appControllerPing: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * DefaultApi - functional programming interface
+ * @export
+ */
+export const DefaultApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DefaultApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async appControllerPing(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PingDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.appControllerPing(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.appControllerPing']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * DefaultApi - factory interface
+ * @export
+ */
+export const DefaultApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DefaultApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        appControllerPing(options?: any): AxiosPromise<PingDto> {
+            return localVarFp.appControllerPing(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * DefaultApi - object-oriented interface
+ * @export
+ * @class DefaultApi
+ * @extends {BaseAPI}
+ */
+export class DefaultApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public appControllerPing(options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).appControllerPing(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2040,11 +2154,11 @@ export const OrganizationsApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
-         * @param {number} id 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        organizationControllerDeleteOrganization: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        organizationControllerDeleteOrganization: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('organizationControllerDeleteOrganization', 'id', id)
             const localVarPath = `/api/organizations/{id}`
@@ -2077,11 +2191,11 @@ export const OrganizationsApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
-         * @param {number} id 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        organizationControllerGetOrganization: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        organizationControllerGetOrganization: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('organizationControllerGetOrganization', 'id', id)
             const localVarPath = `/api/organizations/{id}`
@@ -2208,11 +2322,11 @@ export const OrganizationsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {number} id 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async organizationControllerDeleteOrganization(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async organizationControllerDeleteOrganization(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.organizationControllerDeleteOrganization(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['OrganizationsApi.organizationControllerDeleteOrganization']?.[localVarOperationServerIndex]?.url;
@@ -2220,11 +2334,11 @@ export const OrganizationsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {number} id 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async organizationControllerGetOrganization(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Organization>> {
+        async organizationControllerGetOrganization(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Organization>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.organizationControllerGetOrganization(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['OrganizationsApi.organizationControllerGetOrganization']?.[localVarOperationServerIndex]?.url;
@@ -2274,20 +2388,20 @@ export const OrganizationsApiFactory = function (configuration?: Configuration, 
         },
         /**
          * 
-         * @param {number} id 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        organizationControllerDeleteOrganization(id: number, options?: any): AxiosPromise<void> {
+        organizationControllerDeleteOrganization(id: string, options?: any): AxiosPromise<void> {
             return localVarFp.organizationControllerDeleteOrganization(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {number} id 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        organizationControllerGetOrganization(id: number, options?: any): AxiosPromise<Organization> {
+        organizationControllerGetOrganization(id: string, options?: any): AxiosPromise<Organization> {
             return localVarFp.organizationControllerGetOrganization(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2330,23 +2444,23 @@ export class OrganizationsApi extends BaseAPI {
 
     /**
      * 
-     * @param {number} id 
+     * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OrganizationsApi
      */
-    public organizationControllerDeleteOrganization(id: number, options?: RawAxiosRequestConfig) {
+    public organizationControllerDeleteOrganization(id: string, options?: RawAxiosRequestConfig) {
         return OrganizationsApiFp(this.configuration).organizationControllerDeleteOrganization(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {number} id 
+     * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OrganizationsApi
      */
-    public organizationControllerGetOrganization(id: number, options?: RawAxiosRequestConfig) {
+    public organizationControllerGetOrganization(id: string, options?: RawAxiosRequestConfig) {
         return OrganizationsApiFp(this.configuration).organizationControllerGetOrganization(id, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2415,11 +2529,11 @@ export const ProjectorApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
-         * @param {number} organizationId 
+         * @param {string} organizationId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectorControllerGetProjectorStateByOrganizationId: async (organizationId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        projectorControllerGetProjectorStateByOrganizationId: async (organizationId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'organizationId' is not null or undefined
             assertParamExists('projectorControllerGetProjectorStateByOrganizationId', 'organizationId', organizationId)
             const localVarPath = `/api/projector/{organizationId}`
@@ -2473,11 +2587,11 @@ export const ProjectorApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {number} organizationId 
+         * @param {string} organizationId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async projectorControllerGetProjectorStateByOrganizationId(organizationId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetDisplayDto>> {
+        async projectorControllerGetProjectorStateByOrganizationId(organizationId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetDisplayDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.projectorControllerGetProjectorStateByOrganizationId(organizationId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProjectorApi.projectorControllerGetProjectorStateByOrganizationId']?.[localVarOperationServerIndex]?.url;
@@ -2503,11 +2617,11 @@ export const ProjectorApiFactory = function (configuration?: Configuration, base
         },
         /**
          * 
-         * @param {number} organizationId 
+         * @param {string} organizationId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectorControllerGetProjectorStateByOrganizationId(organizationId: number, options?: any): AxiosPromise<GetDisplayDto> {
+        projectorControllerGetProjectorStateByOrganizationId(organizationId: string, options?: any): AxiosPromise<GetDisplayDto> {
             return localVarFp.projectorControllerGetProjectorStateByOrganizationId(organizationId, options).then((request) => request(axios, basePath));
         },
     };
@@ -2532,12 +2646,12 @@ export class ProjectorApi extends BaseAPI {
 
     /**
      * 
-     * @param {number} organizationId 
+     * @param {string} organizationId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProjectorApi
      */
-    public projectorControllerGetProjectorStateByOrganizationId(organizationId: number, options?: RawAxiosRequestConfig) {
+    public projectorControllerGetProjectorStateByOrganizationId(organizationId: string, options?: RawAxiosRequestConfig) {
         return ProjectorApiFp(this.configuration).projectorControllerGetProjectorStateByOrganizationId(organizationId, options).then((request) => request(this.axios, this.basePath));
     }
 }
@@ -2618,11 +2732,11 @@ export const ProjectorSettingsApiAxiosParamCreator = function (configuration?: C
         },
         /**
          * 
-         * @param {number} organizationId 
+         * @param {string} organizationId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectorSettingsControllerGetSettingsByOrganizationId: async (organizationId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        projectorSettingsControllerGetSettingsByOrganizationId: async (organizationId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'organizationId' is not null or undefined
             assertParamExists('projectorSettingsControllerGetSettingsByOrganizationId', 'organizationId', organizationId)
             const localVarPath = `/api/projector-settings/{organizationId}`
@@ -2726,11 +2840,11 @@ export const ProjectorSettingsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {number} organizationId 
+         * @param {string} organizationId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async projectorSettingsControllerGetSettingsByOrganizationId(organizationId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetProjectorSettingsDto>> {
+        async projectorSettingsControllerGetSettingsByOrganizationId(organizationId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetProjectorSettingsDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.projectorSettingsControllerGetSettingsByOrganizationId(organizationId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProjectorSettingsApi.projectorSettingsControllerGetSettingsByOrganizationId']?.[localVarOperationServerIndex]?.url;
@@ -2776,11 +2890,11 @@ export const ProjectorSettingsApiFactory = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {number} organizationId 
+         * @param {string} organizationId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectorSettingsControllerGetSettingsByOrganizationId(organizationId: number, options?: any): AxiosPromise<GetProjectorSettingsDto> {
+        projectorSettingsControllerGetSettingsByOrganizationId(organizationId: string, options?: any): AxiosPromise<GetProjectorSettingsDto> {
             return localVarFp.projectorSettingsControllerGetSettingsByOrganizationId(organizationId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2824,12 +2938,12 @@ export class ProjectorSettingsApi extends BaseAPI {
 
     /**
      * 
-     * @param {number} organizationId 
+     * @param {string} organizationId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProjectorSettingsApi
      */
-    public projectorSettingsControllerGetSettingsByOrganizationId(organizationId: number, options?: RawAxiosRequestConfig) {
+    public projectorSettingsControllerGetSettingsByOrganizationId(organizationId: string, options?: RawAxiosRequestConfig) {
         return ProjectorSettingsApiFp(this.configuration).projectorSettingsControllerGetSettingsByOrganizationId(organizationId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -4044,11 +4158,11 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
-         * @param {number} id 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerDeleteUser: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        userControllerDeleteUser: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('userControllerDeleteUser', 'id', id)
             const localVarPath = `/api/users/{id}`
@@ -4081,11 +4195,11 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
-         * @param {number} id 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerGetUser: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        userControllerGetUser: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('userControllerGetUser', 'id', id)
             const localVarPath = `/api/users/{id}`
@@ -4212,11 +4326,11 @@ export const UsersApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {number} id 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userControllerDeleteUser(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async userControllerDeleteUser(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerDeleteUser(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UsersApi.userControllerDeleteUser']?.[localVarOperationServerIndex]?.url;
@@ -4224,11 +4338,11 @@ export const UsersApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {number} id 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userControllerGetUser(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+        async userControllerGetUser(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerGetUser(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UsersApi.userControllerGetUser']?.[localVarOperationServerIndex]?.url;
@@ -4278,20 +4392,20 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
-         * @param {number} id 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerDeleteUser(id: number, options?: any): AxiosPromise<void> {
+        userControllerDeleteUser(id: string, options?: any): AxiosPromise<void> {
             return localVarFp.userControllerDeleteUser(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {number} id 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerGetUser(id: number, options?: any): AxiosPromise<User> {
+        userControllerGetUser(id: string, options?: any): AxiosPromise<User> {
             return localVarFp.userControllerGetUser(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -4334,23 +4448,23 @@ export class UsersApi extends BaseAPI {
 
     /**
      * 
-     * @param {number} id 
+     * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public userControllerDeleteUser(id: number, options?: RawAxiosRequestConfig) {
+    public userControllerDeleteUser(id: string, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).userControllerDeleteUser(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {number} id 
+     * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public userControllerGetUser(id: number, options?: RawAxiosRequestConfig) {
+    public userControllerGetUser(id: string, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).userControllerGetUser(id, options).then((request) => request(this.axios, this.basePath));
     }
 

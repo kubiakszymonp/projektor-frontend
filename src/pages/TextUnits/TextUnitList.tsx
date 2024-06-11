@@ -39,7 +39,7 @@ export const TextUnitList: React.FC = () => {
   const [displayTextUnits, setDisplayTextUnits] = useState<GetTextUnitDto[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [tags, setTags] = useState<GetTextUnitTagDto[]>([]);
-  const [selectedTags, setSelectedTags] = useState<number[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedTextUnit, setSelectedTextUnit] = useState<GetTextUnitDto | null>(
     null
   );
@@ -134,7 +134,7 @@ export const TextUnitList: React.FC = () => {
   };
 
   const handleChangeTagsSelection = (event: SelectChangeEvent<number>) => {
-    const values = event.target.value as unknown as number[];
+    const values = event.target.value as unknown as string[];
     setSelectedTags(values);
   };
 

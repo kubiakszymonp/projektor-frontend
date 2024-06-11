@@ -54,7 +54,7 @@ export const ManageTagsDialog: React.FC<{
 
   const saveTag = async () => {
     if (!editedTag) return;
-    if (editedTag.id === -1) {
+    if (editedTag.id === "-1") {
       await textUnitTagApi.textUnitTagControllerCreate({
         ...editedTag,
       });
@@ -81,8 +81,8 @@ export const ManageTagsDialog: React.FC<{
             color="primary"
             variant="contained"
             onClick={() => {
-              if (editedTag?.id === -1) return;
-              const appended = [{ id: -1, name: "", description: "" }, ...allTags];
+              if (editedTag?.id === "-1") return;
+              const appended = [{ id: "-1", name: "", description: "" }, ...allTags];
               setAllTags(appended);
               setEditedTag(appended[0]);
             }}

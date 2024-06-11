@@ -48,7 +48,7 @@ export const TextUnitSelection: React.FC<{
         return displayQueue.textUnitIds.some((q) => q === textUnit.id);
     };
 
-    const onCheckTextUnit = (textUnitId: number, value: boolean) => {
+    const onCheckTextUnit = (textUnitId: string, value: boolean) => {
         if (!displayQueue) return;
 
         let selectedTextUnits = displayQueue.textUnitIds;

@@ -1,11 +1,13 @@
 import { RefObject, useEffect, useState } from "react";
 import { MovePageDtoDirectionEnum } from "../../api/generated";
+import { useIntervalTick } from "../../util/interval-tick";
 
 export const OnPreviewClickHandler: React.FC<{
     previewRef: RefObject<HTMLDivElement>,
     movePage: (direction: MovePageDtoDirectionEnum) => void
 }> = ({ previewRef, movePage }) => {
 
+    const tick = useIntervalTick(600);
     const [style, setStyle] = useState<React.CSSProperties>({});
 
     useEffect(() => {
@@ -14,7 +16,7 @@ export const OnPreviewClickHandler: React.FC<{
                 const rect = previewRef.current.getBoundingClientRect();
                 setStyle({
                     left: rect.left,
-                    top: - window.scrollY,
+                    top: rect.top - window.scrollY,
                     width: rect.width,
                     height: rect.height,
                     position: "fixed",
@@ -33,7 +35,7 @@ export const OnPreviewClickHandler: React.FC<{
             window.removeEventListener("scroll", updatePosition);
             window.removeEventListener("resize", updatePosition);
         };
-    }, [previewRef]);
+    }, [previewRef, tick]);
 
     return (
         <div style={style}>

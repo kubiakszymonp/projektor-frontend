@@ -1,8 +1,12 @@
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
   Button,
   Card,
   Checkbox,
+  Chip,
   FormControl,
   IconButton,
   InputLabel,
@@ -22,11 +26,11 @@ import Fuse from "fuse.js";
 import { useEffect, useMemo, useState } from "react";
 import { displayStateApi, textUnitApi, textUnitQueuesApi, textUnitTagApi } from "../../api";
 import { TextUnitEditDialog } from "./TextUnitEditDialog";
-import { MoreVert } from "@mui/icons-material";
-import { ManageTagsDialog } from "./ManageTagsDialog";
+import { ExpandMore, MoreVert } from "@mui/icons-material";
 import { GetTextUnitDto, GetTextUnitTagDto } from "../../api/generated";
 import { TextUnitAddDialog } from "./TextUnitAddDialog";
 import StyledBox from "../../components/page-wrapper";
+import { TextUnitFiltering } from "./text-unit-filtering";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -34,12 +38,10 @@ const ITEM_PADDING_TOP = 8;
 export const TextUnitList: React.FC = () => {
   const [textUnitEditDialogOpen, setTextUnitEditDialogOpen] = useState(false);
   const [textUnitCreateDialogOpen, setTextUnitCreateDialogOpen] = useState(false);
-  const [manageTagsDialogOpen, setManageTagsDialogOpen] = useState(false);
   const [textUnitList, setTextUnitList] = useState<GetTextUnitDto[]>([]);
   const [displayTextUnits, setDisplayTextUnits] = useState<GetTextUnitDto[]>([]);
   const [searchText, setSearchText] = useState<string>("");
-  const [tags, setTags] = useState<GetTextUnitTagDto[]>([]);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<GetTextUnitTagDto[]>([]);
   const [selectedTextUnit, setSelectedTextUnit] = useState<GetTextUnitDto | null>(
     null
   );
@@ -63,18 +65,11 @@ export const TextUnitList: React.FC = () => {
 
   const refreshData = () => {
     fetchTextUnitList();
-    fetchTags();
   };
 
   const closeAllModals = () => {
     setTextUnitEditDialogOpen(false);
-    setManageTagsDialogOpen(false);
     setTextUnitCreateDialogOpen(false);
-  };
-
-  const fetchTags = async () => {
-    const res = await textUnitTagApi.textUnitTagControllerFindAll();
-    setTags(res.data);
   };
 
   const handleClickTextUnitMenu = (el: HTMLElement) => {
@@ -103,8 +98,9 @@ export const TextUnitList: React.FC = () => {
     let filtered: GetTextUnitDto[] = textUnitList;
 
     if (selectedTags.length > 0) {
+      const selectedTagIds = selectedTags.map((tag) => tag.id);
       filtered = textUnitList.filter((textUnit) =>
-        textUnit.tags.some((tag) => selectedTags.includes(tag.id))
+        textUnit.tags.some((tag) => selectedTagIds.includes(tag.id))
       );
     }
 
@@ -133,15 +129,6 @@ export const TextUnitList: React.FC = () => {
     setTextUnitEditDialogOpen(true);
   };
 
-  const handleChangeTagsSelection = (event: SelectChangeEvent<number>) => {
-    const values = event.target.value as unknown as string[];
-    setSelectedTags(values);
-  };
-
-  const onClickManageTags = () => {
-    setManageTagsDialogOpen(true);
-  };
-
   return (
     <>
       {selectedTextUnit && (
@@ -156,7 +143,6 @@ export const TextUnitList: React.FC = () => {
         handleClose={closeAllModalsAndRefresh}
         open={textUnitCreateDialogOpen}
       />
-      <ManageTagsDialog handleClose={closeAllModalsAndRefresh} open={manageTagsDialogOpen} />
       <StyledBox>
         <Box>
           <Stack direction={"row"}>
@@ -180,61 +166,40 @@ export const TextUnitList: React.FC = () => {
             </Button>
           </Stack>
         </Box>
-        <Box>
-          <Stack direction={"row"}>
-            <FormControl sx={{ my: 1 }} fullWidth>
-              <InputLabel id="demo-multiple-checkbox-label">
-                Wybrane tagi
-              </InputLabel>
-              <Select
-                labelId="demo-multiple-checkbox-label"
-                id="demo-multiple-checkbox"
-                multiple
-                value={selectedTags as any}
-                onChange={handleChangeTagsSelection}
-                MenuProps={{
-                  PaperProps: {
-                    style: {
-                      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-                      width: 250,
-                    },
-                  },
-                }}
-                renderValue={(selected) =>
-                  `Wybrano (${(selected as any).length})`
-                }
-                input={<OutlinedInput label="Wybrane tagi" />}
-              >
-                {tags.map((tag) => (
-                  <MenuItem key={tag.id} value={tag.id}>
-                    <Checkbox
-                      checked={selectedTags.some(
-                        (selectedTag) => selectedTag === tag.id
-                      )}
-                    />
-                    <ListItemText primary={tag.name} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <Button
-              variant="outlined"
-              sx={{
-                width: "8rem",
-                px: 5,
-                my: 1,
-                ml: 1,
-              }}
-              onClick={onClickManageTags}
+        <Box sx={{
+          pt: 2,
+        }}>
+          <Accordion disableGutters>
+            <AccordionSummary
+              expandIcon={<ExpandMore />}
+              aria-controls="panel2-content"
+              id="panel2-header"
             >
-              Tagi
-            </Button>
-          </Stack>
+              Filtry wyszukiwania
+            </AccordionSummary>
+            <AccordionDetails>
+              <Stack direction={"row"}>
+                <TextUnitFiltering selectedTags={selectedTags} setSelectedTags={setSelectedTags}></TextUnitFiltering>
+              </Stack>
+            </AccordionDetails>
+          </Accordion>
         </Box>
+        <Stack direction="row" flexWrap={"wrap"} sx={{ pt: 3 }} spacing={1}>
+          {selectedTags.map((tag) => (
+            <Chip
+              key={tag.id}
+              label={tag.name}
+              variant="outlined"
+              style={{
+                marginBottom: "0.5rem"
+              }}
+            />
+          ))}
+        </Stack>
         <Stack
           direction={"column"}
           sx={{
-            mt: 3,
+            mt: 1,
             gap: {
               xs: 1,
               md: 3,

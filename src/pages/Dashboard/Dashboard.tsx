@@ -8,6 +8,7 @@ import {
   SettingsApplications,
   SettingsRemoteOutlined,
   SettingsSuggestRounded,
+  Tag,
 } from "@mui/icons-material";
 import { Box, Card, Container, Grid, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -52,6 +53,13 @@ export const Dashboard = () => {
       onClick: () => navigate("/text-unit-queue-list"),
     },
     {
+      icon: <Tag fontSize="large" />,
+      title: "Zarządzanie tagami",
+      description:
+        "Twórz kolejki wyświetlania. Dodawaj, usuwaj, edytuj kolejki.",
+      onClick: () => navigate("/tag-list"),
+    },
+    {
       icon: <PermMedia fontSize="large" />,
       title: "Wyświetlanie mediów",
       description: "Rzutuj zdjęcia, filmy oraz muzyke na ekran.",
@@ -76,7 +84,7 @@ export const Dashboard = () => {
       title: "Tryb ekranu",
       description: "",
       onClick: () => {
-        const organizationId = jwtPersistance.getDecodedJwt()?.id;
+        const organizationId = jwtPersistance.getDecodedJwt()?.organizationId;
         navigate("/projector/" + organizationId);
       },
     },

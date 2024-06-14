@@ -50,11 +50,11 @@ export const TextUnitAddDialog: React.FC<{
     };
 
     return (
-        <Dialog fullWidth open={open} onClose={handleClose}>
+        <Dialog fullWidth open={open} onClose={handleClose} >
             <DialogTitle>
                 Dodaj nowy tekst
             </DialogTitle>
-            <DialogContent>
+            <DialogContent sx={{ height: "80vh" }}>
                 {textUnit && (
                     <TextUnitInputs setTextUnit={setTextUnit} textUnit={textUnit} />
                 )}

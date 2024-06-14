@@ -17,6 +17,7 @@ import MediaCaptureProvider from "./services/user-media-capture.provider";
 import { WebRtcStreamReciever } from "./pages/WebRtc/web-rtc-reciever";
 import { ControllerSettings } from "./pages/ControllerSettings/controller-settings";
 import { ServerProvider } from "./services/api-server-context";
+import { TagList } from "./pages/TagManagement/tag-list";
 
 function App() {
   const defaultTheme = createTheme({
@@ -48,6 +49,7 @@ function App() {
               <Route path="/files-manager" element={<FilesManager />} />
               <Route path="/stream" element={<WebRtcStream />} />
               <Route path="/controller-settings" element={<ControllerSettings />} />
+              <Route path="/tag-list" element={<TagList />} />
             </Routes>
           </LoadingProvider>
         </MediaCaptureProvider>

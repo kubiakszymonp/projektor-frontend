@@ -3,7 +3,7 @@ import React, { RefObject, useEffect, useMemo, useState } from "react";
 import { displayStateApi, textUnitApi, textUnitQueuesApi } from "../../api";
 import { OnPreviewClickHandler } from "./OnPreviewClick";
 import { GetDisplayDto, GetDisplayQueueDto, GetDisplayStateDto, GetTextUnitDto, MovePageDtoDirectionEnum } from "../../api/generated";
-import { ParsedTextUnit } from "text-parser";
+import { OrderedParsedTextUnit, ParsedTextUnit } from "text-parser";
 
 export const TextController: React.FC<{
     displayState: GetDisplayStateDto,
@@ -16,7 +16,8 @@ export const TextController: React.FC<{
 
         const currentSongParsed = useMemo(() => {
             if (!textUnit) return null;
-            return new ParsedTextUnit(textUnit.content);
+            const order = textUnit.partsOrder?.split(",").map((part) => parseInt(part));
+            return new OrderedParsedTextUnit(textUnit.content, order ?? []);
         }, [textUnit]);
 
         useEffect(() => {
@@ -51,7 +52,7 @@ export const TextController: React.FC<{
                 <OnPreviewClickHandler previewRef={previewRef} movePage={movePage} />
                 <Box>
                     <Typography variant="h4">{textUnit?.title}</Typography>
-                    {currentSongParsed?.parsedTextUnitParts.map((part, index: number) => {
+                    {currentSongParsed?.orderedTextUnitParts.map((part, index: number) => {
                         return (
                             <Card
                                 key={index}

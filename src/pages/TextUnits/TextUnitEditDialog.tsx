@@ -81,7 +81,7 @@ export const TextUnitEditDialog: React.FC<{
       <DialogTitle>
         Edytuj tekst
       </DialogTitle>
-      <DialogContent>
+      <DialogContent sx={{ height: "80vh" }}>
         {textUnit && (
           <TextUnitInputs setTextUnit={setTextUnit} textUnit={textUnit} />
         )}

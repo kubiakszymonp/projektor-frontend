@@ -99,7 +99,7 @@ export const Controller = () => {
             desiredWidth={calc()}
             originalHeight={projectorSettings?.screenHeight || 0}
             originalWidth={projectorSettings?.screenWidth || 0}
-            url={"/projector-preview/" + jwtPersistance.getDecodedJwt()?.id}
+            url={"/projector-preview/" + jwtPersistance.getDecodedJwt()?.organizationId}
           />
         </Grid>
 
@@ -138,7 +138,7 @@ export const Controller = () => {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Accordion disableGutters sx={{}}>
+          <Accordion disableGutters sx={{}} defaultExpanded>
             <AccordionSummary
               expandIcon={<ExpandMore />}
               aria-controls="panel3-content"

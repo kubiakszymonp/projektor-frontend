@@ -1,23 +1,13 @@
-import {
-    Box,
-    Button,
-    Card,
-    Checkbox,
-    Chip,
-    Stack,
-    TextField,
-    Typography,
-} from "@mui/material";
-import { useState, useEffect, useMemo } from "react";
-import { textUnitQueuesApi, textUnitTagApi } from "../../api";
-import { CreateTextUnitDto, GetDisplayQueueDto, GetTextUnitTagDto, TextUnitTagApi } from "../../api/generated";
+import { Box, Stack, Chip, TextField, Card, Typography, Button, Checkbox } from "@mui/material";
+import { GetTextUnitTagDto } from "../../api/generated";
 import Fuse from "fuse.js";
+import { useState, useMemo, useEffect } from "react";
+import { textUnitTagApi } from "../../api";
 import { SelectableProperty } from "./text-unit-queues";
 
-export const TextUnitTags: React.FC<{
-    textUnit: CreateTextUnitDto;
-    setTextUnit: (textUnit: CreateTextUnitDto) => void;
-}> = ({ textUnit, setTextUnit }) => {
+export const TextUnitFiltering: React.FC<{ selectedTags: GetTextUnitTagDto[], setSelectedTags: (selectedTags: GetTextUnitTagDto[]) => void }> = ({
+    setSelectedTags, selectedTags
+}) => {
     const [searchTextUnitTagsText, setSearchTextUnitTagsText] = useState<string>("");
     const [allTags, setAllTags] = useState<GetTextUnitTagDto[]>([]);
 
@@ -35,12 +25,6 @@ export const TextUnitTags: React.FC<{
         return result;
     }, [allTags, searchTextUnitTagsText]);
 
-    const selectedTags: SelectableProperty[] = useMemo(() => {
-        return textUnit.textUnitTagIds.map((id) => {
-            const tag = allTags.find((q) => q.id === id);
-            return tag ? { id: tag.id, name: tag.name } : null;
-        }).filter((q) => q !== null) as SelectableProperty[];
-    }, [allTags, textUnit]);
 
     useEffect(() => {
         setSearchTextUnitTagsText("");
@@ -52,30 +36,24 @@ export const TextUnitTags: React.FC<{
         setAllTags(res.data);
     };
 
-    const textUnitHasThisTag = (tag: GetTextUnitTagDto) => {
-        return textUnit.textUnitTagIds.includes(tag.id);
-    };
+    const isSelected = (tagId: string) => {
+        return selectedTags.some(q => q.id === tagId);
+    }
 
     const onCheckTag = (tagId: string, value: boolean) => {
-        if (!textUnit) return;
 
-        let selectedTags = textUnit.textUnitTagIds;
+        const selected = isSelected(tagId);
 
-        if (value === true) {
-            selectedTags.push(tagId);
+        if (selected) {
+            setSelectedTags(selectedTags.filter(q => q.id !== tagId));
         }
         else {
-            selectedTags = selectedTags.filter(q => q !== tagId);
+            setSelectedTags([...selectedTags, allTags.find(q => q.id === tagId)!]);
         }
-
-        setTextUnit({
-            ...textUnit,
-            textUnitTagIds: selectedTags
-        });
     };
 
     return (
-        <Box>
+        <Box sx={{width: "100%"}}>
             <Stack direction="row" flexWrap={"wrap"} sx={{ py: 1 }} spacing={1}>
                 {selectedTags.map((tag) => (
                     <Chip
@@ -126,12 +104,10 @@ export const TextUnitTags: React.FC<{
                                 {tag.name}
                             </Typography>
                             <Button color="info">
-                                {textUnit && (
-                                    <Checkbox
-                                        checked={textUnitHasThisTag(tag)}
-                                        onChange={(_e, checked) => onCheckTag(tag.id, checked)}
-                                    />
-                                )}
+                                <Checkbox
+                                    checked={isSelected(tag.id)}
+                                    onChange={(_e, checked) => onCheckTag(tag.id, checked)}
+                                />
                             </Button>
                         </Stack>
                     </Card>

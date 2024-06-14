@@ -99,7 +99,7 @@ export const FilesManager: React.FC = () => {
     if (!inputRef.current) return;
     await uploadFilesToBackend(inputRef.current.files!,
       (progress) => { console.log(`Progress: ${progress}`) },
-      getApi(MediaFilesApi).mediaFilesControllerUploadMultipleFiles);
+      getApi(MediaFilesApi).mediaFilesControllerUploadMultipleFiles.bind(getApi(MediaFilesApi)));
     loadData();
   };
 

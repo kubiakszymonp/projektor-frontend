@@ -37,7 +37,8 @@ export const TextUnitEditDialog: React.FC<{
   const { getApi } = useApi();
 
   useEffect(() => {
-    loadTextUnit();
+    if (open)
+      loadTextUnit();
   }, [open]);
 
   const loadTextUnit = async () => {

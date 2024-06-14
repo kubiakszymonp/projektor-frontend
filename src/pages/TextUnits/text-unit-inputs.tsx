@@ -67,6 +67,7 @@ export const TextUnitInputs: React.FC<{ textUnit: CreateTextUnitDto, setTextUnit
                             id="outlined-multiline-static"
                             label="Zawartość tekstu"
                             multiline
+                            minRows={8}
                             value={textUnit.content}
                             onChange={(e) => {
                                 setTextUnit({

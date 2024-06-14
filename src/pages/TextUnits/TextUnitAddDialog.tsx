@@ -11,12 +11,14 @@ import { CreateTextUnitDto, TextUnitsApi } from "../../api/generated";
 import { TextUnitInputs } from "./text-unit-inputs";
 import { useApi } from "../../services/useApi";
 
-export const emptyTextUnitObject: CreateTextUnitDto = {
-    content: "",
-    displayQueueIds: [],
-    textUnitTagIds: [],
-    title: "",
-    partsOrder: "",
+export const getEmptyTextUnitObject = (): CreateTextUnitDto => {
+    return {
+        content: "",
+        displayQueueIds: [],
+        textUnitTagIds: [],
+        title: "",
+        partsOrder: "",
+    }
 };
 
 const SONG_HELP_TEXT = `Tekst składa się z części oddzielonych nową linią. Każda z części może rozpoczynać się znacznikiem tytułowym wewnątrz kwadratowych nawiasów.\n
@@ -38,11 +40,11 @@ export const TextUnitAddDialog: React.FC<{
     handleClose: () => void;
 }> = ({ open, handleClose }) => {
     const [textUnit, setTextUnit] =
-        useState<CreateTextUnitDto>(emptyTextUnitObject);
+        useState<CreateTextUnitDto>(getEmptyTextUnitObject());
     const { getApi } = useApi();
 
     useEffect(() => {
-        setTextUnit(emptyTextUnitObject);
+        setTextUnit(getEmptyTextUnitObject());
     }, [open]);
 
     const onSave = async () => {

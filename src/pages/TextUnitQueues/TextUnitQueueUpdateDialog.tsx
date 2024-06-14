@@ -20,7 +20,8 @@ export const TextUnitQueueEditDialog: React.FC<{
   const { getApi } = useApi();
 
   useEffect(() => {
-    fetchTextUnitQueue();
+    if (open)
+      fetchTextUnitQueue();
   }, [open]);
 
   const fetchTextUnitQueue = async () => {

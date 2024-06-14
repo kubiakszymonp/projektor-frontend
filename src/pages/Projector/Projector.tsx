@@ -11,17 +11,12 @@ import { WebRtcStreamReciever } from "../WebRtc/web-rtc-reciever";
 import { generateRandomText } from "../../util/generate-random-text";
 import { useApi } from "../../services/useApi";
 
-export const ProjectorPage = (props: { isPreview: boolean }) => {
+export const ProjectorPage: React.FC<{ isPreview: boolean }> = ({ isPreview }) => {
   const { organizationId } = useParams();
   const [displayState, setDisplayState] = useState<GetDisplayDto>();
   const [projectorSettings, setProjectorSettings] = useState<GetProjectorSettingsDto>();
   const [screenIdentifier] = useState<string>(generateRandomText());
   const { getApi } = useApi();
-
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    setPageTitle("Projektor");
-  }, []);
 
   const setScreenDimensions = useCallback(async () => {
     const width = window.innerWidth;
@@ -34,9 +29,10 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
   }, [projectorSettings]);
 
   useEffect(() => {
+    setPageTitle("Projektor");
     getDisplayState();
     sendScreenId();
-    if (props.isPreview) return;
+    if (isPreview) return;
     window.addEventListener("resize", setScreenDimensions);
     return () => window.removeEventListener("resize", setScreenDimensions);
   }, []);

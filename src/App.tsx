@@ -19,6 +19,7 @@ import { ControllerSettings } from "./pages/ControllerSettings/controller-settin
 import { ServerProvider } from "./services/api-server-context";
 import { TagList } from "./pages/TagManagement/tag-list";
 import { ApiProvider } from "./services/useApi";
+import { AutoLoginProjectorPage } from "./pages/Projector/AutoLoginProjector";
 
 function App() {
   const defaultTheme = createTheme({
@@ -43,6 +44,10 @@ function App() {
                 <Route
                   path="/projector/:organizationId"
                   element={<ProjectorPage isPreview={false} />}
+                />
+                <Route
+                  path="/projector/:email/:password"
+                  element={<AutoLoginProjectorPage isPreview={false} />}
                 />
                 <Route
                   path="/projector-preview/:organizationId"

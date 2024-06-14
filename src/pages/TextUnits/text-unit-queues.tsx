@@ -9,9 +9,9 @@ import {
     Typography,
 } from "@mui/material";
 import { useState, useEffect, useMemo } from "react";
-import { textUnitQueuesApi } from "../../api";
-import { CreateTextUnitDto, GetDisplayQueueDto } from "../../api/generated";
+import { CreateTextUnitDto, GetDisplayQueueDto, TextUnitQueuesApi } from "../../api/generated";
 import Fuse from "fuse.js";
+import { useApi } from "../../services/useApi";
 
 
 export interface SelectableProperty {
@@ -25,6 +25,7 @@ export const TextUnitQueues: React.FC<{
 }> = ({ textUnit, setTextUnit }) => {
     const [searchPlaylistText, setSearchPlaylistText] = useState<string>("");
     const [allQueues, setAllQueues] = useState<GetDisplayQueueDto[]>([]);
+    const { getApi } = useApi();
 
     const filteredQueues = useMemo(() => {
         if (searchPlaylistText === "") return allQueues;
@@ -53,7 +54,7 @@ export const TextUnitQueues: React.FC<{
     }, [allQueues, textUnit]);
 
     const fetchQueues = async () => {
-        const res = await textUnitQueuesApi.displayQueuesControllerFindAll();
+        const res = await getApi(TextUnitQueuesApi).displayQueuesControllerFindAll();
         setAllQueues(res.data);
     };
 

@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { displayStateApi, textUnitQueuesApi } from "../../api";
 import {
   Box,
   Button,
@@ -16,9 +15,10 @@ import {
 import Fuse from "fuse.js";
 import { TextUnitQueueEditDialog } from "./TextUnitQueueUpdateDialog";
 import { MoreVert } from "@mui/icons-material";
-import { GetDisplayQueueDto, GetTextUnitDto } from "../../api/generated";
+import { DisplayStateApi, GetDisplayQueueDto, GetTextUnitDto, TextUnitQueuesApi } from "../../api/generated";
 import { TextUnitQueueCreateDialog } from "./TextUnitQueueCreateDialog";
 import StyledBox from "../../components/page-wrapper";
+import { useApi } from "../../services/useApi";
 
 export const TextUnitQueueList = () => {
   const [allDisplayQueues, setAllDisplayQueues] = useState<GetDisplayQueueDto[]>([]);
@@ -29,6 +29,7 @@ export const TextUnitQueueList = () => {
   const [textUnitQueueEditDialogOpen, setTextUnitQueueEditDialogOpen] =
     useState(false);
   const [displayQueueCreateDialogOpen, setDisplayQueueCreateDialogOpen] = useState(false);
+  const { getApi } = useApi();
 
   useEffect(() => {
     fetchTextUnitQueues();
@@ -71,7 +72,7 @@ export const TextUnitQueueList = () => {
   };
 
   const fetchTextUnitQueues = async () => {
-    const queues = await textUnitQueuesApi.displayQueuesControllerFindAll();
+    const queues = await getApi(TextUnitQueuesApi).displayQueuesControllerFindAll();
     setAllDisplayQueues(queues.data);
   };
 
@@ -86,7 +87,7 @@ export const TextUnitQueueList = () => {
   };
 
   const setCurrentQueue = async (queue: GetDisplayQueueDto) => {
-    await displayStateApi.displayStateControllerUpdateDisplayState({
+    await getApi(DisplayStateApi).displayStateControllerUpdateDisplayState({
       textUnitQueueId: queue.id,
     })
   };

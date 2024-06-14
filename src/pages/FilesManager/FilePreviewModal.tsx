@@ -11,10 +11,10 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { displayStateApi, getStaticResourceUrl, uploadedFilesApi } from "../../api";
 import { useRef, useState } from "react";
 import { MoreVert } from "@mui/icons-material";
-import { GetMediaFileDto } from "../../api/generated";
+import { DisplayStateApi, GetMediaFileDto } from "../../api/generated";
+import { useApi } from "../../services/useApi";
 
 export const FilePreviewModal: React.FC<{
   open: boolean;
@@ -25,6 +25,7 @@ export const FilePreviewModal: React.FC<{
   refresh: () => void;
 }> = ({ open, handleClose, currentFile, nextFile, previousFile, refresh }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const { getStaticResourceUrl, getApi } = useApi();
 
   const handleClickFileMenu = (el: HTMLElement) => {
     setAnchorEl(el);
@@ -35,7 +36,7 @@ export const FilePreviewModal: React.FC<{
   };
 
   const setAsCurrentCastingFile = async () => {
-    await displayStateApi.displayStateControllerUpdateDisplayState({
+    await getApi(DisplayStateApi).displayStateControllerUpdateDisplayState({
       mediaFileId: currentFile?.id,
     });
     refresh();

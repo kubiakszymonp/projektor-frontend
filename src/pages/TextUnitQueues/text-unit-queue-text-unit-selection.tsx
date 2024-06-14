@@ -9,9 +9,9 @@ import {
     Typography,
 } from "@mui/material";
 import { useState, useEffect, useMemo } from "react";
-import { textUnitApi, textUnitQueuesApi } from "../../api";
 import { CreateDisplayQueueDto, CreateTextUnitDto, GetDisplayQueueDto, GetTextUnitDto } from "../../api/generated";
 import Fuse from "fuse.js";
+import { useApi } from "../../services/useApi";
 
 
 export interface SelectableProperty {
@@ -25,6 +25,7 @@ export const TextUnitSelection: React.FC<{
     allTextUnits: GetTextUnitDto[];
 }> = ({ displayQueue, setDisplayQueue, allTextUnits }) => {
     const [searchTextUnitText, setSearchTextUnitText] = useState<string>("");
+    const { getApi } = useApi();
 
     const filteredTextUnits = useMemo(() => {
         if (searchTextUnitText === "") return allTextUnits;

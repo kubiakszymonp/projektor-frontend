@@ -5,11 +5,11 @@ import {
     DialogActions,
     Button,
 } from "@mui/material";
-import { textUnitApi } from "../../api";
 import { useEffect, useState } from "react";
 import { CustomPopover } from "../../components/popover";
-import { CreateTextUnitDto } from "../../api/generated";
+import { CreateTextUnitDto, TextUnitsApi } from "../../api/generated";
 import { TextUnitInputs } from "./text-unit-inputs";
+import { useApi } from "../../services/useApi";
 
 export const emptyTextUnitObject: CreateTextUnitDto = {
     content: "",
@@ -39,13 +39,14 @@ export const TextUnitAddDialog: React.FC<{
 }> = ({ open, handleClose }) => {
     const [textUnit, setTextUnit] =
         useState<CreateTextUnitDto>(emptyTextUnitObject);
+    const { getApi } = useApi();
 
     useEffect(() => {
         setTextUnit(emptyTextUnitObject);
     }, [open]);
 
     const onSave = async () => {
-        await textUnitApi.textUnitControllerCreate(textUnit);
+        await getApi(TextUnitsApi).textUnitControllerCreate(textUnit);
         handleClose();
     };
 

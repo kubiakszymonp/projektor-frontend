@@ -1,20 +1,14 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Button } from "@mui/material";
-import { Computer, Face, Forest, PlayArrow, Stop } from "@mui/icons-material";
-import { GetDisplayDto, GetDisplayDtoDisplayTypeEnum } from "../../api/generated";
-import { displayStateApi, projectorApi, webRtcStreamApi } from "../../api";
-import { useNotifyOnProjectorUpdate } from "../../services/useNofifyOrganizationEdit";
+import { GetDisplayDto } from "../../api/generated";
 import { jwtPersistance } from "../../services/jwt-persistance";
-import { ConnectingState, createPeerConnectionWithAnswer, getWebRtcState, onTrackEventAsVideoSource } from "../../services/web-rtc-utils";
-import { Socket, io } from "socket.io-client";
+import { createPeerConnectionWithAnswer, onTrackEventAsVideoSource } from "../../services/web-rtc-utils";
+import { io } from "socket.io-client";
 import { environment } from "../../environment";
 
 export const WebRtcStreamReciever: React.FC<{ screenId: string, projectorState: GetDisplayDto }> = ({ screenId, projectorState }) => {
     const remoteVideoRef = useRef<HTMLVideoElement>(null);
     const [peerConnection, setPeerConnection] = useState<RTCPeerConnection>();
-    const [isConnected, setIsConnected] = useState(false);
     const organizationId = useMemo(() => jwtPersistance.getDecodedJwt()?.organizationId, []);
-    const [socket, setSocket] = useState<Socket | null>(null);
 
 
     useEffect(() => {
@@ -34,14 +28,9 @@ export const WebRtcStreamReciever: React.FC<{ screenId: string, projectorState: 
                 onTrackEventAsVideoSource(event, remoteVideoRef);
             });
             setPeerConnection(pc);
-            pc.onconnectionstatechange = () => {
-                setIsConnected(pc.connectionState === "connected");
-            };
 
             socket.emit("answer", pc.localDescription);
         });
-
-        setSocket(socket);
 
         return () => {
             peerConnection?.close();

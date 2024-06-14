@@ -1,7 +1,6 @@
-import { Accordion, AccordionDetails, AccordionSummary, Box, Chip, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, Stack, Tab, Tabs, TextField } from "@mui/material";
-import { CreateTextUnitDto, GetTextUnitTagDto } from "../../api/generated";
-import { textUnitTagApi } from "../../api";
-import { useEffect, useMemo, useState } from "react";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Stack, Tab, Tabs, TextField } from "@mui/material";
+import { CreateTextUnitDto } from "../../api/generated";
+import { useState } from "react";
 import { ExpandMore } from "@mui/icons-material";
 import { TextUnitQueues } from "./text-unit-queues";
 import { TextUnitTags } from "./text-unit-tags";

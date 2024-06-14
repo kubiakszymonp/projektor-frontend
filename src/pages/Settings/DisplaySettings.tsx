@@ -11,9 +11,9 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
-import { projectorSettingsApi } from "../../api";
-import { GetProjectorSettingsDto, TextStrategy } from "../../api/generated";
+import { GetProjectorSettingsDto, ProjectorSettingsApi, TextStrategy } from "../../api/generated";
 import StyledBox from "../../components/page-wrapper";
+import { useApi } from "../../services/useApi";
 
 interface FieldWithDescription {
   fieldName: string;
@@ -123,6 +123,7 @@ const DISPLAY_SETTINGS: FieldWithDescription[] = [
 export const DisplaySettings = () => {
   const [projectorSettings, setProjectorSettings] =
     useState<GetProjectorSettingsDto>();
+  const { getApi } = useApi();
 
   useEffect(() => {
     saveCurrentSettings();
@@ -135,14 +136,14 @@ export const DisplaySettings = () => {
 
   const saveCurrentSettings = async () => {
     if (!projectorSettings) return;
-    await projectorSettingsApi.projectorSettingsControllerUpdate(
+    await getApi(ProjectorSettingsApi).projectorSettingsControllerUpdate(
       projectorSettings
     );
   };
 
   const fetchCurrentSettings = async () => {
     const state =
-      await projectorSettingsApi.projectorSettingsControllerGetSetting();
+      await getApi(ProjectorSettingsApi).projectorSettingsControllerGetSetting();
     setProjectorSettings(state.data);
   };
 

@@ -10,13 +10,13 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { displayStateApi, getStaticResourceUrl, uploadedFilesApi } from "../../api";
 import { useEffect, useRef, useState } from "react";
 import { MoreVert } from "@mui/icons-material";
 import { FilePreviewModal } from "./FilePreviewModal";
-import { GetMediaFileDto } from "../../api/generated";
+import { DisplayStateApi, GetMediaFileDto, MediaFilesApi } from "../../api/generated";
 import { uploadFilesToBackend } from "../../util/upload-files";
 import StyledBox from "../../components/page-wrapper";
+import { useApi } from "../../services/useApi";
 
 export const FilesManager: React.FC = () => {
   const [fileInfosGrouped, setFileInfosGrouped] = useState<
@@ -41,6 +41,7 @@ export const FilesManager: React.FC = () => {
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { getApi, getStaticResourceUrl } = useApi();
 
   const handleClickFileMenu = (el: HTMLElement) => {
     setAnchorEl(el);
@@ -57,14 +58,14 @@ export const FilesManager: React.FC = () => {
 
   const fetchFileInfos = async () => {
     const filesInfo =
-      await uploadedFilesApi.mediaFilesControllerGetFilesForOrganization();
+      await getApi(MediaFilesApi).mediaFilesControllerGetFilesForOrganization();
     setFileInfos(filesInfo.data);
     setFileInfosGrouped(groupFilesByDate(filesInfo.data));
   };
 
   const fetchCurrentProjectorDisplayedImageId = async () => {
     const displayState =
-      await displayStateApi.displayStateControllerGetDisplayState();
+      await getApi(DisplayStateApi).displayStateControllerGetDisplayState();
     setCurrentProjectorDisplayedImageId(displayState.data.mediaFileId);
   };
 
@@ -96,19 +97,21 @@ export const FilesManager: React.FC = () => {
 
   const handleUpload = async () => {
     if (!inputRef.current) return;
-    await uploadFilesToBackend(inputRef.current.files!, (progress) => { console.log(`Progress: ${progress}`) });
+    await uploadFilesToBackend(inputRef.current.files!,
+      (progress) => { console.log(`Progress: ${progress}`) },
+      getApi(MediaFilesApi).mediaFilesControllerUploadMultipleFiles);
     loadData();
   };
 
   const deleteFile = async () => {
-    await uploadedFilesApi.mediaFilesControllerRemove(
+    await getApi(MediaFilesApi).mediaFilesControllerRemove(
       String(menuOpenedForFile?.id)
     );
     loadData();
   };
 
   const setAsCurrentCastingFile = async () => {
-    await displayStateApi.displayStateControllerUpdateDisplayState({
+    await getApi(DisplayStateApi).displayStateControllerUpdateDisplayState({
       mediaFileId: menuOpenedForFile?.id,
     });
     loadData();

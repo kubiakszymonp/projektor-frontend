@@ -6,15 +6,16 @@ import {
     Button,
 } from "@mui/material";
 import { useState, useEffect } from "react";
-import { textUnitQueuesApi } from "../../api";
-import { CreateDisplayQueueDto, GetDisplayQueueDto } from "../../api/generated";
+import { CreateDisplayQueueDto, GetDisplayQueueDto, TextUnitQueuesApi } from "../../api/generated";
 import { DisplayQueueInputs } from "./display-queue-inputs";
+import { useApi } from "../../services/useApi";
 
 export const TextUnitQueueCreateDialog: React.FC<{
     open: boolean;
     handleClose: () => void;
 }> = ({ open, handleClose }) => {
     const [displayQueue, setDisplayQueue] = useState<CreateDisplayQueueDto>();
+    const { getApi } = useApi();
 
     useEffect(() => {
         setDisplayQueue({
@@ -26,7 +27,7 @@ export const TextUnitQueueCreateDialog: React.FC<{
 
     const onSave = async () => {
         if (!displayQueue) return;
-        await textUnitQueuesApi.displayQueuesControllerCreate(displayQueue);
+        await getApi(TextUnitQueuesApi).displayQueuesControllerCreate(displayQueue);
         handleClose();
     };
 

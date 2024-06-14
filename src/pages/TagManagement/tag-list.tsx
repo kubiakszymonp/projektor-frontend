@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { displayStateApi, textUnitQueuesApi, textUnitTagApi } from "../../api";
 import {
     Box,
     Button,
@@ -16,11 +15,12 @@ import {
 import Fuse from "fuse.js";
 
 import { MoreVert } from "@mui/icons-material";
-import { GetDisplayQueueDto, GetTextUnitDto, GetTextUnitTagDto } from "../../api/generated";
+import { GetDisplayQueueDto, GetTextUnitDto, GetTextUnitTagDto, TextUnitTagApi } from "../../api/generated";
 
 import StyledBox from "../../components/page-wrapper";
 import { TagCreateDialog } from "./tag-create-dialog";
 import { TagEditDialog } from "./tag-edit-dialog";
+import { useApi } from "../../services/useApi";
 
 export const TagList = () => {
 
@@ -29,13 +29,14 @@ export const TagList = () => {
     const [searchText, setSearchText] = useState<string>("");
     const [editTagDialogOpen, setEditTagDialogOpen] = useState(false);
     const [createTagDialogOpen, setCreateTagDialogOpen] = useState(false);
+    const {getApi} = useApi();
 
     useEffect(() => {
         fetchTags();
     }, []);
 
     const fetchTags = async () => {
-        const res = await textUnitTagApi.textUnitTagControllerFindAll();
+        const res = await getApi(TextUnitTagApi).textUnitTagControllerFindAll();
         setAllTags(res.data);
     };
 

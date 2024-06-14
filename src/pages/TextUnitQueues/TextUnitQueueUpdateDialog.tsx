@@ -6,9 +6,9 @@ import {
   Button,
 } from "@mui/material";
 import { useState, useEffect } from "react";
-import { textUnitQueuesApi } from "../../api";
-import { CreateDisplayQueueDto, GetDisplayQueueDto } from "../../api/generated";
+import { CreateDisplayQueueDto, GetDisplayQueueDto, TextUnitQueuesApi } from "../../api/generated";
 import { DisplayQueueInputs } from "./display-queue-inputs";
+import { useApi } from "../../services/useApi";
 
 
 export const TextUnitQueueEditDialog: React.FC<{
@@ -17,13 +17,14 @@ export const TextUnitQueueEditDialog: React.FC<{
   textUnitQueueId: string;
 }> = ({ open, handleClose, textUnitQueueId }) => {
   const [displayQueue, setDisplayQueue] = useState<CreateDisplayQueueDto>();
+  const { getApi } = useApi();
 
   useEffect(() => {
     fetchTextUnitQueue();
   }, [open]);
 
   const fetchTextUnitQueue = async () => {
-    const res = await textUnitQueuesApi.displayQueuesControllerFindOne(textUnitQueueId.toString());
+    const res = await getApi(TextUnitQueuesApi).displayQueuesControllerFindOne(textUnitQueueId.toString());
     setDisplayQueue({
       name: res.data.name,
       description: res.data.description,
@@ -33,7 +34,7 @@ export const TextUnitQueueEditDialog: React.FC<{
 
   const onSave = async () => {
     if (!displayQueue) return;
-    await textUnitQueuesApi.displayQueuesControllerUpdate({
+    await getApi(TextUnitQueuesApi).displayQueuesControllerUpdate({
       ...displayQueue,
       id: textUnitQueueId,
     });
@@ -43,7 +44,7 @@ export const TextUnitQueueEditDialog: React.FC<{
 
   const onDelete = async () => {
     if (!displayQueue) return;
-    await textUnitQueuesApi.displayQueuesControllerRemove(textUnitQueueId.toString());
+    await getApi(TextUnitQueuesApi).displayQueuesControllerRemove(textUnitQueueId.toString());
     handleClose();
   };
 

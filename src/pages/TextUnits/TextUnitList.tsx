@@ -24,16 +24,14 @@ import {
 } from "@mui/material";
 import Fuse from "fuse.js";
 import { useEffect, useMemo, useState } from "react";
-import { displayStateApi, textUnitApi, textUnitQueuesApi, textUnitTagApi } from "../../api";
 import { TextUnitEditDialog } from "./TextUnitEditDialog";
 import { ExpandMore, MoreVert } from "@mui/icons-material";
-import { GetTextUnitDto, GetTextUnitTagDto } from "../../api/generated";
+import { DisplayStateApi, GetTextUnitDto, GetTextUnitTagDto, TextUnitsApi } from "../../api/generated";
 import { TextUnitAddDialog } from "./TextUnitAddDialog";
 import StyledBox from "../../components/page-wrapper";
 import { TextUnitFiltering } from "./text-unit-filtering";
+import { useApi } from "../../services/useApi";
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
 
 export const TextUnitList: React.FC = () => {
   const [textUnitEditDialogOpen, setTextUnitEditDialogOpen] = useState(false);
@@ -49,6 +47,7 @@ export const TextUnitList: React.FC = () => {
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.down("sm"));
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const { getApi } = useApi();
 
   useEffect(() => {
     closeAllModalsAndRefresh();
@@ -81,13 +80,13 @@ export const TextUnitList: React.FC = () => {
   };
 
   const fetchTextUnitList = async () => {
-    const res = await textUnitApi.textUnitControllerFindAll();
+    const res = await getApi(TextUnitsApi).textUnitControllerFindAll();
     setTextUnitList(res.data);
   };
 
   const setTextUnitForDisplay = async (textUnit: GetTextUnitDto | null) => {
     if (!textUnit) return;
-    await displayStateApi.displayStateControllerUpdateDisplayState({
+    await getApi(DisplayStateApi).displayStateControllerUpdateDisplayState({
       textUnitId: textUnit.id,
       textUnitPart: 0,
       textUnitPartPage: 0,

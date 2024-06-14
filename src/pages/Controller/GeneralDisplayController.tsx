@@ -1,19 +1,21 @@
 import { FormControlLabel, Checkbox, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { GetDisplayDtoDisplayTypeEnum, GetDisplayStateDto } from "../../api/generated";
-import { displayStateApi } from "../../api";
+import { DisplayStateApi, GetDisplayDtoDisplayTypeEnum, GetDisplayStateDto } from "../../api/generated";
+import { useApi } from "../../services/useApi";
 
 export const GeneralDisplayController: React.FC<{
     displayState: GetDisplayStateDto,
 }> = ({ displayState }) => {
 
+    const { getApi } = useApi();
+
     const setScreenOnOff = async (off: boolean) => {
-        await displayStateApi.displayStateControllerUpdateDisplayState({
+        await getApi(DisplayStateApi).displayStateControllerUpdateDisplayState({
             emptyDisplay: off,
         });
     };
 
     const setDisplayType = async (type: GetDisplayDtoDisplayTypeEnum) => {
-        await displayStateApi.displayStateControllerUpdateDisplayState({
+        await getApi(DisplayStateApi).displayStateControllerUpdateDisplayState({
             displayType: type,
         });
     }
@@ -34,7 +36,7 @@ export const GeneralDisplayController: React.FC<{
                             setScreenOnOff(checked);
                         }}
                     />
-                    <FormControl fullWidth sx={{my: 2}}>
+                    <FormControl fullWidth sx={{ my: 2 }}>
                         <InputLabel id="demo-simple-select-label">Typ treści</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"

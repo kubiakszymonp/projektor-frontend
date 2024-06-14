@@ -1,15 +1,15 @@
 import { Box, Stack, Chip, TextField, Card, Typography, Button, Checkbox } from "@mui/material";
-import { GetTextUnitTagDto } from "../../api/generated";
+import { GetTextUnitTagDto, TextUnitTagApi } from "../../api/generated";
 import Fuse from "fuse.js";
 import { useState, useMemo, useEffect } from "react";
-import { textUnitTagApi } from "../../api";
-import { SelectableProperty } from "./text-unit-queues";
+import { useApi } from "../../services/useApi";
 
 export const TextUnitFiltering: React.FC<{ selectedTags: GetTextUnitTagDto[], setSelectedTags: (selectedTags: GetTextUnitTagDto[]) => void }> = ({
     setSelectedTags, selectedTags
 }) => {
     const [searchTextUnitTagsText, setSearchTextUnitTagsText] = useState<string>("");
     const [allTags, setAllTags] = useState<GetTextUnitTagDto[]>([]);
+    const { getApi } = useApi();
 
     const filteredTags = useMemo(() => {
         if (searchTextUnitTagsText === "") return allTags;
@@ -32,7 +32,7 @@ export const TextUnitFiltering: React.FC<{ selectedTags: GetTextUnitTagDto[], se
     }, []);
 
     const fetchTags = async () => {
-        const res = await textUnitTagApi.textUnitTagControllerFindAll();
+        const res = await getApi(TextUnitTagApi).textUnitTagControllerFindAll();
         setAllTags(res.data);
     };
 
@@ -53,7 +53,7 @@ export const TextUnitFiltering: React.FC<{ selectedTags: GetTextUnitTagDto[], se
     };
 
     return (
-        <Box sx={{width: "100%"}}>
+        <Box sx={{ width: "100%" }}>
             <Stack direction="row" flexWrap={"wrap"} sx={{ py: 1 }} spacing={1}>
                 {selectedTags.map((tag) => (
                     <Chip

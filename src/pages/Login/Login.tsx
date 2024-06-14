@@ -16,7 +16,8 @@ import { jwtPersistance } from "../../services/jwt-persistance";
 import { useNavigate } from "react-router-dom";
 import { setPageTitle } from "../../services/page-title";
 import { TransitionAlert } from "../../components/alert.component";
-import { authApi } from "../../api";
+import { useApi } from "../../services/useApi";
+import { AuthApi } from "../../api/generated";
 
 function Copyright(props: any) {
   return (
@@ -48,11 +49,11 @@ export const LoginPage = () => {
 
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-
   const [errorMessage, setErrorMessage] = React.useState("");
+  const { getApi } = useApi();
 
   const handleSubmit = () => {
-    authApi
+    getApi(AuthApi)
       .authControllerLogin({
         email,
         password,

@@ -2,8 +2,8 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/
 import { DisplayQueueInputs } from "../TextUnitQueues/display-queue-inputs";
 import { useEffect, useState } from "react";
 import { CreateDisplayQueueDto, CreateTextUnitTagDto, TextUnitTagApi } from "../../api/generated";
-import { textUnitTagApi } from "../../api";
 import { TagInputs } from "./tag-inputs";
+import { useApi } from "../../services/useApi";
 
 export const TagEditDialog: React.FC<{
     open: boolean;
@@ -12,11 +12,12 @@ export const TagEditDialog: React.FC<{
 }> = ({ open, handleClose, tagId }) => {
 
     const [tag, setTag] = useState<CreateTextUnitTagDto>();
+    const { getApi } = useApi();
 
     useEffect(() => { fetchTag(); }, [open]);
 
     const fetchTag = async () => {
-        const res = await textUnitTagApi.textUnitTagControllerFindOne(tagId);
+        const res = await getApi(TextUnitTagApi).textUnitTagControllerFindOne(tagId);
         setTag({
             name: res.data.name,
             description: res.data.description,
@@ -24,7 +25,7 @@ export const TagEditDialog: React.FC<{
     }
 
     const onSave = async () => {
-        await textUnitTagApi.textUnitTagControllerUpdate(tagId, {
+        await getApi(TextUnitTagApi).textUnitTagControllerUpdate(tagId, {
             ...tag,
             id: tagId,
         });
@@ -33,7 +34,7 @@ export const TagEditDialog: React.FC<{
     }
 
     const handleDelete = async () => {
-        await textUnitTagApi.textUnitTagControllerRemove(tagId);
+        await getApi(TextUnitTagApi).textUnitTagControllerRemove(tagId);
         handleClose();
     }
 

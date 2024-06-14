@@ -9,10 +9,10 @@ import {
     Typography,
 } from "@mui/material";
 import { useState, useEffect, useMemo } from "react";
-import { textUnitQueuesApi, textUnitTagApi } from "../../api";
 import { CreateTextUnitDto, GetDisplayQueueDto, GetTextUnitTagDto, TextUnitTagApi } from "../../api/generated";
 import Fuse from "fuse.js";
 import { SelectableProperty } from "./text-unit-queues";
+import { useApi } from "../../services/useApi";
 
 export const TextUnitTags: React.FC<{
     textUnit: CreateTextUnitDto;
@@ -20,6 +20,7 @@ export const TextUnitTags: React.FC<{
 }> = ({ textUnit, setTextUnit }) => {
     const [searchTextUnitTagsText, setSearchTextUnitTagsText] = useState<string>("");
     const [allTags, setAllTags] = useState<GetTextUnitTagDto[]>([]);
+    const { getApi } = useApi();
 
     const filteredTags = useMemo(() => {
         if (searchTextUnitTagsText === "") return allTags;
@@ -48,7 +49,7 @@ export const TextUnitTags: React.FC<{
     }, []);
 
     const fetchTags = async () => {
-        const res = await textUnitTagApi.textUnitTagControllerFindAll();
+        const res = await getApi(TextUnitTagApi).textUnitTagControllerFindAll();
         setAllTags(res.data);
     };
 

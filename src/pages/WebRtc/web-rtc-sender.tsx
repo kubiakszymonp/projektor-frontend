@@ -1,14 +1,14 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@mui/material";
 import { Camera, Computer, Face, Forest, NotInterested, PlayArrow, Stop } from "@mui/icons-material";
-import { GetDisplayDto, GetDisplayDtoDisplayTypeEnum, WebrtcStreamApi } from "../../api/generated";
-import { displayStateApi, projectorApi, webRtcStreamApi } from "../../api";
+import { DisplayStateApi, GetDisplayDto, GetDisplayDtoDisplayTypeEnum, WebrtcStreamApi } from "../../api/generated";
 import { useNotifyOnProjectorUpdate } from "../../services/useNofifyOrganizationEdit";
 import { jwtPersistance } from "../../services/jwt-persistance";
 import { CapturingStateType, useMediaCapture } from "../../services/user-media-capture.provider";
 import { ConnectingState, acceptRtcAnswer, createPeerConnectionWithOffer, getWebRtcState } from "../../services/web-rtc-utils";
 import { environment } from "../../environment";
 import { Socket, io } from "socket.io-client";
+import { useApi } from "../../services/useApi";
 
 export const WebRtcStream: React.FC = () => {
     const localVideoRef = useRef<HTMLVideoElement>(null);
@@ -17,6 +17,7 @@ export const WebRtcStream: React.FC = () => {
     const { setCapturingType, stream } = useMediaCapture();
     const [pendingAnswers, setPendingAnswers] = useState<{ screenId: string, answer: RTCSessionDescriptionInit }[]>([]);
     const [socket, setSocket] = useState<Socket | null>(null);
+    const { getApi } = useApi();
 
     useEffect(() => {
         const socket = io(environment.BACKEND_HOST, {
@@ -55,7 +56,7 @@ export const WebRtcStream: React.FC = () => {
         }
 
         if (pendingAnswers.length === 0) {
-            displayStateApi.displayStateControllerUpdateDisplayState({
+            getApi(DisplayStateApi).displayStateControllerUpdateDisplayState({
                 emptyDisplay: false
             });
         }
@@ -63,11 +64,11 @@ export const WebRtcStream: React.FC = () => {
     }, [pendingAnswers]);
 
     const clear = async () => {
-        await webRtcStreamApi.webRtcControllerClearOrganization();
+        await getApi(WebrtcStreamApi).webRtcControllerClearOrganization();
     }
 
     const hideDisplay = async () => {
-        await displayStateApi.displayStateControllerUpdateDisplayState({
+        await getApi(DisplayStateApi).displayStateControllerUpdateDisplayState({
             emptyDisplay: true
         });
     }
@@ -97,7 +98,7 @@ export const WebRtcStream: React.FC = () => {
         if (!stream) return;
 
 
-        await displayStateApi.displayStateControllerUpdateDisplayState({
+        await getApi(DisplayStateApi).displayStateControllerUpdateDisplayState({
             displayType: GetDisplayDtoDisplayTypeEnum.WebRtc,
             emptyDisplay: true
         });

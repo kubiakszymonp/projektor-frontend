@@ -2,26 +2,14 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  TextField,
-  Box,
   DialogActions,
   Button,
-  Stack,
-  Chip,
-  FormControl,
-  InputLabel,
-  Select,
-  OutlinedInput,
-  MenuItem,
-  Checkbox,
-  ListItemText,
 } from "@mui/material";
-import { textUnitApi, textUnitTagApi } from "../../api";
 import { useEffect, useState } from "react";
-import { TransitionAlert } from "../../components/alert.component";
 import { CustomPopover } from "../../components/popover";
-import { CreateTextUnitDto, GetTextUnitTagDto, UpdateTextUnitDto } from "../../api/generated";
+import { CreateTextUnitDto, TextUnitsApi } from "../../api/generated";
 import { TextUnitInputs } from "./text-unit-inputs";
+import { useApi } from "../../services/useApi";
 
 
 
@@ -46,13 +34,14 @@ export const TextUnitEditDialog: React.FC<{
 }> = ({ open, handleClose, textUnitId }) => {
   const [textUnit, setTextUnit] =
     useState<CreateTextUnitDto>();
+  const { getApi } = useApi();
 
   useEffect(() => {
     loadTextUnit();
   }, [open]);
 
   const loadTextUnit = async () => {
-    const res = await textUnitApi.textUnitControllerFindOne(String(textUnitId));
+    const res = await getApi(TextUnitsApi).textUnitControllerFindOne(String(textUnitId));
     setTextUnit({
       title: res.data.title,
       content: res.data.content,
@@ -65,14 +54,14 @@ export const TextUnitEditDialog: React.FC<{
   };
 
   const handleDelete = async () => {
-    await textUnitApi.textUnitControllerRemove(String(textUnitId));
+    await getApi(TextUnitsApi).textUnitControllerRemove(String(textUnitId));
     handleClose();
   };
 
 
   const onSave = async () => {
     if (!textUnit) return;
-    await textUnitApi.textUnitControllerUpdate({ ...textUnit, id: textUnitId });
+    await getApi(TextUnitsApi).textUnitControllerUpdate({ ...textUnit, id: textUnitId });
     handleClose();
   };
 

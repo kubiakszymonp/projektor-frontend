@@ -1,9 +1,9 @@
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
 import { DisplayQueueInputs } from "../TextUnitQueues/display-queue-inputs";
 import { useEffect, useState } from "react";
-import { CreateTextUnitTagDto } from "../../api/generated";
-import { textUnitTagApi } from "../../api";
+import { CreateTextUnitTagDto, TextUnitTagApi } from "../../api/generated";
 import { TagInputs } from "./tag-inputs";
+import { useApi } from "../../services/useApi";
 
 export const TagCreateDialog: React.FC<{
     open: boolean;
@@ -14,6 +14,7 @@ export const TagCreateDialog: React.FC<{
         name: "",
         description: "",
     });
+    const { getApi } = useApi();
 
     useEffect(() => {
         setTag({
@@ -23,7 +24,7 @@ export const TagCreateDialog: React.FC<{
     }, [open]);
 
     const onSave = async () => {
-        await textUnitTagApi.textUnitTagControllerCreate(tag);
+        await getApi(TextUnitTagApi).textUnitTagControllerCreate(tag);
         handleClose();
     }
     return (

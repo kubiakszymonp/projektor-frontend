@@ -18,6 +18,7 @@ import { WebRtcStreamReciever } from "./pages/WebRtc/web-rtc-reciever";
 import { ControllerSettings } from "./pages/ControllerSettings/controller-settings";
 import { ServerProvider } from "./services/api-server-context";
 import { TagList } from "./pages/TagManagement/tag-list";
+import { ApiProvider } from "./services/useApi";
 
 function App() {
   const defaultTheme = createTheme({
@@ -28,31 +29,33 @@ function App() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <ServerProvider>
-        <MediaCaptureProvider>
-          <LoadingProvider>
-            <LoadingSpinner />
-            <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/text-unit-list" element={<TextUnitList />} />
-              <Route path="/display-settings" element={<DisplaySettings />} />
-              <Route path="/display-controller" element={<Controller />} />
-              <Route path="/text-unit-queue-list" element={<TextUnitQueueList />} />
-              <Route
-                path="/projector/:organizationId"
-                element={<ProjectorPage isPreview={false} />}
-              />
-              <Route
-                path="/projector-preview/:organizationId"
-                element={<ProjectorPage isPreview={true} />}
-              />
-              <Route path="/files-manager" element={<FilesManager />} />
-              <Route path="/stream" element={<WebRtcStream />} />
-              <Route path="/controller-settings" element={<ControllerSettings />} />
-              <Route path="/tag-list" element={<TagList />} />
-            </Routes>
-          </LoadingProvider>
-        </MediaCaptureProvider>
+        <ApiProvider>
+          <MediaCaptureProvider>
+            <LoadingProvider>
+              <LoadingSpinner />
+              <Routes>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/text-unit-list" element={<TextUnitList />} />
+                <Route path="/display-settings" element={<DisplaySettings />} />
+                <Route path="/display-controller" element={<Controller />} />
+                <Route path="/text-unit-queue-list" element={<TextUnitQueueList />} />
+                <Route
+                  path="/projector/:organizationId"
+                  element={<ProjectorPage isPreview={false} />}
+                />
+                <Route
+                  path="/projector-preview/:organizationId"
+                  element={<ProjectorPage isPreview={true} />}
+                />
+                <Route path="/files-manager" element={<FilesManager />} />
+                <Route path="/stream" element={<WebRtcStream />} />
+                <Route path="/controller-settings" element={<ControllerSettings />} />
+                <Route path="/tag-list" element={<TagList />} />
+              </Routes>
+            </LoadingProvider>
+          </MediaCaptureProvider>
+        </ApiProvider>
       </ServerProvider>
     </ThemeProvider>
   );

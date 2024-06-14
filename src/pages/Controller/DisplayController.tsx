@@ -2,21 +2,23 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { AutoscalingIframe } from "../../components/autoscaling-iframe";
 
 import { jwtPersistance } from "../../services/jwt-persistance";
-import { displayStateApi, projectorApi, projectorSettingsApi } from "../../api";
 import { useLoading } from "../../components/loading/loading-context";
 import { TextController } from "./TextController";
 import { useNotifyOnProjectorUpdate } from "../../services/useNofifyOrganizationEdit";
 import {
+  DisplayStateApi,
   GetDisplayDto,
   GetDisplayDtoDisplayTypeEnum,
   GetDisplayStateDto,
   GetProjectorSettingsDto,
+  ProjectorSettingsApi,
 } from "../../api/generated";
 import { ExpandMore } from "@mui/icons-material";
 import { Accordion, AccordionSummary, AccordionDetails, Grid, Typography } from "@mui/material";
 import { GeneralDisplayController } from "./GeneralDisplayController";
 import { DisplayQueuesController } from "./DisplayQueuesController";
 import { useMediaQuery, useTheme } from "@mui/material";
+import { useApi } from "../../services/useApi";
 
 export const Controller = () => {
   const [displayState, setDisplayState] = useState<GetDisplayStateDto>();
@@ -28,6 +30,7 @@ export const Controller = () => {
     []
   );
   const gridElementRef = useRef<HTMLDivElement>(null);
+  const { getApi } = useApi();
 
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.down("xs"));
@@ -57,13 +60,13 @@ export const Controller = () => {
   useNotifyOnProjectorUpdate(loadState, { organizationId });
 
   const fetchDisplayState = async () => {
-    const state = await displayStateApi.displayStateControllerGetDisplayState();
+    const state = await getApi(DisplayStateApi).displayStateControllerGetDisplayState();
     setDisplayState(state.data);
   };
 
   const fetchProjectorSettings = async () => {
     const settings =
-      await projectorSettingsApi.projectorSettingsControllerGetSetting();
+      await getApi(ProjectorSettingsApi).projectorSettingsControllerGetSetting();
     setProjectorSettings(settings.data);
   };
 

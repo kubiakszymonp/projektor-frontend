@@ -1,9 +1,9 @@
 import { Box, Card, Checkbox, FormControlLabel, Typography } from "@mui/material";
 import React, { RefObject, useEffect, useMemo, useState } from "react";
-import { displayStateApi, textUnitApi, textUnitQueuesApi } from "../../api";
 import { OnPreviewClickHandler } from "./OnPreviewClick";
-import { GetDisplayDto, GetDisplayQueueDto, GetDisplayStateDto, GetTextUnitDto, MovePageDtoDirectionEnum } from "../../api/generated";
+import { DisplayStateApi, GetDisplayDto, GetDisplayQueueDto, GetDisplayStateDto, GetTextUnitDto, MovePageDtoDirectionEnum, TextUnitsApi } from "../../api/generated";
 import { OrderedParsedTextUnit, ParsedTextUnit } from "text-parser";
+import { useApi } from "../../services/useApi";
 
 export const TextController: React.FC<{
     displayState: GetDisplayStateDto,
@@ -13,6 +13,7 @@ export const TextController: React.FC<{
         const [textUnit, setTextUnit] = useState<GetTextUnitDto>();
         const [displayQueue, setDisplayQueue] =
             useState<GetDisplayQueueDto>();
+        const { getApi } = useApi();
 
         const currentSongParsed = useMemo(() => {
             if (!textUnit) return null;
@@ -29,12 +30,12 @@ export const TextController: React.FC<{
         }
 
         const fetchTextUnit = async (id: string) => {
-            const textUnit = await textUnitApi.textUnitControllerFindOne(id.toString());
+            const textUnit = await getApi(TextUnitsApi).textUnitControllerFindOne(id.toString());
             setTextUnit(textUnit.data);
         };
 
         const selectTextUnitPart = async (index: number) => {
-            await displayStateApi.displayStateControllerUpdateDisplayState({
+            await getApi(DisplayStateApi).displayStateControllerUpdateDisplayState({
                 textUnitId: displayState.textUnitId,
                 textUnitPart: index,
                 textUnitPartPage: 0,
@@ -42,7 +43,7 @@ export const TextController: React.FC<{
         };
 
         const movePage = async (direction: MovePageDtoDirectionEnum) => {
-            await displayStateApi.displayStateControllerMovePage({
+            await getApi(DisplayStateApi).displayStateControllerMovePage({
                 direction,
             });
         };

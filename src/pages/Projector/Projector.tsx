@@ -2,20 +2,21 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./Projector.css";
 import { setPageTitle } from "../../services/page-title";
 import { useParams } from "react-router-dom";
-import { projectorApi, projectorSettingsApi, webRtcStreamApi } from "../../api";
 import { ProjectorMediaDisplay } from "./MediaDisplay";
 import { ProjectorTextDisplay } from "./TextDisplay";
 import { useNotifyOnProjectorUpdate } from "../../services/useNofifyOrganizationEdit";
-import { GetDisplayDto, GetDisplayDtoDisplayTypeEnum, GetProjectorSettingsDto } from "../../api/generated";
+import { GetDisplayDto, GetDisplayDtoDisplayTypeEnum, GetProjectorSettingsDto, ProjectorApi, ProjectorSettingsApi, WebrtcStreamApi } from "../../api/generated";
 import zIndex from "@mui/material/styles/zIndex";
 import { WebRtcStreamReciever } from "../WebRtc/web-rtc-reciever";
 import { generateRandomText } from "../../util/generate-random-text";
+import { useApi } from "../../services/useApi";
 
 export const ProjectorPage = (props: { isPreview: boolean }) => {
   const { organizationId } = useParams();
   const [displayState, setDisplayState] = useState<GetDisplayDto>();
   const [projectorSettings, setProjectorSettings] = useState<GetProjectorSettingsDto>();
   const [screenIdentifier] = useState<string>(generateRandomText());
+  const { getApi } = useApi();
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -26,7 +27,7 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
     const width = window.innerWidth;
     const height = window.innerHeight;
 
-    await projectorSettingsApi.projectorSettingsControllerUpdate({
+    await getApi(ProjectorSettingsApi).projectorSettingsControllerUpdate({
       screenHeight: height,
       screenWidth: width,
     });
@@ -42,7 +43,7 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
 
 
   const sendScreenId = async () => {
-    await webRtcStreamApi.webRtcControllerSetScreen({
+    await getApi(WebrtcStreamApi).webRtcControllerSetScreen({
       screenId: screenIdentifier
     });
   }
@@ -50,11 +51,11 @@ export const ProjectorPage = (props: { isPreview: boolean }) => {
   const getDisplayState = async () => {
     if (!organizationId) return;
     const projectorDisplay =
-      await projectorApi.projectorControllerGetProjectorStateByOrganizationId(
+      await getApi(ProjectorApi).projectorControllerGetProjectorStateByOrganizationId(
         organizationId
       );
 
-    const projectorSettings = await projectorSettingsApi.projectorSettingsControllerGetSetting();
+    const projectorSettings = await getApi(ProjectorSettingsApi).projectorSettingsControllerGetSetting();
 
     setProjectorSettings(projectorSettings.data);
     setDisplayState(projectorDisplay.data);

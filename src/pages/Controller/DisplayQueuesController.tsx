@@ -1,7 +1,7 @@
 import { Box, Typography, Card } from "@mui/material";
 import { useEffect, useState } from "react";
-import { GetDisplayQueueDto, GetDisplayStateDto } from "../../api/generated";
-import { displayStateApi, textUnitQueuesApi } from "../../api";
+import { DisplayStateApi, GetDisplayQueueDto, GetDisplayStateDto, TextUnitQueuesApi } from "../../api/generated";
+import { useApi } from "../../services/useApi";
 
 export const DisplayQueuesController: React.FC<{
     displayState: GetDisplayStateDto,
@@ -9,6 +9,7 @@ export const DisplayQueuesController: React.FC<{
 
     const [displayQueue, setDisplayQueue] =
         useState<GetDisplayQueueDto>();
+    const { getApi } = useApi();
 
     useEffect(() => {
         loadState();
@@ -23,7 +24,7 @@ export const DisplayQueuesController: React.FC<{
     };
 
     const setCurrentTextUnitRequest = async (textUnitId: string) => {
-        await displayStateApi.displayStateControllerUpdateDisplayState({
+        await getApi(DisplayStateApi).displayStateControllerUpdateDisplayState({
             textUnitId: textUnitId,
             textUnitPart: 0,
             textUnitPartPage: 0,
@@ -31,7 +32,7 @@ export const DisplayQueuesController: React.FC<{
     };
 
     const fetchQueue = async (id: string) => {
-        const queue = await textUnitQueuesApi.displayQueuesControllerFindOne(id.toString());
+        const queue = await getApi(TextUnitQueuesApi).displayQueuesControllerFindOne(id.toString());
         setDisplayQueue(queue.data);
     };
 

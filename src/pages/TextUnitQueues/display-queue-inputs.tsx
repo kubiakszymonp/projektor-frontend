@@ -13,10 +13,10 @@ import {
 import { useState, useEffect, useMemo } from "react";
 import { DragAndDropItem } from "./TextUnitQueueList";
 import { TextUnitQueueDragAndDrop } from "./TextUnitQueueDragAndDropComponent";
-import { CreateDisplayQueueDto, GetDisplayQueueDto, GetQueueTextUnit, GetTextUnitDto, UpdateDisplayQueueDto, UpdateTextUnitDto } from "../../api/generated";
+import { CreateDisplayQueueDto, GetDisplayQueueDto, GetQueueTextUnit, GetTextUnitDto, TextUnitsApi, UpdateDisplayQueueDto, UpdateTextUnitDto } from "../../api/generated";
 import { ExpandMore } from "@mui/icons-material";
 import { TextUnitSelection } from "./text-unit-queue-text-unit-selection";
-import { textUnitApi } from "../../api";
+import { useApi } from "../../services/useApi";
 
 
 export const DisplayQueueInputs: React.FC<{
@@ -25,13 +25,14 @@ export const DisplayQueueInputs: React.FC<{
 }> = ({ displayQueue, setDisplayQueue }) => {
 
     const [allTextUnits, setAllTextUnits] = useState<GetTextUnitDto[]>([]);
+    const { getApi } = useApi();
 
     useEffect(() => {
         fetchTextUnits();
     }, []);
 
     const fetchTextUnits = async () => {
-        const res = await textUnitApi.textUnitControllerFindAll();
+        const res = await getApi(TextUnitsApi).textUnitControllerFindAll();
         setAllTextUnits(res.data);
     }
 

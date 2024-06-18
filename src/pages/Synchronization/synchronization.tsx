@@ -25,9 +25,8 @@ export const Synchronization: React.FC = () => {
     const handleAddBackup = async () => {
 
         const response = await getApi(BackupApi).backupControllerFetchBackup();
-        const backupData = response.data;
 
-        await addData<Backup>(Stores.Backup, { id: new Date().getTime().toString(), backupData });
+        await addData<Backup>(Stores.Backup, { id: new Date().getTime().toString(), backupData: response.data.backup });
         getBackups();
     }
 

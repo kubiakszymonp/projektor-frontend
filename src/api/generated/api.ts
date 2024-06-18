@@ -1585,7 +1585,7 @@ export const BackupApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async backupControllerFetchBackup(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async backupControllerFetchBackup(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApplyBackupDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.backupControllerFetchBackup(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['BackupApi.backupControllerFetchBackup']?.[localVarOperationServerIndex]?.url;
@@ -1596,7 +1596,7 @@ export const BackupApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async backupControllerFetchBackupCompressed(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async backupControllerFetchBackupCompressed(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApplyBackupDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.backupControllerFetchBackupCompressed(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['BackupApi.backupControllerFetchBackupCompressed']?.[localVarOperationServerIndex]?.url;
@@ -1635,7 +1635,7 @@ export const BackupApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        backupControllerFetchBackup(options?: any): AxiosPromise<string> {
+        backupControllerFetchBackup(options?: any): AxiosPromise<ApplyBackupDto> {
             return localVarFp.backupControllerFetchBackup(options).then((request) => request(axios, basePath));
         },
         /**
@@ -1643,7 +1643,7 @@ export const BackupApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        backupControllerFetchBackupCompressed(options?: any): AxiosPromise<string> {
+        backupControllerFetchBackupCompressed(options?: any): AxiosPromise<ApplyBackupDto> {
             return localVarFp.backupControllerFetchBackupCompressed(options).then((request) => request(axios, basePath));
         },
     };

@@ -26,6 +26,19 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
+ * @interface ApplyBackupDto
+ */
+export interface ApplyBackupDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ApplyBackupDto
+     */
+    'backup': string;
+}
+/**
+ * 
+ * @export
  * @interface CreateDisplayQueueDto
  */
 export interface CreateDisplayQueueDto {
@@ -1378,6 +1391,311 @@ export class AuthApi extends BaseAPI {
      */
     public authControllerLogin(loginDto: LoginDto, options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).authControllerLogin(loginDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * BackupApi - axios parameter creator
+ * @export
+ */
+export const BackupApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {ApplyBackupDto} applyBackupDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        backupControllerApplyBackup: async (applyBackupDto: ApplyBackupDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'applyBackupDto' is not null or undefined
+            assertParamExists('backupControllerApplyBackup', 'applyBackupDto', applyBackupDto)
+            const localVarPath = `/api/backup`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(applyBackupDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {ApplyBackupDto} applyBackupDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        backupControllerApplyBackupCompressed: async (applyBackupDto: ApplyBackupDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'applyBackupDto' is not null or undefined
+            assertParamExists('backupControllerApplyBackupCompressed', 'applyBackupDto', applyBackupDto)
+            const localVarPath = `/api/backup/compressed`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(applyBackupDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        backupControllerFetchBackup: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/backup`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        backupControllerFetchBackupCompressed: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/backup/compressed`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * BackupApi - functional programming interface
+ * @export
+ */
+export const BackupApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = BackupApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {ApplyBackupDto} applyBackupDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async backupControllerApplyBackup(applyBackupDto: ApplyBackupDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.backupControllerApplyBackup(applyBackupDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BackupApi.backupControllerApplyBackup']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {ApplyBackupDto} applyBackupDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async backupControllerApplyBackupCompressed(applyBackupDto: ApplyBackupDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.backupControllerApplyBackupCompressed(applyBackupDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BackupApi.backupControllerApplyBackupCompressed']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async backupControllerFetchBackup(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.backupControllerFetchBackup(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BackupApi.backupControllerFetchBackup']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async backupControllerFetchBackupCompressed(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.backupControllerFetchBackupCompressed(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BackupApi.backupControllerFetchBackupCompressed']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * BackupApi - factory interface
+ * @export
+ */
+export const BackupApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = BackupApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {ApplyBackupDto} applyBackupDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        backupControllerApplyBackup(applyBackupDto: ApplyBackupDto, options?: any): AxiosPromise<void> {
+            return localVarFp.backupControllerApplyBackup(applyBackupDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {ApplyBackupDto} applyBackupDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        backupControllerApplyBackupCompressed(applyBackupDto: ApplyBackupDto, options?: any): AxiosPromise<void> {
+            return localVarFp.backupControllerApplyBackupCompressed(applyBackupDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        backupControllerFetchBackup(options?: any): AxiosPromise<string> {
+            return localVarFp.backupControllerFetchBackup(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        backupControllerFetchBackupCompressed(options?: any): AxiosPromise<string> {
+            return localVarFp.backupControllerFetchBackupCompressed(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * BackupApi - object-oriented interface
+ * @export
+ * @class BackupApi
+ * @extends {BaseAPI}
+ */
+export class BackupApi extends BaseAPI {
+    /**
+     * 
+     * @param {ApplyBackupDto} applyBackupDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BackupApi
+     */
+    public backupControllerApplyBackup(applyBackupDto: ApplyBackupDto, options?: RawAxiosRequestConfig) {
+        return BackupApiFp(this.configuration).backupControllerApplyBackup(applyBackupDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {ApplyBackupDto} applyBackupDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BackupApi
+     */
+    public backupControllerApplyBackupCompressed(applyBackupDto: ApplyBackupDto, options?: RawAxiosRequestConfig) {
+        return BackupApiFp(this.configuration).backupControllerApplyBackupCompressed(applyBackupDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BackupApi
+     */
+    public backupControllerFetchBackup(options?: RawAxiosRequestConfig) {
+        return BackupApiFp(this.configuration).backupControllerFetchBackup(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BackupApi
+     */
+    public backupControllerFetchBackupCompressed(options?: RawAxiosRequestConfig) {
+        return BackupApiFp(this.configuration).backupControllerFetchBackupCompressed(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

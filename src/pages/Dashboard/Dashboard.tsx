@@ -9,6 +9,7 @@ import {
   SettingsApplications,
   SettingsRemoteOutlined,
   SettingsSuggestRounded,
+  Sync,
   Tag,
 } from "@mui/icons-material";
 import { Box, Card, Container, Grid, Stack, Typography } from "@mui/material";
@@ -73,11 +74,11 @@ export const Dashboard = () => {
       onClick: () => navigate("/stream"),
     },
     {
-      icon: <SettingsApplications fontSize="large" />,
-      title: "Ustawienia kontrolera",
+      icon: <Sync fontSize="large" />,
+      title: "Synchronizacja",
       description: "",
       onClick: () => {
-        navigate("/controller-settings");
+        navigate("/synchronization");
       },
     },
     {

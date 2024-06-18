@@ -20,6 +20,7 @@ import { ServerProvider } from "./services/api-server-context";
 import { TagList } from "./pages/TagManagement/tag-list";
 import { ApiProvider } from "./services/useApi";
 import { AutoLoginProjectorPage } from "./pages/Projector/AutoLoginProjector";
+import { UserList } from "./pages/UsersManagement/user-list";
 
 function App() {
   const defaultTheme = createTheme({
@@ -57,6 +58,7 @@ function App() {
                 <Route path="/stream" element={<WebRtcStream />} />
                 <Route path="/controller-settings" element={<ControllerSettings />} />
                 <Route path="/tag-list" element={<TagList />} />
+                <Route path="/users-management" element={<UserList />} />
               </Routes>
             </LoadingProvider>
           </MediaCaptureProvider>

@@ -60,24 +60,6 @@ export interface CreateOrganizationDto {
      * @memberof CreateOrganizationDto
      */
     'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateOrganizationDto
-     */
-    'phoneNumber': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateOrganizationDto
-     */
-    'paymentData': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateOrganizationDto
-     */
-    'contactData': string;
 }
 /**
  * 
@@ -177,21 +159,7 @@ export interface CreateUserDto {
      * @memberof CreateUserDto
      */
     'organizationId': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateUserDto
-     */
-    'role': CreateUserDtoRoleEnum;
 }
-
-export const CreateUserDtoRoleEnum = {
-    Admin: 'ADMIN',
-    User: 'USER'
-} as const;
-
-export type CreateUserDtoRoleEnum = typeof CreateUserDtoRoleEnum[keyof typeof CreateUserDtoRoleEnum];
-
 /**
  * 
  * @export
@@ -360,6 +328,12 @@ export interface GetDisplayStateDto {
      * @memberof GetDisplayStateDto
      */
     'mediaFileId': string | null;
+    /**
+     * 
+     * @type {GetMediaFileDto}
+     * @memberof GetDisplayStateDto
+     */
+    'mediaFile'?: GetMediaFileDto;
     /**
      * 
      * @type {string}
@@ -710,6 +684,43 @@ export interface GetTextUnitTagDto {
 /**
  * 
  * @export
+ * @interface GetUserDto
+ */
+export interface GetUserDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetUserDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetUserDto
+     */
+    'email': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetUserDto
+     */
+    'password': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetUserDto
+     */
+    'organizationId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetUserDto
+     */
+    'id': string;
+}
+/**
+ * 
+ * @export
  * @interface LoginDto
  */
 export interface LoginDto {
@@ -759,24 +770,6 @@ export interface Organization {
      * @memberof Organization
      */
     'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Organization
-     */
-    'phoneNumber': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Organization
-     */
-    'paymentData': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Organization
-     */
-    'contactData': string;
     /**
      * 
      * @type {Array<User>}
@@ -903,6 +896,12 @@ export interface UpdateDisplayStateDto {
      * @memberof UpdateDisplayStateDto
      */
     'mediaFileId'?: string | null;
+    /**
+     * 
+     * @type {GetMediaFileDto}
+     * @memberof UpdateDisplayStateDto
+     */
+    'mediaFile'?: GetMediaFileDto;
     /**
      * 
      * @type {string}
@@ -1176,22 +1175,8 @@ export interface UpdateUserDto {
      * @type {string}
      * @memberof UpdateUserDto
      */
-    'role'?: UpdateUserDtoRoleEnum;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateUserDto
-     */
     'id': string;
 }
-
-export const UpdateUserDtoRoleEnum = {
-    Admin: 'ADMIN',
-    User: 'USER'
-} as const;
-
-export type UpdateUserDtoRoleEnum = typeof UpdateUserDtoRoleEnum[keyof typeof UpdateUserDtoRoleEnum];
-
 /**
  * 
  * @export
@@ -3984,7 +3969,7 @@ export const TextUnitsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async textUnitControllerUpdate(updateTextUnitDto: UpdateTextUnitDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async textUnitControllerUpdate(updateTextUnitDto: UpdateTextUnitDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTextUnitDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.textUnitControllerUpdate(updateTextUnitDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TextUnitsApi.textUnitControllerUpdate']?.[localVarOperationServerIndex]?.url;
@@ -4041,7 +4026,7 @@ export const TextUnitsApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        textUnitControllerUpdate(updateTextUnitDto: UpdateTextUnitDto, options?: any): AxiosPromise<void> {
+        textUnitControllerUpdate(updateTextUnitDto: UpdateTextUnitDto, options?: any): AxiosPromise<GetTextUnitDto> {
             return localVarFp.textUnitControllerUpdate(updateTextUnitDto, options).then((request) => request(axios, basePath));
         },
     };
@@ -4199,10 +4184,10 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerGetUser: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        userControllerGetUserById: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('userControllerGetUser', 'id', id)
-            const localVarPath = `/api/users/{id}`
+            assertParamExists('userControllerGetUserById', 'id', id)
+            const localVarPath = `/api/users/by-id/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4232,11 +4217,15 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {string} organizationId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerGetUsers: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/users`;
+        userControllerGetUsersForOrganization: async (organizationId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'organizationId' is not null or undefined
+            assertParamExists('userControllerGetUsersForOrganization', 'organizationId', organizationId)
+            const localVarPath = `/api/users/by-organization/{organizationId}`
+                .replace(`{${"organizationId"}}`, encodeURIComponent(String(organizationId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4342,21 +4331,22 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userControllerGetUser(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerGetUser(id, options);
+        async userControllerGetUserById(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetUserDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerGetUserById(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UsersApi.userControllerGetUser']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['UsersApi.userControllerGetUserById']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
+         * @param {string} organizationId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userControllerGetUsers(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<User>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerGetUsers(options);
+        async userControllerGetUsersForOrganization(organizationId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetUserDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerGetUsersForOrganization(organizationId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UsersApi.userControllerGetUsers']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['UsersApi.userControllerGetUsersForOrganization']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -4405,16 +4395,17 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerGetUser(id: string, options?: any): AxiosPromise<User> {
-            return localVarFp.userControllerGetUser(id, options).then((request) => request(axios, basePath));
+        userControllerGetUserById(id: string, options?: any): AxiosPromise<GetUserDto> {
+            return localVarFp.userControllerGetUserById(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {string} organizationId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerGetUsers(options?: any): AxiosPromise<Array<User>> {
-            return localVarFp.userControllerGetUsers(options).then((request) => request(axios, basePath));
+        userControllerGetUsersForOrganization(organizationId: string, options?: any): AxiosPromise<Array<GetUserDto>> {
+            return localVarFp.userControllerGetUsersForOrganization(organizationId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -4464,18 +4455,19 @@ export class UsersApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public userControllerGetUser(id: string, options?: RawAxiosRequestConfig) {
-        return UsersApiFp(this.configuration).userControllerGetUser(id, options).then((request) => request(this.axios, this.basePath));
+    public userControllerGetUserById(id: string, options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).userControllerGetUserById(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @param {string} organizationId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public userControllerGetUsers(options?: RawAxiosRequestConfig) {
-        return UsersApiFp(this.configuration).userControllerGetUsers(options).then((request) => request(this.axios, this.basePath));
+    public userControllerGetUsersForOrganization(organizationId: string, options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).userControllerGetUsersForOrganization(organizationId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

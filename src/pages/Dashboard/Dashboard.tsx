@@ -3,6 +3,7 @@ import {
   Logout,
   LyricsOutlined,
   PermMedia,
+  Person,
   QueueOutlined,
   ScreenshotMonitor,
   SettingsApplications,
@@ -86,6 +87,13 @@ export const Dashboard = () => {
       onClick: () => {
         const organizationId = jwtPersistance.getDecodedJwt()?.organizationId;
         navigate("/projector/" + organizationId);
+      },
+    },
+    {
+      icon: <Person fontSize="large" />,
+      title: "Zarządzanie użytkownikami",
+      onClick: () => {
+        navigate("users-management");
       },
     },
     {

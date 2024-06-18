@@ -19,9 +19,9 @@ export class JWTPersistance {
 
   getDecodedJwt(): {
     email: string;
-    id: number;
+    id: string;
     role: string;
-    organizationId: number;
+    organizationId: string;
   } | null {
     const jwt = this.getJwt();
     if (!jwt) {
@@ -29,9 +29,9 @@ export class JWTPersistance {
     }
     const decoded = jwtDecode<{
       email: string;
-      id: number;
+      id: string;
       role: string;
-      organizationId: number;
+      organizationId: string;
     }>(jwt);
     return decoded;
   }

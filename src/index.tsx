@@ -5,8 +5,6 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import ScrollToTop from "./util/ScrollToTop";
-import { width } from "@mui/system";
-import { register } from "./service-worker";
 
 
 const root = ReactDOM.createRoot(
@@ -23,4 +21,4 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
-register();
+// register();

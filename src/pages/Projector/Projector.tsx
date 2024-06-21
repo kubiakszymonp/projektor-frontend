@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import "./Projector.css";
 import { setPageTitle } from "../../services/page-title";
 import { useParams } from "react-router-dom";
 import { ProjectorMediaDisplay } from "./MediaDisplay";
@@ -63,7 +62,15 @@ export const ProjectorPage: React.FC<{ isPreview: boolean }> = ({ isPreview }) =
     <>
       <div
         className="projector-container"
-        style={{ backgroundColor: projectorSettings?.backgroundColor }}
+        style={{
+          backgroundColor: projectorSettings?.backgroundColor,
+          overflow: "hidden",
+          margin: 0,
+          width: "100vw",
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
         {projectorSettings && (
           <>
@@ -78,7 +85,7 @@ export const ProjectorPage: React.FC<{ isPreview: boolean }> = ({ isPreview }) =
             )}
           </>
         )}
-      </div>
+      </div >
       {displayState?.emptyDisplay === true && (
         <div id="black-cover-empty-display" style={{
           zIndex: 10,
@@ -88,7 +95,8 @@ export const ProjectorPage: React.FC<{ isPreview: boolean }> = ({ isPreview }) =
           backgroundColor: projectorSettings?.backgroundColor,
           top: 0
         }}></div>
-      )}
+      )
+      }
     </>
   );
 };

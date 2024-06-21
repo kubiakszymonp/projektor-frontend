@@ -22,7 +22,7 @@ export const Dashboard = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (jwtPersistance.getDecodedJwt() === null) {
-      navigate("login");
+      // navigate("login");
     }
   }, []);
 

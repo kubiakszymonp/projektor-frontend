@@ -68,95 +68,93 @@ export const LoginPage = () => {
       });
   };
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          height: "100vh",
-          justifyContent: "center",
-        }}
-      >
-        <Container component="main" maxWidth="md">
-          <CssBaseline />
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+        justifyContent: "center",
+      }}
+    >
+      <Container component="main" maxWidth="md">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <LockOutlined />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Logowanie kontrolera
+          </Typography>
           <Box
-            sx={{
-              marginTop: 8,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
+            component="form"
+            noValidate
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSubmit();
+              }
             }}
+            sx={{ mt: 1, pt: 3 }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              <LockOutlined />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Logowanie kontrolera
-            </Typography>
-            <Box
-              component="form"
-              noValidate
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleSubmit();
-                }
+            <TransitionAlert
+              opened={errorMessage.length > 0}
+              text={errorMessage}
+              severity={"error"}
+            />
+            <TextField
+              inputProps={{
+                form: {
+                  autocomplete: "off",
+                },
               }}
-              sx={{ mt: 1, pt: 3 }}
+              margin="normal"
+              required
+              fullWidth
+              name="email"
+              label="Email"
+              type="text"
+              id="email"
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
+            <TextField
+              inputProps={{
+                form: {
+                  autocomplete: "off",
+                },
+              }}
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Hasło"
+              type="password"
+              id="password"
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            />
+            <Button
+              onClick={handleSubmit}
+              fullWidth
+              size="large"
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
             >
-              <TransitionAlert
-                opened={errorMessage.length > 0}
-                text={errorMessage}
-                severity={"error"}
-              />
-              <TextField
-                inputProps={{
-                  form: {
-                    autocomplete: "off",
-                  },
-                }}
-                margin="normal"
-                required
-                fullWidth
-                name="email"
-                label="Email"
-                type="text"
-                id="email"
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-              />
-              <TextField
-                inputProps={{
-                  form: {
-                    autocomplete: "off",
-                  },
-                }}
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Hasło"
-                type="password"
-                id="password"
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-              />
-              <Button
-                onClick={handleSubmit}
-                fullWidth
-                size="large"
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Logowanie
-              </Button>
-            </Box>
+              Logowanie
+            </Button>
           </Box>
-          <Copyright sx={{ mt: 5, mb: 4 }} />
-        </Container>
-      </div>
-    </ThemeProvider>
+        </Box>
+        <Copyright sx={{ mt: 5, mb: 4 }} />
+      </Container>
+    </div>
   );
 };

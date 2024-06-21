@@ -102,7 +102,7 @@ export const Controller = () => {
             desiredWidth={calc()}
             originalHeight={projectorSettings?.screenHeight || 0}
             originalWidth={projectorSettings?.screenWidth || 0}
-            url={"/projector-preview/" + jwtPersistance.getDecodedJwt()?.organizationId}
+            url={"#/projector-preview/" + jwtPersistance.getDecodedJwt()?.organizationId}
           />
         </Grid>
 

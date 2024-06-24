@@ -21,6 +21,7 @@ import StyledBox from "../../components/page-wrapper";
 import { TagCreateDialog } from "./tag-create-dialog";
 import { TagEditDialog } from "./tag-edit-dialog";
 import { useApi } from "../../services/useApi";
+import { NavBar } from "../../components/nav-bar";
 
 export const TagList = () => {
 
@@ -29,7 +30,7 @@ export const TagList = () => {
     const [searchText, setSearchText] = useState<string>("");
     const [editTagDialogOpen, setEditTagDialogOpen] = useState(false);
     const [createTagDialogOpen, setCreateTagDialogOpen] = useState(false);
-    const {getApi} = useApi();
+    const { getApi } = useApi();
 
     useEffect(() => {
         fetchTags();
@@ -80,6 +81,7 @@ export const TagList = () => {
 
     return (
         <>
+            <NavBar />
             {selectedTagId && (
                 <TagEditDialog
                     tagId={selectedTagId}

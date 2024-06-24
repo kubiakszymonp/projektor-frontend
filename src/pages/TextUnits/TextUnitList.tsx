@@ -31,6 +31,7 @@ import { TextUnitAddDialog } from "./TextUnitAddDialog";
 import StyledBox from "../../components/page-wrapper";
 import { TextUnitFiltering } from "./text-unit-filtering";
 import { useApi } from "../../services/useApi";
+import { NavBar } from "../../components/nav-bar";
 
 
 export const TextUnitList: React.FC = () => {
@@ -130,6 +131,7 @@ export const TextUnitList: React.FC = () => {
 
   return (
     <>
+      <NavBar />
       {selectedTextUnit && (
         <TextUnitEditDialog
           open={textUnitEditDialogOpen}

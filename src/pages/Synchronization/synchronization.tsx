@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Stores, User, addData, deleteData, getStoreData, initDB } from "./db";
 import { useApi } from "../../services/useApi";
 import { BackupApi } from "../../api/generated";
+import { NavBar } from "../../components/nav-bar";
 
 export interface Backup {
     id: string;
@@ -48,37 +49,40 @@ export const Synchronization: React.FC = () => {
     };
 
     return (
-        <StyledBox>
-            <Typography variant="h4" sx={{ p: 2 }}>
-                Synchronizacja
-            </Typography>
-            <Button
-                onClick={handleAddBackup}
-                variant="contained"
-                color="primary">
-                Pobierz zsynchronizowane dane
-            </Button>
+        <>
+            <NavBar />
+            <StyledBox>
+                <Typography variant="h4" sx={{ p: 2 }}>
+                    Synchronizacja
+                </Typography>
+                <Button
+                    onClick={handleAddBackup}
+                    variant="contained"
+                    color="primary">
+                    Pobierz zsynchronizowane dane
+                </Button>
 
-            {backups.map((backup) => (
-                <Card key={backup.id} sx={{
-                    m: 1,
-                    p: 1
-                }}>
-                    <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
-                        <Typography>{new Date(parseInt(backup.id)).toLocaleDateString() + " " + new Date(parseInt(backup.id)).toLocaleTimeString()}</Typography>
-                        <div>
-                            <Button sx={{
-                                m: 1
-                            }} variant="outlined" onClick={() => {
-                                applyBackup(backup)
-                            }}>Zastosuj</Button>
-                            <Button sx={{
-                                m: 1
-                            }} variant="outlined" color="error" onClick={() => removeBackups(backup.id)}>Usuń</Button>
-                        </div>
-                    </Stack>
-                </Card>
-            ))}
-        </StyledBox>
+                {backups.map((backup) => (
+                    <Card key={backup.id} sx={{
+                        m: 1,
+                        p: 1
+                    }}>
+                        <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
+                            <Typography>{new Date(parseInt(backup.id)).toLocaleDateString() + " " + new Date(parseInt(backup.id)).toLocaleTimeString()}</Typography>
+                            <div>
+                                <Button sx={{
+                                    m: 1
+                                }} variant="outlined" onClick={() => {
+                                    applyBackup(backup)
+                                }}>Zastosuj</Button>
+                                <Button sx={{
+                                    m: 1
+                                }} variant="outlined" color="error" onClick={() => removeBackups(backup.id)}>Usuń</Button>
+                            </div>
+                        </Stack>
+                    </Card>
+                ))}
+            </StyledBox>
+        </>
     );
 };

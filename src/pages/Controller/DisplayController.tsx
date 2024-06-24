@@ -19,6 +19,7 @@ import { GeneralDisplayController } from "./GeneralDisplayController";
 import { DisplayQueuesController } from "./DisplayQueuesController";
 import { useMediaQuery, useTheme } from "@mui/material";
 import { useApi } from "../../services/useApi";
+import { NavBar } from "../../components/nav-bar";
 
 export const Controller = () => {
   const [displayState, setDisplayState] = useState<GetDisplayStateDto>();
@@ -79,84 +80,86 @@ export const Controller = () => {
 
 
   return (
-    <div
-      style={{
-        position: "relative",
-        backgroundColor: "#101010",
-        minHeight: "100vh",
-      }}
-    >
-      <Grid container spacing={2} >
-        <Grid item xs={12} md={6} ref={gridElementRef} sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}>
-          <AutoscalingIframe
-            onLoad={() => {
-              setTimeout(() => {
-                setLoading(false);
-              }, 300);
-            }}
-            ref={previewRef}
-            desiredWidth={calc()}
-            originalHeight={projectorSettings?.screenHeight || 0}
-            originalWidth={projectorSettings?.screenWidth || 0}
-            url={"#/projector-preview/" + jwtPersistance.getDecodedJwt()?.organizationId}
-          />
-        </Grid>
+    <>
+      <NavBar />
+      <div
+        style={{
+          backgroundColor: "#101010",
+          minHeight: "100vh",
+        }}
+      >
+        <Grid container spacing={2} sx={{marginTop: 0}}>
+          <Grid item xs={12} md={6} ref={gridElementRef} sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}>
+            <AutoscalingIframe
+              onLoad={() => {
+                setTimeout(() => {
+                  setLoading(false);
+                }, 300);
+              }}
+              ref={previewRef}
+              desiredWidth={calc()}
+              originalHeight={projectorSettings?.screenHeight || 0}
+              originalWidth={projectorSettings?.screenWidth || 0}
+              url={"#/projector-preview/" + jwtPersistance.getDecodedJwt()?.organizationId}
+            />
+          </Grid>
 
-        <Grid item xs={12} md={6}>
-          <Accordion disableGutters sx={{}} defaultExpanded>
-            <AccordionSummary
-              expandIcon={<ExpandMore />}
-              aria-controls="panel1-content"
-              id="panel1-header"
-            >
-              Ustawienia pieśni
-            </AccordionSummary>
-            <AccordionDetails>
-              {displayState && (
-                <TextController displayState={displayState} previewRef={previewRef} />
-              )}
-            </AccordionDetails>
-          </Accordion>
-        </Grid>
+          <Grid item xs={12} md={6}>
+            <Accordion disableGutters sx={{}} defaultExpanded>
+              <AccordionSummary
+                expandIcon={<ExpandMore />}
+                aria-controls="panel1-content"
+                id="panel1-header"
+              >
+                Ustawienia pieśni
+              </AccordionSummary>
+              <AccordionDetails>
+                {displayState && (
+                  <TextController displayState={displayState} previewRef={previewRef} />
+                )}
+              </AccordionDetails>
+            </Accordion>
+          </Grid>
 
-        <Grid item xs={12} md={6}>
-          <Accordion disableGutters sx={{}} defaultExpanded>
-            <AccordionSummary
-              expandIcon={<ExpandMore />}
-              aria-controls="panel2-content"
-              id="panel2-header"
-            >
-              Ustawienia kolejki
-            </AccordionSummary>
-            <AccordionDetails>
-              {displayState && (
-                <DisplayQueuesController displayState={displayState} />
-              )}
-            </AccordionDetails>
-          </Accordion>
-        </Grid>
+          <Grid item xs={12} md={6}>
+            <Accordion disableGutters sx={{}} defaultExpanded>
+              <AccordionSummary
+                expandIcon={<ExpandMore />}
+                aria-controls="panel2-content"
+                id="panel2-header"
+              >
+                Ustawienia kolejki
+              </AccordionSummary>
+              <AccordionDetails>
+                {displayState && (
+                  <DisplayQueuesController displayState={displayState} />
+                )}
+              </AccordionDetails>
+            </Accordion>
+          </Grid>
 
-        <Grid item xs={12} md={6}>
-          <Accordion disableGutters sx={{}} defaultExpanded>
-            <AccordionSummary
-              expandIcon={<ExpandMore />}
-              aria-controls="panel3-content"
-              id="panel3-header"
-            >
-              Typ treści
-            </AccordionSummary>
-            <AccordionDetails>
-              {displayState && (
-                <GeneralDisplayController displayState={displayState} />
-              )}
-            </AccordionDetails>
-          </Accordion>
+          <Grid item xs={12} md={6}>
+            <Accordion disableGutters sx={{}} defaultExpanded>
+              <AccordionSummary
+                expandIcon={<ExpandMore />}
+                aria-controls="panel3-content"
+                id="panel3-header"
+              >
+                Typ treści
+              </AccordionSummary>
+              <AccordionDetails>
+                {displayState && (
+                  <GeneralDisplayController displayState={displayState} />
+                )}
+              </AccordionDetails>
+            </Accordion>
+          </Grid>
         </Grid>
-      </Grid>
-    </div>
+      </div>
+    </>
   );
 };

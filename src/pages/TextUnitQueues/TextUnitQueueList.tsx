@@ -19,6 +19,7 @@ import { DisplayStateApi, GetDisplayQueueDto, GetTextUnitDto, TextUnitQueuesApi 
 import { TextUnitQueueCreateDialog } from "./TextUnitQueueCreateDialog";
 import StyledBox from "../../components/page-wrapper";
 import { useApi } from "../../services/useApi";
+import { NavBar } from "../../components/nav-bar";
 
 export const TextUnitQueueList = () => {
   const [allDisplayQueues, setAllDisplayQueues] = useState<GetDisplayQueueDto[]>([]);
@@ -94,6 +95,7 @@ export const TextUnitQueueList = () => {
 
   return (
     <>
+      <NavBar />
       {selectedDisplayQueue && (
         <TextUnitQueueEditDialog
           textUnitQueueId={selectedDisplayQueue.id}

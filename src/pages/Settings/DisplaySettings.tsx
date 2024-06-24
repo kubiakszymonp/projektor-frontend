@@ -14,6 +14,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { GetProjectorSettingsDto, ProjectorSettingsApi, TextStrategy } from "../../api/generated";
 import StyledBox from "../../components/page-wrapper";
 import { useApi } from "../../services/useApi";
+import { NavBar } from "../../components/nav-bar";
 
 interface FieldWithDescription {
   fieldName: string;
@@ -148,81 +149,84 @@ export const DisplaySettings = () => {
   };
 
   return (
-    <StyledBox>
-      <Typography
-        component="h3"
-        variant="h4"
-        sx={{
-          marginBottom: 3,
-        }}
-      >
-        Ustawienia
-      </Typography>
-      {projectorSettings && (
-        <Stack direction={"column"}>
-          <Typography variant="h5" sx={{ p: 2 }}>
-            Ustawienia tekstu
-          </Typography>
-          {TEXT_SETTINGS.map((field, index) => (
-            <TextField
-              sx={{ mb: 2 }}
-              key={index}
-              id="outlined-basic"
-              label={field.name}
-              variant="outlined"
-              value={(projectorSettings as any)[field.fieldName]}
-              onChange={(e) => {
-                setProjectorSettings({
-                  ...projectorSettings,
-                  [field.fieldName]: e.target.value,
-                });
-              }}
-            />
-          ))}
-          <FormControl>
-            <InputLabel id="demo-select-small-label">Tryb wyświetlania tekstu</InputLabel>
-            <Select
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              value={
-                (projectorSettings as any)[TEXT_STRATEGY_INPUT.fieldName]
-              }
-              label="Tryb wyświetlania tekstu"
-              onChange={(e) => {
-                setProjectorSettings({
-                  ...projectorSettings,
-                  [TEXT_STRATEGY_INPUT.fieldName]: e.target.value,
-                });
-              }}
-            >
-              {TEXT_STRATEGY_INPUT.options?.map((option) => (
-                <MenuItem key={option.key} value={option.key}>
-                  {option.value}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Typography variant="h5" sx={{ p: 2 }}>
-            Ustawienia wizualne
-          </Typography>
-          {DISPLAY_SETTINGS.map((field, index) => (
-            <TextField
-              sx={{ mb: 2 }}
-              key={index}
-              id="outlined-basic"
-              label={field.name}
-              variant="outlined"
-              value={(projectorSettings as any)[field.fieldName]}
-              onChange={(e) => {
-                setProjectorSettings({
-                  ...projectorSettings,
-                  [field.fieldName]: e.target.value,
-                });
-              }}
-            />
-          ))}
-        </Stack>
-      )}
-    </StyledBox>
+    <>
+      <NavBar />
+      <StyledBox>
+        <Typography
+          component="h3"
+          variant="h4"
+          sx={{
+            marginBottom: 3,
+          }}
+        >
+          Ustawienia
+        </Typography>
+        {projectorSettings && (
+          <Stack direction={"column"}>
+            <Typography variant="h5" sx={{ p: 2 }}>
+              Ustawienia tekstu
+            </Typography>
+            {TEXT_SETTINGS.map((field, index) => (
+              <TextField
+                sx={{ mb: 2 }}
+                key={index}
+                id="outlined-basic"
+                label={field.name}
+                variant="outlined"
+                value={(projectorSettings as any)[field.fieldName]}
+                onChange={(e) => {
+                  setProjectorSettings({
+                    ...projectorSettings,
+                    [field.fieldName]: e.target.value,
+                  });
+                }}
+              />
+            ))}
+            <FormControl>
+              <InputLabel id="demo-select-small-label">Tryb wyświetlania tekstu</InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={
+                  (projectorSettings as any)[TEXT_STRATEGY_INPUT.fieldName]
+                }
+                label="Tryb wyświetlania tekstu"
+                onChange={(e) => {
+                  setProjectorSettings({
+                    ...projectorSettings,
+                    [TEXT_STRATEGY_INPUT.fieldName]: e.target.value,
+                  });
+                }}
+              >
+                {TEXT_STRATEGY_INPUT.options?.map((option) => (
+                  <MenuItem key={option.key} value={option.key}>
+                    {option.value}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Typography variant="h5" sx={{ p: 2 }}>
+              Ustawienia wizualne
+            </Typography>
+            {DISPLAY_SETTINGS.map((field, index) => (
+              <TextField
+                sx={{ mb: 2 }}
+                key={index}
+                id="outlined-basic"
+                label={field.name}
+                variant="outlined"
+                value={(projectorSettings as any)[field.fieldName]}
+                onChange={(e) => {
+                  setProjectorSettings({
+                    ...projectorSettings,
+                    [field.fieldName]: e.target.value,
+                  });
+                }}
+              />
+            ))}
+          </Stack>
+        )}
+      </StyledBox>
+    </>
   );
 };

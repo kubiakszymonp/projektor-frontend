@@ -9,6 +9,7 @@ import { ConnectingState, acceptRtcAnswer, createPeerConnectionWithOffer, getWeb
 import { environment } from "../../environment";
 import { Socket, io } from "socket.io-client";
 import { useApi } from "../../services/useApi";
+import { NavBar } from "../../components/nav-bar";
 
 export const WebRtcStream: React.FC = () => {
     const localVideoRef = useRef<HTMLVideoElement>(null);
@@ -137,11 +138,18 @@ export const WebRtcStream: React.FC = () => {
 
     return (
         <>
-            <div style={{ display: "flex", height: "100vh", width: "100%", backgroundColor: "black", justifyContent: "center", alignItems: "center" }}>
+            <NavBar />
+            <div style={{
+                display: "flex",
+                height: "100vh", width: "100%",
+                backgroundColor: "black", justifyContent: "center",
+                alignItems: "center",
+                position: "relative"
+            }}>
                 <div
                     style={{
                         position: "absolute",
-                        top: "5%",
+                        top: "1rem",
                         zIndex: 5,
                         display: "flex",
                         justifyContent: "center",

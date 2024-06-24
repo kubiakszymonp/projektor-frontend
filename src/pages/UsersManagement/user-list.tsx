@@ -7,6 +7,7 @@ import { jwtPersistance } from "../../services/jwt-persistance";
 import StyledBox from "../../components/page-wrapper";
 import { UserCreateDialog } from "./create-user-dialog";
 import { UserUpdateDialog } from "./update-user-dialog";
+import { NavBar } from "../../components/nav-bar";
 
 export const UserList: React.FC = () => {
 
@@ -47,6 +48,7 @@ export const UserList: React.FC = () => {
 
     return (
         <>
+            <NavBar />
             <UserCreateDialog
                 handleClose={() => {
                     setOpenCreateDialog(false);

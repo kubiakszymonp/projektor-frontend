@@ -17,6 +17,7 @@ import { DisplayStateApi, GetMediaFileDto, MediaFilesApi } from "../../api/gener
 import { uploadFilesToBackend } from "../../util/upload-files";
 import StyledBox from "../../components/page-wrapper";
 import { useApi } from "../../services/useApi";
+import { NavBar } from "../../components/nav-bar";
 
 export const FilesManager: React.FC = () => {
   const [fileInfosGrouped, setFileInfosGrouped] = useState<
@@ -136,162 +137,165 @@ export const FilesManager: React.FC = () => {
   };
 
   return (
-    <StyledBox>
-      <FilePreviewModal
-        open={filePreviewModalOpen}
-        currentFile={currentPreviewFile}
-        nextFile={moveToNextFile}
-        previousFile={moveToPreviousFile}
-        handleClose={() => {
-          setFilePreviewModalOpen(false);
-        }}
-        refresh={loadData}
-      />
-      <input
-        type="file"
-        multiple
-        hidden
-        ref={inputRef}
-        onChange={() => {
-          handleUpload();
-        }}
-      />
-      <Button
-        variant="outlined"
-        sx={{
-          px: 5,
-          mx: 2,
-        }}
-        onClick={() => {
-          inputRef?.current?.click();
-        }}
-      >
-        Prześlij jeden lub więcej plików
-      </Button>
-
-      {fileInfosGrouped.map((dateGroup) => (
-        <Box
-          key={dateGroup.date.toString()}
+    <>
+      <NavBar />
+      <StyledBox>
+        <FilePreviewModal
+          open={filePreviewModalOpen}
+          currentFile={currentPreviewFile}
+          nextFile={moveToNextFile}
+          previousFile={moveToPreviousFile}
+          handleClose={() => {
+            setFilePreviewModalOpen(false);
+          }}
+          refresh={loadData}
+        />
+        <input
+          type="file"
+          multiple
+          hidden
+          ref={inputRef}
+          onChange={() => {
+            handleUpload();
+          }}
+        />
+        <Button
+          variant="outlined"
           sx={{
-            p: 1,
+            px: 5,
+            mx: 2,
+          }}
+          onClick={() => {
+            inputRef?.current?.click();
           }}
         >
-          <Typography variant={"h5"} sx={{ m: 1 }}>
-            {dateGroup.date.toDateString()}
-          </Typography>
-          <Grid container spacing={1}>
-            {dateGroup.files.map((fileInfo) => (
-              <Grid item xs={6} sm={4} md={3} key={fileInfo.id}>
-                <Card
-                  sx={{
-                    p: 1,
-                  }}
-                >
-                  <Stack direction={"row"} justifyContent={"end"}>
-                    {currentProjectorDisplayedImageId === fileInfo.id && (
-                      <Badge
-                        classes={{
-                          anchorOriginTopRightRectangular: "noTransform",
-                        }}
-                        color="secondary"
-                        badgeContent={"Wyświetlane"}
-                      ></Badge>
-                    )}
-                  </Stack>
-                  <Box
+          Prześlij jeden lub więcej plików
+        </Button>
+
+        {fileInfosGrouped.map((dateGroup) => (
+          <Box
+            key={dateGroup.date.toString()}
+            sx={{
+              p: 1,
+            }}
+          >
+            <Typography variant={"h5"} sx={{ m: 1 }}>
+              {dateGroup.date.toDateString()}
+            </Typography>
+            <Grid container spacing={1}>
+              {dateGroup.files.map((fileInfo) => (
+                <Grid item xs={6} sm={4} md={3} key={fileInfo.id}>
+                  <Card
                     sx={{
-                      maxHeight: {
-                        xs: "150px",
-                        sm: "250px",
-                        md: "300px",
-                      },
-                      height: {
-                        xs: "150px",
-                        sm: "250px",
-                        md: "300px",
-                      },
-                      overflow: "hidden",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                    onClick={() => {
-                      setCurrentPreviewFile(fileInfo);
-                      setFilePreviewModalOpen(true);
+                      p: 1,
                     }}
                   >
-                    <img
-                      src={getStaticResourceUrl(fileInfo.url)}
-                      alt={fileInfo.name}
-                      style={{
-                        objectFit: "cover",
-                        objectPosition: "center",
-                        width: "100%",
-                        height: "100%",
+                    <Stack direction={"row"} justifyContent={"end"}>
+                      {currentProjectorDisplayedImageId === fileInfo.id && (
+                        <Badge
+                          classes={{
+                            anchorOriginTopRightRectangular: "noTransform",
+                          }}
+                          color="secondary"
+                          badgeContent={"Wyświetlane"}
+                        ></Badge>
+                      )}
+                    </Stack>
+                    <Box
+                      sx={{
+                        maxHeight: {
+                          xs: "150px",
+                          sm: "250px",
+                          md: "300px",
+                        },
+                        height: {
+                          xs: "150px",
+                          sm: "250px",
+                          md: "300px",
+                        },
+                        overflow: "hidden",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
                       }}
-                    />
-                  </Box>
-                  <Stack
-                    sx={{
-                      maxWidth: "100%",
-                    }}
-                    direction={"row"}
-                    justifyContent={"space-between"}
-                    alignItems={"center"}
-                  >
-                    <Typography
                       onClick={() => {
                         setCurrentPreviewFile(fileInfo);
                         setFilePreviewModalOpen(true);
                       }}
+                    >
+                      <img
+                        src={getStaticResourceUrl(fileInfo.url)}
+                        alt={fileInfo.name}
+                        style={{
+                          objectFit: "cover",
+                          objectPosition: "center",
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      />
+                    </Box>
+                    <Stack
                       sx={{
-                        textOverflow: "ellipsis",
-                        overflow: "hidden",
-                        whiteSpace: "nowrap",
+                        maxWidth: "100%",
                       }}
+                      direction={"row"}
+                      justifyContent={"space-between"}
+                      alignItems={"center"}
                     >
-                      {fileInfo.name}
-                    </Typography>
+                      <Typography
+                        onClick={() => {
+                          setCurrentPreviewFile(fileInfo);
+                          setFilePreviewModalOpen(true);
+                        }}
+                        sx={{
+                          textOverflow: "ellipsis",
+                          overflow: "hidden",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {fileInfo.name}
+                      </Typography>
 
-                    <IconButton
-                      onClick={(e) => {
-                        handleClickFileMenu(e.currentTarget);
-                        setMenuOpenedForFile(fileInfo);
-                      }}
-                    >
-                      <MoreVert />
-                    </IconButton>
-                  </Stack>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleCloseFileMenu}
-          >
-            <MenuItem
-              onClick={() => {
-                setAsCurrentCastingFile();
-                handleCloseFileMenu();
-              }}
+                      <IconButton
+                        onClick={(e) => {
+                          handleClickFileMenu(e.currentTarget);
+                          setMenuOpenedForFile(fileInfo);
+                        }}
+                      >
+                        <MoreVert />
+                      </IconButton>
+                    </Stack>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+            <Menu
+              id="simple-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleCloseFileMenu}
             >
-              Rzutuj
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                deleteFile();
-                handleCloseFileMenu();
-              }}
-            >
-              Usuń
-            </MenuItem>
-          </Menu>
-        </Box>
-      ))}
-    </StyledBox>
+              <MenuItem
+                onClick={() => {
+                  setAsCurrentCastingFile();
+                  handleCloseFileMenu();
+                }}
+              >
+                Rzutuj
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  deleteFile();
+                  handleCloseFileMenu();
+                }}
+              >
+                Usuń
+              </MenuItem>
+            </Menu>
+          </Box>
+        ))}
+      </StyledBox>
+    </>
   );
 };

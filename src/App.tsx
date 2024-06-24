@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { LoginPage } from "./pages/Login/Login";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { ProjectorPage } from "./pages/Projector/Projector";
@@ -35,6 +35,7 @@ function App() {
           <MediaCaptureProvider>
             <LoadingProvider>
               <LoadingSpinner />
+
               <Routes>
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/" element={<Dashboard />} />
@@ -69,3 +70,4 @@ function App() {
 }
 
 export default App;
+

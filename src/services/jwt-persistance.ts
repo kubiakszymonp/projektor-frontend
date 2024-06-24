@@ -23,17 +23,24 @@ export class JWTPersistance {
     role: string;
     organizationId: string;
   } | null {
-    const jwt = this.getJwt();
-    if (!jwt) {
+    try {
+
+
+      const jwt = this.getJwt();
+      if (!jwt) {
+        return null;
+      }
+      const decoded = jwtDecode<{
+        email: string;
+        id: string;
+        role: string;
+        organizationId: string;
+      }>(jwt);
+      return decoded;
+    } catch (error) {
+      console.error("Error decoding jwt", error);
       return null;
     }
-    const decoded = jwtDecode<{
-      email: string;
-      id: string;
-      role: string;
-      organizationId: string;
-    }>(jwt);
-    return decoded;
   }
 }
 export const jwtPersistance = new JWTPersistance();

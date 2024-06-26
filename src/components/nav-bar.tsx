@@ -26,7 +26,7 @@ export const NavBar: React.FC = () => {
                         <Home />
                     </IconButton>
                     <Typography variant="h6" onClick={navigateHome}>
-                        eprojektor.pl
+                        erzutnik.pl
                     </Typography>
                 </Toolbar>
             </AppBar>
